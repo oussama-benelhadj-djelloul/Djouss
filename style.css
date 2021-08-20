@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
+
+div{
+    font-family: 'Raleway', sans-serif;
+}
+
+.Hero{
+    height: 70vh;
+    background-image: url("uploads/hero-image.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+}
+
+.commandi-bg{
+    background-color:#fff8b9 ;
+}
+
+.anazik-bg{
+    background-color:#FFC0C0 ;
+}
+
+.SNTF-bg{
+    background-color: #BCC2FF;
+}
