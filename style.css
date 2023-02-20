@@ -2,6 +2,11 @@
 
 html {
   scroll-behavior: smooth;
+  
+}
+
+body{
+    background: #000;
 }
 
 div{
@@ -9,11 +14,11 @@ div{
 }
 
 .Hero{
-    height: 70vh;
-    background-image: url("uploads/hero-image.png");
-    background-size: contain;
+    height: 80vh;
+    background-image: url("uploads/Frame\ 518.png");
+    background-size: cover;
     background-repeat: no-repeat;
-    background-position: center bottom;
+    background-position: center ;
 }
 
 .commandi-bg{
