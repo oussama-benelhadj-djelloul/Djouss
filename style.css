@@ -32,3 +32,8 @@ div{
 .SNTF-bg{
     background-color: #BCC2FF;
 }
+
+.rotate:hover{
+    transition: transform 0.3s ease-in-out;  /* Add transition for smooth effect */
+    transform: rotate(1deg);  /* Apply slight negative rotation on hover */
+}
