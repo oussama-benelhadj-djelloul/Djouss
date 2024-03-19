@@ -38,3 +38,17 @@ div{
     transform: rotate(1deg);  /* Apply slight negative rotation on hover */
 }
 
+.experienceFont{
+    font-family: Geist; font-size: 48px;font-weight: bolder;line-height: 95%; letter-spacing: -3px;color: white;
+}
+
+.experienceFontCompanyDate{
+    font-family: Geist; font-size: 2.5rem;line-height: 95%; letter-spacing: -2px;color: grey;font-weight: 200;
+}
+
+.seperatorexp{
+    width: 100%; /* Span the full width */
+            height: 1px; /* Set the line height */
+            border-top: 1px solid white; /* Create white border-top */
+            
+}
