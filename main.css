@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Akatab:wght@400;500;600;700;800;900&family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+
+p {
+    font-family: "Akatab", sans-serif;
+}
+
+.navbar-brand img {
+    margin-right: 10px;
+}
+
+.hero {
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+}
+
+.lead {
+    font-weight: 400;
+}
+
+.btn {
+    font-weight: 500;
+}
+
+.btn-dark {
+    border-radius: 25px;
+    padding: 10px 20px;
+}
+
+.testimonials p {
+    font-weight: 400;
+}
+
+.testimonials .media-body h5 {
+    font-weight: 600;
+}
+
+.testimonials .media img {
+    width: 50px;
+    height: 50px;
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+}
+
+/*************/
+
+.recent-work h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.card {
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-top {
+    height: auto;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.card-body p {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.card-title {
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+    .recent-work h2 {
+        font-size: 2rem;
+    }
+}
+
+/************/
+.work-section {
+    padding: 50px 0;
+    text-align: center;
+}
+.work-section h2 {
+    margin-bottom: 50px;
+    font-size: 36px;
+}
+.work-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+.work-item {
+    margin-bottom: 30px;
+}
+.work-title {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
