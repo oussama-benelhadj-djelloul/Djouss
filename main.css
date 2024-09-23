@@ -237,3 +237,27 @@ div {
   .medium {
     grid-column: span 2;
   }
+
+
+.experienceFont{
+    font-size: 16px;font-weight: bolder;line-height: 95%; letter-spacing: -2px;color: black;
+}
+
+.experienceFontCompanyDate{
+    font-size: 2.5rem;line-height: 95%; letter-spacing: -2px;color: grey;font-weight: 200;
+}
+
+.experienceFontContact{
+    font-size: 1.5rem;line-height: 95%; letter-spacing: -2px;color: #808080;font-weight: 200;
+}
+
+.experienceFontContactD{
+    font-size: 0.2rem;line-height: 95%; letter-spacing: -0.5px;color: grey;font-weight: 200;
+}
+
+.seperatorexp{
+    width: 100%; /* Span the full width */
+            height: 1px; /* Set the line height */
+            border-top: 1px solid darkblue; /* Create white border-top */
+            
+}
