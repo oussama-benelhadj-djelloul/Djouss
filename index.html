@@ -451,6 +451,10 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
     <script>
+        // Redirect to 'main.html' after 3 seconds
+        setTimeout(function() {
+            window.location.href = "main.html";
+        }, 500); // 3000 milliseconds = 3 seconds
         ScrollReveal().reveal('.project1', { delay: 100 });
         ScrollReveal().reveal('.experience-scroll', { delay: 100 });
 
