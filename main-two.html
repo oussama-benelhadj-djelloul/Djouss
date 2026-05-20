@@ -84,6 +84,24 @@
     html[lang="ar"] .lang-en { display: none; }
     html[lang="ar"] .lang-ar { display: revert; }
 
+    /* Language switch animation: blur + fade the page during the swap */
+    html.lang-switching body {
+      filter: blur(6px);
+      opacity: 0.45;
+      transform: scale(0.995);
+    }
+    body {
+      transition: filter 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: center top;
+    }
+    html.lang-switching {
+      pointer-events: none;
+    }
+
     /* RTL niceties: keep drawer on the right edge but flip border + exp date margin */
     html[dir="rtl"] .drawer {
       border-left: none;
@@ -1094,6 +1112,9 @@
     </div>
     <ul class="services-list">
       <li><span class="lang-en">Product Design</span><span class="lang-ar">تصميم المنتجات</span></li>
+      <li><span class="lang-en">Product/Design Engineer</span><span class="lang-ar">مهندس منتجات/تصميم</span></li>
+      <li><span class="lang-en">AI-Native Design</span><span class="lang-ar">التصميم القائم على الذكاء الاصطناعي</span></li>
+      <li><span class="lang-en">Product Management</span><span class="lang-ar">إدارة المنتجات</span></li>
       <li><span class="lang-en">UI/UX Design</span><span class="lang-ar">تصميم واجهات وتجربة المستخدم</span></li>
       <li><span class="lang-en">Design Systems</span><span class="lang-ar">أنظمة التصميم</span></li>
       <li><span class="lang-en">Brand Strategy &amp; Art Direction</span><span class="lang-ar">استراتيجية العلامة التجارية والإدارة الفنية</span></li>
@@ -1259,14 +1280,31 @@
       if (e.key === 'Escape') closeAllDrawers();
     });
 
-    // Language toggle
+    // Language toggle (blur + fade transition)
     const langToggle = document.getElementById('langToggle');
+    let langSwitching = false;
     langToggle.addEventListener('click', () => {
+      if (langSwitching) return;
+      langSwitching = true;
+
       const currentLang = document.documentElement.getAttribute('lang') || 'en';
       const newLang = currentLang === 'ar' ? 'en' : 'ar';
-      document.documentElement.setAttribute('lang', newLang);
-      document.documentElement.setAttribute('dir', newLang === 'ar' ? 'rtl' : 'ltr');
-      localStorage.setItem('lang', newLang);
+
+      // Phase 1: blur out
+      document.documentElement.classList.add('lang-switching');
+
+      // Phase 2 (after 350ms): swap lang while page is blurred
+      setTimeout(() => {
+        document.documentElement.setAttribute('lang', newLang);
+        document.documentElement.setAttribute('dir', newLang === 'ar' ? 'rtl' : 'ltr');
+        localStorage.setItem('lang', newLang);
+
+        // Phase 3: blur back in
+        requestAnimationFrame(() => {
+          document.documentElement.classList.remove('lang-switching');
+          setTimeout(() => { langSwitching = false; }, 350);
+        });
+      }, 350);
     });
   </script>
 
