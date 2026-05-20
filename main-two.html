@@ -875,6 +875,65 @@
       overflow: hidden;
     }
 
+    /* Project drawer (wider for image gallery) */
+    #projectDrawer {
+      width: min(620px, 96vw);
+    }
+
+    .project-meta {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .project-images {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .project-images img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--hover-bg);
+    }
+
+    /* Hover popover on work-items */
+    .work-popover {
+      position: fixed;
+      width: 260px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+      transition: opacity 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+      z-index: 90;
+    }
+
+    .work-popover.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .work-popover img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      display: block;
+    }
+
+    @media (max-width: 700px) {
+      .work-popover { display: none; }
+    }
+
     /* ── Responsive ── */
     @media (max-width: 560px) {
       .work-cards {
@@ -1047,42 +1106,42 @@
 
       <!-- remaining as list -->
       <div class="work-grid">
-        <a class="work-item" href="/Pages/merkez.html">
+        <a class="work-item" href="#" data-project="merkez">
           <div class="work-item-left">
             <span class="work-title">MERKEZ</span>
             <span class="work-meta"><span class="lang-en">E-learning · B2C · 2023</span><span class="lang-ar">تعليم إلكتروني · B2C · 2023</span></span>
           </div>
           <span class="work-arrow">→</span>
         </a>
-        <a class="work-item" href="/Pages/aztrajet.html">
+        <a class="work-item" href="#" data-project="aztrajet">
           <div class="work-item-left">
             <span class="work-title">A-Z Trajet</span>
             <span class="work-meta"><span class="lang-en">VTC Ride-Hailing · B2C · 2023</span><span class="lang-ar">نقل ركاب · B2C · 2023</span></span>
           </div>
           <span class="work-arrow">→</span>
         </a>
-        <a class="work-item" href="/Pages/alrazi.html">
+        <a class="work-item" href="#" data-project="alrazi">
           <div class="work-item-left">
             <span class="work-title">Al Razi</span>
             <span class="work-meta"><span class="lang-en">PRM, SaaS · B2B2C · 2023–2024</span><span class="lang-ar">PRM، SaaS · B2B2C · 2023–2024</span></span>
           </div>
           <span class="work-arrow">→</span>
         </a>
-        <a class="work-item" href="/Pages/amalaah.html">
+        <a class="work-item" href="#" data-project="amalaah">
           <div class="work-item-left">
             <span class="work-title">Amalaah</span>
             <span class="work-meta"><span class="lang-en">HR-Tech · B2B2C · 2021</span><span class="lang-ar">تقنيات الموارد البشرية · B2B2C · 2021</span></span>
           </div>
           <span class="work-arrow">→</span>
         </a>
-        <a class="work-item" href="/Pages/jawlah.html">
+        <a class="work-item" href="#" data-project="jawlah">
           <div class="work-item-left">
             <span class="work-title">Jawlah</span>
             <span class="work-meta"><span class="lang-en">Tourism · B2B2C · 2024</span><span class="lang-ar">سياحة · B2B2C · 2024</span></span>
           </div>
           <span class="work-arrow">→</span>
         </a>
-        <a class="work-item" href="/Pages/haraj.html">
+        <a class="work-item" href="#" data-project="haraj">
           <div class="work-item-left">
             <span class="work-title">Haraj Al Fajr</span>
             <span class="work-meta"><span class="lang-en">E-commerce · B2B · 2022–2023</span><span class="lang-ar">تجارة إلكترونية · B2B · 2022–2023</span></span>
@@ -1096,6 +1155,26 @@
 
   <!-- DRAWER OVERLAY + PANELS -->
   <div class="drawer-overlay" id="drawerOverlay"></div>
+
+  <!-- Project drawer (populated by JS) -->
+  <aside class="drawer" id="projectDrawer" aria-hidden="true" aria-label="Project">
+    <div class="drawer-header">
+      <p class="section-label" style="margin-bottom:0;" id="projectTitle"></p>
+      <button class="drawer-close" data-drawer-close aria-label="Close drawer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/>
+          <path d="m6 6 12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div class="project-meta" id="projectMeta"></div>
+    <div class="project-images" id="projectImages"></div>
+  </aside>
+
+  <!-- Hover popover for work-items -->
+  <div class="work-popover" id="workPopover">
+    <img id="workPopoverImg" src="" alt="">
+  </div>
 
   <aside class="drawer" id="servicesDrawer" aria-hidden="true" aria-label="I can help with">
     <div class="drawer-header">
@@ -1278,6 +1357,158 @@
     drawerOverlay.addEventListener('click', closeAllDrawers);
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeAllDrawers();
+    });
+
+    // Project data (extracted from /Pages/*.html)
+    const projects = {
+      merkez: {
+        title: 'MERKEZ',
+        metaEn: 'E-learning · B2C · 2023',
+        metaAr: 'تعليم إلكتروني · B2C · 2023',
+        cover: 'uploads/Merkez/merkez-cover.png',
+        images: [
+          'uploads/Merkez/Post 1.png','uploads/Merkez/Post 2.png','uploads/Merkez/Post 3.png',
+          'uploads/Merkez/Post 4.png','uploads/Merkez/Post 5.png','uploads/Merkez/Post 6.png',
+          'uploads/Merkez/Post 7.png','uploads/Merkez/Post 8.png','uploads/Merkez/Post 9.png',
+          'uploads/Merkez/Post 10.png','uploads/Merkez/Post 11.png'
+        ]
+      },
+      aztrajet: {
+        title: 'A-Z Trajet',
+        metaEn: 'VTC Ride-Hailing · B2C · 2023',
+        metaAr: 'نقل ركاب · B2C · 2023',
+        cover: 'uploads/A-Z Trajet/trajet-cover.png',
+        images: [
+          'uploads/A-Z Trajet/trajet- 1.png','uploads/A-Z Trajet/trajet- 2.png','uploads/A-Z Trajet/trajet- 3.png',
+          'uploads/A-Z Trajet/trajet- 4.png','uploads/A-Z Trajet/trajet- 7.png','uploads/A-Z Trajet/trajet- 8.png',
+          'uploads/A-Z Trajet/trajet- 10.png','uploads/A-Z Trajet/trajet- 11.png','uploads/A-Z Trajet/trajet- 12.png',
+          'uploads/A-Z Trajet/trajet- 13.png','uploads/A-Z Trajet/trajet- 14.png','uploads/A-Z Trajet/trajet- 16.png',
+          'uploads/A-Z Trajet/trajet- 33.png','uploads/A-Z Trajet/trajet- 44.png'
+        ]
+      },
+      alrazi: {
+        title: 'Al Razi',
+        metaEn: 'PRM, SaaS · B2B2C · 2023–2024',
+        metaAr: 'PRM، SaaS · B2B2C · 2023–2024',
+        cover: 'uploads/alrazi/alrazi-cover.png',
+        images: [
+          'uploads/alrazi/alrazi- 1.png','uploads/alrazi/alrazi- 2.png','uploads/alrazi/alrazi- 3.png',
+          'uploads/alrazi/alrazi- 4.png','uploads/alrazi/alrazi- 5.png','uploads/alrazi/alrazi- 6.png',
+          'uploads/alrazi/alrazi- 7.png','uploads/alrazi/alrazi- 8.png','uploads/alrazi/alrazi- 16.png'
+        ]
+      },
+      amalaah: {
+        title: 'Amaalah',
+        metaEn: 'HR-Tech · B2B2C · 2021',
+        metaAr: 'تقنيات الموارد البشرية · B2B2C · 2021',
+        cover: 'uploads/Amaalah/amaalah-cover.png',
+        images: [
+          'uploads/Amaalah/amaalah- 1.png','uploads/Amaalah/amaalah- 2.png','uploads/Amaalah/amaalah- 3.png',
+          'uploads/Amaalah/amaalah- 4.png','uploads/Amaalah/amaalah- 5.png','uploads/Amaalah/amaalah- 6.png',
+          'uploads/Amaalah/amaalah- 7.png','uploads/Amaalah/amaalah- 8.png','uploads/Amaalah/amaalah- 9.png',
+          'uploads/Amaalah/amaalah- 10.png','uploads/Amaalah/amaalah- 11.png'
+        ]
+      },
+      jawlah: {
+        title: 'Jawlah',
+        metaEn: 'Tourism · B2B2C · 2024',
+        metaAr: 'سياحة · B2B2C · 2024',
+        cover: 'uploads/jawlah/jawlah-cover.png',
+        images: [
+          'uploads/jawlah/jawlah- 1.png','uploads/jawlah/jawlah- 2.png','uploads/jawlah/jawlah- 3.png',
+          'uploads/jawlah/jawlah- 4.png','uploads/jawlah/jawlah- 5.png','uploads/jawlah/jawlah- 6.png'
+        ]
+      },
+      haraj: {
+        title: 'Haraj Al Fajr',
+        metaEn: 'E-commerce · B2B · 2022–2023',
+        metaAr: 'تجارة إلكترونية · B2B · 2022–2023',
+        cover: 'uploads/haraj/haraj-cover.png',
+        images: [
+          'uploads/haraj/haraj- 1.png','uploads/haraj/haraj- 2.png','uploads/haraj/haraj- 3.png',
+          'uploads/haraj/haraj- 4.png','uploads/haraj/haraj- 5.png','uploads/haraj/haraj- 6.png',
+          'uploads/haraj/haraj- 7.png','uploads/haraj/haraj- 8.png'
+        ]
+      }
+    };
+
+    const projectDrawer = document.getElementById('projectDrawer');
+    const projectTitle = document.getElementById('projectTitle');
+    const projectMeta = document.getElementById('projectMeta');
+    const projectImages = document.getElementById('projectImages');
+
+    const populateProject = (key) => {
+      const p = projects[key];
+      if (!p) return;
+
+      projectTitle.textContent = p.title;
+
+      // Build meta with both language spans (safe DOM construction)
+      projectMeta.replaceChildren();
+      const enSpan = document.createElement('span');
+      enSpan.className = 'lang-en';
+      enSpan.textContent = p.metaEn;
+      const arSpan = document.createElement('span');
+      arSpan.className = 'lang-ar';
+      arSpan.textContent = p.metaAr;
+      projectMeta.append(enSpan, arSpan);
+
+      // Build image list
+      projectImages.replaceChildren();
+      [p.cover, ...p.images].forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = p.title;
+        img.loading = 'lazy';
+        projectImages.append(img);
+      });
+
+      projectDrawer.scrollTop = 0;
+    };
+
+    document.querySelectorAll('.work-item[data-project]').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('workPopover').classList.remove('visible');
+        populateProject(item.dataset.project);
+        openDrawer(projectDrawer)();
+      });
+    });
+
+    // Hover popover for work-items (centered on cursor)
+    const workPopover = document.getElementById('workPopover');
+    const workPopoverImg = document.getElementById('workPopoverImg');
+    let popoverTimer;
+
+    const movePopoverToCursor = (e) => {
+      const w = workPopover.offsetWidth;
+      const h = workPopover.offsetHeight;
+      const margin = 8;
+      const gap = 16;
+      let left = e.clientX - w / 2;
+      // Prefer above the cursor; flip below if there's no room
+      let top = e.clientY - h - gap;
+      if (top < margin) top = e.clientY + gap;
+      left = Math.max(margin, Math.min(left, window.innerWidth - w - margin));
+      top = Math.max(margin, Math.min(top, window.innerHeight - h - margin));
+      workPopover.style.left = `${left}px`;
+      workPopover.style.top = `${top}px`;
+    };
+
+    document.querySelectorAll('.work-item[data-project]').forEach(item => {
+      item.addEventListener('mouseenter', (e) => {
+        const p = projects[item.dataset.project];
+        if (!p || !p.images.length) return;
+        clearTimeout(popoverTimer);
+        workPopoverImg.src = p.images[0];
+        workPopoverImg.alt = p.title;
+        movePopoverToCursor(e);
+        requestAnimationFrame(() => workPopover.classList.add('visible'));
+      });
+      item.addEventListener('mousemove', movePopoverToCursor);
+      item.addEventListener('mouseleave', () => {
+        popoverTimer = setTimeout(() => workPopover.classList.remove('visible'), 60);
+      });
     });
 
     // Language toggle (blur + fade transition)
