@@ -68,6 +68,11 @@
                         Based in Algeria -- Product Designer -- Master's Degree in Software Engineering.
                     </span>
                 </div>
+                <div class="hero-desc mt-4">
+                    <span>
+                        Helping turn concepts into compelling products with a focus on design excellence and user experience. I've been fortunate to work with teams at <a href="https://smeetz.com" target="_blank" class="hero-link">Smeetz</a>, <a href="https://goubba.com" target="_blank" class="hero-link">Go</a> (ex Goubba), and <a href="https://finnetude.com" target="_blank" class="hero-link">Finnetued</a>, and <a href="#" class="hero-link" data-toggle="popover" data-trigger="click" title="Other Experiences" data-html="true" id="othersPopover">others</a>.
+                    </span>
+                </div>
             </div>
             <div class="col-md-2"></div>
         </div>
@@ -98,7 +103,7 @@
                     <div class="text-muted mb-3">
                         <span class="badge badge-success">HR-Tech</span> Freelancer "Saudi Arabia" | May to Juin-2021
                     </div>
-                    <div>
+                    <div id="amaalah-content">
                         <ul>
                             <li class="py-2">
                                 Joining a Freelancer team from around the world working on the recruiting Web-App and
@@ -144,10 +149,10 @@
                     <div class="text-muted mb-3">
                         <span class="badge badge-danger">Fintech</span> Intern "Algeria" | Juin to Aout-2022
                     </div>
-                    <div>
+                    <div id="goubba-content">
                         <ul>
                             <li class="py-2">
-                                Being the Responsible of Goubba Design System, taking the brand products to a consistent Visual and experience with documenting for better DX ( Developer Experience).
+                                Being the Responsible of Goubba Design System, taking the brand products to a consistent Visual and experience with documenting for better DX ( Developer Experienc[...]
                             </li>
                             <li class="py-2">
                                 Ensure the flexibility of the Design System through radical Changes.
@@ -186,7 +191,7 @@
                     <div class="text-muted mb-3">
                         <span class="badge badge-success">Fintech & SAAS</span> Freelancer "Algeria" | October to December-2021
                     </div>
-                    <div>
+                    <div id="alfa-content">
                         <ul>
                             <li class="py-2">
                                 Building the First Algerian Trading Simulation.
@@ -198,7 +203,7 @@
                                 Make a Set of components to face the problem of having allot of information and task in one single page.
                             </li>
                             <li class="py-2">
-                                Discovering new field “Trading & Shares” and learn more about.
+                                Discovering new field "Trading & Shares" and learn more about.
                             </li>
                             <li class="py-2">
                                 Design a System to make it easy for the Development process.
@@ -221,7 +226,7 @@
                     <div class="text-muted mb-3">
                         <span class="badge badge-primary">Agency</span> Freelancer "Canada" | May-2021
                     </div>
-                    <div>
+                    <div id="keena-content">
                         <ul>
                             <li class="py-2">
                                 Designing a Landing Page for the Canadian.
@@ -463,6 +468,56 @@
         ScrollReveal().reveal('.project3', { delay: 300 });
         ScrollReveal().reveal('.project4', { delay: 400 });
 
+        // Initialize popover for "others" link
+        $(document).ready(function(){
+            // Collect all experience content
+            var allExperienceContent = '';
+            
+            // Get content from all experience items
+            var amaalahContent = document.getElementById('amaalah-content').innerHTML;
+            var goubbaContent = document.getElementById('goubba-content').innerHTML;
+            var alfaContent = document.getElementById('alfa-content').innerHTML;
+            var keenaContent = document.getElementById('keena-content').innerHTML;
+            
+            var popoverContent = `
+                <div class="experience-popover">
+                    <div class="mb-4">
+                        <h5 class="font-weight-bold">UI/UX Designer at AMAALAH</h5>
+                        <span class="badge badge-success">HR-Tech</span> Freelancer "Saudi Arabia" | May to Juin-2021
+                        ${amaalahContent}
+                    </div>
+                    <div class="mb-4">
+                        <h5 class="font-weight-bold">Product Designer at Goubba</h5>
+                        <span class="badge badge-danger">Fintech</span> Intern "Algeria" | Juin to Aout-2022
+                        ${goubbaContent}
+                    </div>
+                    <div class="mb-4">
+                        <h5 class="font-weight-bold">Product Designer at Alfa +</h5>
+                        <span class="badge badge-success">Fintech & SAAS</span> Freelancer "Algeria" | October to December-2021
+                        ${alfaContent}
+                    </div>
+                    <div>
+                        <h5 class="font-weight-bold">Web Designer at KEENA</h5>
+                        <span class="badge badge-primary">Agency</span> Freelancer "Canada" | May-2021
+                        ${keenaContent}
+                    </div>
+                </div>
+            `;
+            
+            $('#othersPopover').popover({
+                content: popoverContent,
+                trigger: 'click',
+                placement: 'bottom',
+                html: true
+            });
+            
+            // Close popover when clicking outside
+            $(document).on('click', function(e){
+                if($(e.target).data('toggle') !== 'popover' && $(e.target).parents('.popover.in').length === 0) {
+                    $('[data-toggle="popover"]').popover('hide');
+                }
+            });
+        });
     </script>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
