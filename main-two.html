@@ -340,6 +340,98 @@
       object-fit: cover;
     }
 
+    /* ── Popover Styles ── */
+    .popover-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .popover-trigger {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .popover-trigger:hover {
+      color: var(--fg);
+    }
+
+    .popover-content {
+      display: none;
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 10px;
+      min-width: 320px;
+      max-width: 400px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+      z-index: 1000;
+      animation: popoverSlideUp 0.2s ease;
+    }
+
+    .popover-content.active {
+      display: block;
+    }
+
+    @keyframes popoverSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .popover-content::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 10px;
+      width: 8px;
+      height: 8px;
+      background: var(--bg);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transform: rotate(45deg);
+    }
+
+    .popover-exp-item {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .popover-exp-item:last-child {
+      border-bottom: none;
+    }
+
+    .popover-exp-role {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--fg);
+    }
+
+    .popover-exp-company {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .popover-exp-date {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
     /* ── Section ── */
     section {
       margin-bottom: 72px;
@@ -696,6 +788,11 @@
       .cta-block {
         padding: 36px 24px;
       }
+
+      .popover-content {
+        min-width: 280px;
+        max-width: 90vw;
+      }
     }
   </style>
 </head>
@@ -712,7 +809,7 @@
         <li>
           <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
             <!-- Lucide Sun Icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun sun-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sun-icon">
               <circle cx="12" cy="12" r="4"/>
               <path d="M12 2v2"/>
               <path d="M12 20v2"/>
@@ -724,7 +821,7 @@
               <path d="m19.07 4.93-1.41 1.41"/>
             </svg>
             <!-- Lucide Moon Icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon moon-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="moon-icon">
               <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
             </svg>
           </button>
@@ -752,6 +849,16 @@
         Helping turn concepts into compelling products with a focus on
         design excellence and user experience.
         You can reach out to me on <a href="https://linkedin.com" target="_blank">Linkedin</a> or see more of my work on <a href="https://twitter.com" target="_blank">Twitter</a>.
+      </p>
+
+      <p class="hero-desc">
+        I've been fortunate to work with teams at <a href="https://smeetz.com" target="_blank">Smeetz</a>, <a href="https://goubba.com" target="_blank">Go</a> (ex Goubba), and <a href="https://finnetude.com" target="_blank">Finnetued</a>, and
+        <div class="popover-container" style="display: inline;">
+          <button class="popover-trigger" id="othersBtn">others</button>
+          <div class="popover-content" id="othersPopover">
+            <div id="popoverContent"></div>
+          </div>
+        </div>.
       </p>
 
       <a href="mailto:benelhadj-djelloul-oussama@outlook.com" class="btn-primary">
@@ -894,7 +1001,7 @@
     <!-- EXPERIENCE -->
     <section id="experience" class="reveal">
       <p class="section-label">Experience</p>
-      <div class="exp-list">
+      <div class="exp-list" id="experienceList">
         <div class="exp-item">
           <div>
             <div class="exp-role">Product Designer</div>
@@ -952,6 +1059,47 @@
     // Stagger hero on load
     document.querySelector('.hero').style.transitionDelay = '0.1s';
 
+    // Popover functionality
+    const othersBtn = document.getElementById('othersBtn');
+    const othersPopover = document.getElementById('othersPopover');
+    const popoverContent = document.getElementById('popoverContent');
+
+    othersBtn.addEventListener('click', () => {
+      othersPopover.classList.toggle('active');
+    });
+
+    // Close popover when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!othersBtn.contains(e.target) && !othersPopover.contains(e.target)) {
+        othersPopover.classList.remove('active');
+      }
+    });
+
+    // Populate popover with experience data
+    function populatePopover() {
+      const experienceList = document.getElementById('experienceList');
+      const items = experienceList.querySelectorAll('.exp-item');
+      let html = '';
+
+      items.forEach(item => {
+        const role = item.querySelector('.exp-role').textContent;
+        const company = item.querySelector('.exp-company').textContent;
+        const date = item.querySelector('.exp-date').textContent;
+
+        html += `
+          <div class="popover-exp-item">
+            <div class="popover-exp-role">${role}</div>
+            <div class="popover-exp-company">${company}</div>
+            <div class="popover-exp-date">${date}</div>
+          </div>
+        `;
+      });
+
+      popoverContent.innerHTML = html;
+    }
+
+    populatePopover();
+
     // Theme toggle logic (Circular View Transition)
     const themeToggle = document.getElementById('themeToggle');
     themeToggle.addEventListener('click', (event) => {
@@ -998,21 +1146,17 @@
           },
           {
             duration: 500,
-            easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-            pseudoElement: isDark 
-              ? '::view-transition-old(root)' 
-              : '::view-transition-new(root)',
+            easing: 'ease-in-out',
+            fill: 'forwards'
           }
         );
       });
 
-      // Cleanup classes after transition is completed
       transition.finished.then(() => {
         document.documentElement.classList.remove('transition-to-light', 'transition-to-dark');
       });
     });
   </script>
-
 </body>
 
 </html>
