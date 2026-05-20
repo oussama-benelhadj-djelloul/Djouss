@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script>
     (function() {
       const savedTheme = localStorage.getItem('theme');
@@ -19,6 +20,9 @@
       } else {
         document.documentElement.setAttribute('data-theme', 'light');
       }
+      const savedLang = localStorage.getItem('lang') || 'en';
+      document.documentElement.setAttribute('lang', savedLang);
+      document.documentElement.setAttribute('dir', savedLang === 'ar' ? 'rtl' : 'ltr');
     })();
   </script>
   <style>
@@ -69,6 +73,65 @@
       color: var(--fg);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Language: Arabic font + visibility ── */
+    html[lang="ar"] body {
+      font-family: 'IBM Plex Sans Arabic', var(--font);
+    }
+
+    .lang-ar { display: none; }
+    html[lang="ar"] .lang-en { display: none; }
+    html[lang="ar"] .lang-ar { display: revert; }
+
+    /* RTL niceties: keep drawer on the right edge but flip border + exp date margin */
+    html[dir="rtl"] .drawer {
+      border-left: none;
+      border-right: 1px solid var(--border);
+      box-shadow: 12px 0 40px rgba(0, 0, 0, 0.08);
+    }
+
+    html[dir="rtl"] .exp-date {
+      margin-left: 0;
+      margin-right: 16px;
+    }
+
+    /* Language toggle button */
+    .lang-toggle-btn {
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .lang-label {
+      position: absolute;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+    }
+
+    .lang-ar-label {
+      font-family: 'IBM Plex Sans Arabic', var(--font);
+      font-size: 14px;
+    }
+
+    /* Default (English): show EN, hide AR */
+    .lang-toggle-btn .lang-en-label {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+    .lang-toggle-btn .lang-ar-label {
+      opacity: 0;
+      transform: rotate(90deg) scale(0);
+    }
+
+    /* Arabic mode: show AR, hide EN */
+    html[lang="ar"] .lang-toggle-btn .lang-en-label {
+      opacity: 0;
+      transform: rotate(-90deg) scale(0);
+    }
+    html[lang="ar"] .lang-toggle-btn .lang-ar-label {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
     }
 
     /* ── Theme Transition ── */
@@ -273,11 +336,11 @@
     .hero-desc {
       font-size: 15px;
       color: var(--muted);
-      max-width: 480px;
       line-height: 1.7;
       margin-bottom: 32px;
     }
-    .hero-desc a {
+    .hero-desc a,
+    .hero-desc strong {
       font-weight: 600;
       color: var(--muted);
       text-decoration: none;
@@ -285,6 +348,47 @@
     }
     .hero-desc a:hover {
       color: var(--fg);
+    }
+
+    .hero-desc .flag {
+      font-size: 14px;
+      margin: 0 2px;
+      letter-spacing: -1px;
+    }
+
+    .hero-name {
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    /* Flag shimmer on hover */
+    .hero-europe,
+    .hero-mena {
+      background-image: linear-gradient(90deg, currentColor 0%, currentColor 100%);
+      background-size: 200% 100%;
+      background-position: 0 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+      transition: color 0.2s;
+    }
+
+    .hero-europe:hover {
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      background-image: linear-gradient(90deg, #003399 0%, #FFCC00 50%, #003399 100%);
+      animation: flag-shimmer 1.4s linear infinite;
+    }
+
+    .hero-mena:hover {
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      background-image: linear-gradient(90deg, #006233 0%, #CE1126 50%, #006233 100%);
+      animation: flag-shimmer 1.4s linear infinite;
+    }
+
+    @keyframes flag-shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
 
     .hero-flags {
@@ -678,6 +782,81 @@
       transform: translateY(0);
     }
 
+    /* ── Drawer (Experience) ── */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 100;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
+
+    .drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100dvh;
+      width: min(440px, 92vw);
+      background: var(--bg);
+      border-left: 1px solid var(--border);
+      z-index: 101;
+      transform: translateX(100%);
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      overflow-y: auto;
+      padding: 32px 28px 40px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: -12px 0 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .drawer-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s, background-color 0.2s;
+    }
+
+    .drawer-close:hover {
+      color: var(--fg);
+      background: var(--hover-bg);
+    }
+
+    .drawer-close svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    body.drawer-open {
+      overflow: hidden;
+    }
+
     /* ── Responsive ── */
     @media (max-width: 560px) {
       .work-cards {
@@ -708,7 +887,13 @@
     <nav>
       <a class="nav-name" href="#">Djouss</a>
       <ul class="nav-links">
-        <li><a href="#work">Work</a></li>
+        <li><a href="#work"><span class="lang-en">Work</span><span class="lang-ar">أعمالي</span></a></li>
+        <li>
+          <button id="langToggle" class="theme-toggle-btn lang-toggle-btn" aria-label="Toggle Language" title="Toggle Language">
+            <span class="lang-label lang-en-label">EN</span>
+            <span class="lang-label lang-ar-label">ع</span>
+          </button>
+        </li>
         <li>
           <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
             <!-- Lucide Sun Icon -->
@@ -729,42 +914,53 @@
             </svg>
           </button>
         </li>
-        <li><a href="#contact" class="nav-cta">Book a call</a></li>
       </ul>
     </nav>
 
     <!-- HERO -->
     <section class="hero reveal">
-      <div class="hero-flags">
-        <span class="flag-emoji">🇩🇿</span>
-        <span class="flag-emoji">🇸🇦</span>
-        <span class="flag-emoji">🇪🇺</span>
-        <span class="flag-emoji">🇦🇪</span>
-        <span class="flag-emoji">🇨🇦</span>
-      </div>
-      <p class="hero-trusted">Crafting designs for clients worldwide.</p>
+      <p class="hero-desc lang-en">
+        <span class="hero-name">Oussama Benelhadj Djelloul</span>
+      </p>
+      <p class="hero-desc lang-ar">
+        <span class="hero-name">أسامة بن الحاج جلول</span>
+      </p>
 
-      <div class="hero-status">Available for new projects</div>
+      <p class="hero-desc lang-en">
+        Product designer (with AI <a href="#" class="services-link">i'm even more</a>)<br>
+        Five years shaping digital products for startups across <strong class="hero-europe">Europe</strong> <span class="flag">🇪🇺</span> and <strong class="hero-mena">MENA</strong> <span class="flag">🇩🇿</span><span class="flag">🇸🇦</span><span class="flag">🇦🇪</span>. I care about the details no one notices until my eyes feel satisfied.
+      </p>
+      <p class="hero-desc lang-ar">
+        مصمم منتجات (ومع الذكاء الاصطناعي <a href="#" class="services-link">أصبحت أكثر</a>)<br>
+        خمس سنوات في تشكيل المنتجات الرقمية للشركات الناشئة عبر <strong class="hero-europe">أوروبا</strong> <span class="flag">🇪🇺</span> و<strong class="hero-mena">الشرق الأوسط وشمال أفريقيا</strong> <span class="flag">🇩🇿</span><span class="flag">🇸🇦</span><span class="flag">🇦🇪</span>. أهتم بالتفاصيل التي لا يلاحظها أحد حتى تشعر عيناي بالرضا.
+      </p>
 
-      <h1>Partnering with Founders<br>to Design the Future</h1>
+      <p class="hero-desc lang-en">
+        I've been fortunate to work with teams at <a href="https://smeetz.com" target="_blank">Smeetz</a>, <a href="#" target="_blank">Go</a> (ex <a href="#" target="_blank">Gouba</a>), and <a href="#" target="_blank">Finnetued</a>, and <a href="#" class="others-link">others</a>.
+      </p>
+      <p class="hero-desc lang-ar">
+        كنت محظوظًا للعمل مع فرق في <a href="https://smeetz.com" target="_blank">Smeetz</a> و<a href="#" target="_blank">Go</a> (سابقًا <a href="#" target="_blank">Gouba</a>) و<a href="#" target="_blank">Finnetued</a>، و<a href="#" class="others-link">غيرها</a>.
+      </p>
 
-      <p class="hero-desc">
+      <p class="hero-desc lang-en">
         Helping turn concepts into compelling products with a focus on
         design excellence and user experience.
         You can reach out to me on <a href="https://linkedin.com" target="_blank">Linkedin</a> or see more of my work on <a href="https://twitter.com" target="_blank">Twitter</a>.
       </p>
+      <p class="hero-desc lang-ar">
+        أساعد في تحويل الأفكار إلى منتجات جذابة مع التركيز على تميز التصميم وتجربة المستخدم.
+        يمكنك التواصل معي على <a href="https://linkedin.com" target="_blank">لينكدإن</a> أو الاطلاع على المزيد من أعمالي على <a href="https://twitter.com" target="_blank">تويتر</a>.
+      </p>
 
-      <a href="mailto:benelhadj-djelloul-oussama@outlook.com" class="btn-primary">
-        <img src="uploads/logo.png" alt="">
-        Book a Free Discovery Call
-      </a>
     </section>
 
     <!-- CLIENTS SCROLL -->
     <section class="reveal">
-      <p class="section-label">Trusted by</p>
-      <p style="font-size:13px; color:var(--muted); margin-bottom:20px;">Designing solutions for a global clientele with
-        unique needs.</p>
+      <p class="section-label"><span class="lang-en">Trusted by</span><span class="lang-ar">موثوق به من</span></p>
+      <p style="font-size:13px; color:var(--muted); margin-bottom:20px;">
+        <span class="lang-en">Designing solutions for a global clientele with unique needs.</span>
+        <span class="lang-ar">تصميم حلول لعملاء عالميين بحاجات فريدة.</span>
+      </p>
       <div class="logos-track-wrap">
         <div class="logos-track" id="logosTrack">
           <img src="Porfolio-icons/3M express.png" alt="3M Express">
@@ -796,50 +992,37 @@
       </div>
     </section>
 
-    <!-- SERVICES -->
-    <section class="reveal">
-      <p class="section-label">I can help with</p>
-      <ul class="services-list">
-        <li>Product Design</li>
-        <li>UI/UX Design</li>
-        <li>Design Systems</li>
-        <li>Brand Strategy &amp; Art Direction</li>
-        <li>Mobile App Design</li>
-        <li>Creative Direction for Startups</li>
-      </ul>
-    </section>
-
     <!-- SELECTED WORK – featured cards -->
     <section id="work" class="reveal">
-      <p class="section-label">Selected Work</p>
+      <p class="section-label"><span class="lang-en">Selected Work</span><span class="lang-ar">أعمال مختارة</span></p>
 
       <div class="work-cards">
         <a class="work-card" href="/Pages/meetendo.html">
           <img class="work-card-img" src="uploads/Meetendo/meetendo+intro.png" alt="Meetendo">
           <div class="work-card-label">
             <h3>Meentendo</h3>
-            <p>Health Tech · B2C · 2022–2023</p>
+            <p><span class="lang-en">Health Tech · B2C · 2022–2023</span><span class="lang-ar">تقنية صحية · B2C · 2022–2023</span></p>
           </div>
         </a>
         <a class="work-card" href="/Pages/alfa.html">
           <img class="work-card-img" src="uploads/finnetude/alfa+intro.png" alt="ALFA+">
           <div class="work-card-label">
             <h3>ALFA+</h3>
-            <p>Fintech · B2B, B2Gov · 2022–2023</p>
+            <p><span class="lang-en">Fintech · B2B, B2Gov · 2022–2023</span><span class="lang-ar">تقنية مالية · B2B، B2Gov · 2022–2023</span></p>
           </div>
         </a>
         <a class="work-card" href="/Pages/send.html">
           <img class="work-card-img" src="uploads/Send/send+intro.png" alt="Send">
           <div class="work-card-label">
             <h3>Send</h3>
-            <p>Logistics · B2B, B2Gov · 2022–2023</p>
+            <p><span class="lang-en">Logistics · B2B, B2Gov · 2022–2023</span><span class="lang-ar">لوجستيات · B2B، B2Gov · 2022–2023</span></p>
           </div>
         </a>
         <a class="work-card" href="/Pages/qari.html">
           <img class="work-card-img" src="uploads/QARI/qari+intro.png" alt="QARI">
           <div class="work-card-label">
             <h3>QARI</h3>
-            <p>E-learning · B2C · 2022–2023</p>
+            <p><span class="lang-en">E-learning · B2C · 2022–2023</span><span class="lang-ar">تعليم إلكتروني · B2C · 2022–2023</span></p>
           </div>
         </a>
       </div>
@@ -849,92 +1032,127 @@
         <a class="work-item" href="/Pages/merkez.html">
           <div class="work-item-left">
             <span class="work-title">MERKEZ</span>
-            <span class="work-meta">E-learning · B2C · 2023</span>
+            <span class="work-meta"><span class="lang-en">E-learning · B2C · 2023</span><span class="lang-ar">تعليم إلكتروني · B2C · 2023</span></span>
           </div>
           <span class="work-arrow">→</span>
         </a>
         <a class="work-item" href="/Pages/aztrajet.html">
           <div class="work-item-left">
             <span class="work-title">A-Z Trajet</span>
-            <span class="work-meta">VTC Ride-Hailing · B2C · 2023</span>
+            <span class="work-meta"><span class="lang-en">VTC Ride-Hailing · B2C · 2023</span><span class="lang-ar">نقل ركاب · B2C · 2023</span></span>
           </div>
           <span class="work-arrow">→</span>
         </a>
         <a class="work-item" href="/Pages/alrazi.html">
           <div class="work-item-left">
             <span class="work-title">Al Razi</span>
-            <span class="work-meta">PRM, SaaS · B2B2C · 2023–2024</span>
+            <span class="work-meta"><span class="lang-en">PRM, SaaS · B2B2C · 2023–2024</span><span class="lang-ar">PRM، SaaS · B2B2C · 2023–2024</span></span>
           </div>
           <span class="work-arrow">→</span>
         </a>
         <a class="work-item" href="/Pages/amalaah.html">
           <div class="work-item-left">
             <span class="work-title">Amalaah</span>
-            <span class="work-meta">HR-Tech · B2B2C · 2021</span>
+            <span class="work-meta"><span class="lang-en">HR-Tech · B2B2C · 2021</span><span class="lang-ar">تقنيات الموارد البشرية · B2B2C · 2021</span></span>
           </div>
           <span class="work-arrow">→</span>
         </a>
         <a class="work-item" href="/Pages/jawlah.html">
           <div class="work-item-left">
             <span class="work-title">Jawlah</span>
-            <span class="work-meta">Tourism · B2B2C · 2024</span>
+            <span class="work-meta"><span class="lang-en">Tourism · B2B2C · 2024</span><span class="lang-ar">سياحة · B2B2C · 2024</span></span>
           </div>
           <span class="work-arrow">→</span>
         </a>
         <a class="work-item" href="/Pages/haraj.html">
           <div class="work-item-left">
             <span class="work-title">Haraj Al Fajr</span>
-            <span class="work-meta">E-commerce · B2B · 2022–2023</span>
+            <span class="work-meta"><span class="lang-en">E-commerce · B2B · 2022–2023</span><span class="lang-ar">تجارة إلكترونية · B2B · 2022–2023</span></span>
           </div>
           <span class="work-arrow">→</span>
         </a>
       </div>
     </section>
 
-    <!-- EXPERIENCE -->
-    <section id="experience" class="reveal">
-      <p class="section-label">Experience</p>
-      <div class="exp-list">
-        <div class="exp-item">
-          <div>
-            <div class="exp-role">Product Designer</div>
-            <div class="exp-company">Smeetz</div>
-          </div>
-          <span class="exp-date">Aug 2024</span>
-        </div>
-        <div class="exp-item">
-          <div>
-            <div class="exp-role">Product Designer</div>
-            <div class="exp-company">3M Zone</div>
-          </div>
-          <span class="exp-date">Jul 2023 – Aug 2024</span>
-        </div>
-        <div class="exp-item">
-          <div>
-            <div class="exp-role">Product Designer</div>
-            <div class="exp-company">Finnetude</div>
-          </div>
-          <span class="exp-date">Jan 2023 – Jun 2023</span>
-        </div>
-        <div class="exp-item">
-          <div>
-            <div class="exp-role">UI/UX Designer Intern</div>
-            <div class="exp-company">Goubba</div>
-          </div>
-          <span class="exp-date">Jun 2022 – Sep 2022</span>
-        </div>
-        <div class="exp-item">
-          <div>
-            <div class="exp-role">UI/UX Designer (Freelance)</div>
-            <div class="exp-company">Amaalah</div>
-          </div>
-          <span class="exp-date">Jun 2021</span>
-        </div>
-      </div>
-    </section>
-
-
   </div>
+
+  <!-- DRAWER OVERLAY + PANELS -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+
+  <aside class="drawer" id="servicesDrawer" aria-hidden="true" aria-label="I can help with">
+    <div class="drawer-header">
+      <p class="section-label" style="margin-bottom:0;">
+        <span class="lang-en">I can help with</span>
+        <span class="lang-ar">يمكنني المساعدة في</span>
+      </p>
+      <button class="drawer-close" data-drawer-close aria-label="Close drawer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/>
+          <path d="m6 6 12 12"/>
+        </svg>
+      </button>
+    </div>
+    <ul class="services-list">
+      <li><span class="lang-en">Product Design</span><span class="lang-ar">تصميم المنتجات</span></li>
+      <li><span class="lang-en">UI/UX Design</span><span class="lang-ar">تصميم واجهات وتجربة المستخدم</span></li>
+      <li><span class="lang-en">Design Systems</span><span class="lang-ar">أنظمة التصميم</span></li>
+      <li><span class="lang-en">Brand Strategy &amp; Art Direction</span><span class="lang-ar">استراتيجية العلامة التجارية والإدارة الفنية</span></li>
+      <li><span class="lang-en">Mobile App Design</span><span class="lang-ar">تصميم تطبيقات الجوال</span></li>
+      <li><span class="lang-en">Creative Direction for Startups</span><span class="lang-ar">الإدارة الإبداعية للشركات الناشئة</span></li>
+    </ul>
+  </aside>
+
+  <aside class="drawer" id="drawer" aria-hidden="true" aria-label="Experience">
+    <div class="drawer-header">
+      <p class="section-label" style="margin-bottom:0;">
+        <span class="lang-en">Experience</span>
+        <span class="lang-ar">الخبرة</span>
+      </p>
+      <button class="drawer-close" data-drawer-close aria-label="Close drawer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/>
+          <path d="m6 6 12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div class="exp-list">
+      <div class="exp-item">
+        <div>
+          <div class="exp-role"><span class="lang-en">Product Designer</span><span class="lang-ar">مصمم منتجات</span></div>
+          <div class="exp-company">Smeetz</div>
+        </div>
+        <span class="exp-date"><span class="lang-en">Aug 2024</span><span class="lang-ar">أغسطس 2024</span></span>
+      </div>
+      <div class="exp-item">
+        <div>
+          <div class="exp-role"><span class="lang-en">Product Designer</span><span class="lang-ar">مصمم منتجات</span></div>
+          <div class="exp-company">3M Zone</div>
+        </div>
+        <span class="exp-date"><span class="lang-en">Jul 2023 – Aug 2024</span><span class="lang-ar">يوليو 2023 – أغسطس 2024</span></span>
+      </div>
+      <div class="exp-item">
+        <div>
+          <div class="exp-role"><span class="lang-en">Product Designer</span><span class="lang-ar">مصمم منتجات</span></div>
+          <div class="exp-company">Finnetude</div>
+        </div>
+        <span class="exp-date"><span class="lang-en">Jan 2023 – Jun 2023</span><span class="lang-ar">يناير 2023 – يونيو 2023</span></span>
+      </div>
+      <div class="exp-item">
+        <div>
+          <div class="exp-role"><span class="lang-en">UI/UX Designer Intern</span><span class="lang-ar">متدرب تصميم واجهات</span></div>
+          <div class="exp-company">Goubba</div>
+        </div>
+        <span class="exp-date"><span class="lang-en">Jun 2022 – Sep 2022</span><span class="lang-ar">يونيو 2022 – سبتمبر 2022</span></span>
+      </div>
+      <div class="exp-item">
+        <div>
+          <div class="exp-role"><span class="lang-en">UI/UX Designer (Freelance)</span><span class="lang-ar">مصمم واجهات (مستقل)</span></div>
+          <div class="exp-company">Amaalah</div>
+        </div>
+        <span class="exp-date"><span class="lang-en">Jun 2021</span><span class="lang-ar">يونيو 2021</span></span>
+      </div>
+    </div>
+  </aside>
 
   <script>
     // Scroll reveal
@@ -1010,6 +1228,45 @@
       transition.finished.then(() => {
         document.documentElement.classList.remove('transition-to-light', 'transition-to-dark');
       });
+    });
+
+    // Drawers
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const drawers = document.querySelectorAll('.drawer');
+
+    const openDrawer = (drawerEl) => (e) => {
+      if (e) e.preventDefault();
+      drawerEl.classList.add('open');
+      drawerOverlay.classList.add('open');
+      drawerEl.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('drawer-open');
+    };
+
+    const closeAllDrawers = () => {
+      drawers.forEach(d => {
+        d.classList.remove('open');
+        d.setAttribute('aria-hidden', 'true');
+      });
+      drawerOverlay.classList.remove('open');
+      document.body.classList.remove('drawer-open');
+    };
+
+    document.querySelectorAll('.others-link').forEach(el => el.addEventListener('click', openDrawer(document.getElementById('drawer'))));
+    document.querySelectorAll('.services-link').forEach(el => el.addEventListener('click', openDrawer(document.getElementById('servicesDrawer'))));
+    document.querySelectorAll('[data-drawer-close]').forEach(btn => btn.addEventListener('click', closeAllDrawers));
+    drawerOverlay.addEventListener('click', closeAllDrawers);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAllDrawers();
+    });
+
+    // Language toggle
+    const langToggle = document.getElementById('langToggle');
+    langToggle.addEventListener('click', () => {
+      const currentLang = document.documentElement.getAttribute('lang') || 'en';
+      const newLang = currentLang === 'ar' ? 'en' : 'ar';
+      document.documentElement.setAttribute('lang', newLang);
+      document.documentElement.setAttribute('dir', newLang === 'ar' ? 'rtl' : 'ltr');
+      localStorage.setItem('lang', newLang);
     });
   </script>
 
