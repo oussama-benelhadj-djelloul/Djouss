@@ -114,42 +114,56 @@
       margin-right: 16px;
     }
 
-    /* Language toggle button */
+    /* Language toggle button + tooltip */
     .lang-toggle-btn {
-      font-family: inherit;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
+      position: relative;
     }
 
-    .lang-label {
+    .lang-toggle-btn svg {
+      position: static;
+    }
+
+    .lang-tooltip {
       position: absolute;
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      background: var(--fg);
+      color: var(--bg);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 5px 9px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 60;
+      letter-spacing: 0.01em;
     }
 
-    .lang-ar-label {
+    .lang-tooltip::before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 4px solid transparent;
+      border-bottom-color: var(--fg);
+    }
+
+    .lang-tooltip .lang-ar {
       font-family: 'IBM Plex Sans Arabic', var(--font);
-      font-size: 14px;
+    }
+    html[lang="ar"] .lang-tooltip .lang-en {
+      font-family: 'Inter', var(--font);
     }
 
-    /* Default (English): show EN, hide AR */
-    .lang-toggle-btn .lang-en-label {
+    .lang-toggle-btn:hover .lang-tooltip,
+    .lang-toggle-btn:focus-visible .lang-tooltip {
       opacity: 1;
-      transform: rotate(0deg) scale(1);
-    }
-    .lang-toggle-btn .lang-ar-label {
-      opacity: 0;
-      transform: rotate(90deg) scale(0);
-    }
-
-    /* Arabic mode: show AR, hide EN */
-    html[lang="ar"] .lang-toggle-btn .lang-en-label {
-      opacity: 0;
-      transform: rotate(-90deg) scale(0);
-    }
-    html[lang="ar"] .lang-toggle-btn .lang-ar-label {
-      opacity: 1;
-      transform: rotate(0deg) scale(1);
+      transform: translateX(-50%) translateY(0);
     }
 
     /* ── Theme Transition ── */
@@ -966,9 +980,19 @@
       <ul class="nav-links">
         <li><a href="#work"><span class="lang-en">Work</span><span class="lang-ar">أعمالي</span></a></li>
         <li>
-          <button id="langToggle" class="theme-toggle-btn lang-toggle-btn" aria-label="Toggle Language" title="Toggle Language">
-            <span class="lang-label lang-en-label">EN</span>
-            <span class="lang-label lang-ar-label">ع</span>
+          <button id="langToggle" class="theme-toggle-btn lang-toggle-btn" aria-label="Toggle Language">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-languages">
+              <path d="m5 8 6 6"/>
+              <path d="m4 14 6-6 2-3"/>
+              <path d="M2 5h12"/>
+              <path d="M7 2h1"/>
+              <path d="m22 22-5-10-5 10"/>
+              <path d="M14 18h6"/>
+            </svg>
+            <span class="lang-tooltip" role="tooltip">
+              <span class="lang-en">العربية</span>
+              <span class="lang-ar">English</span>
+            </span>
           </button>
         </li>
         <li>
