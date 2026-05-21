@@ -405,6 +405,36 @@
       font-weight: 600;
     }
 
+    /* Typewriter rotator on "i'm even more" link */
+    .typewriter {
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .typewriter-text {
+      display: inline;
+    }
+
+    .typewriter-caret {
+      display: inline-block;
+      width: 1.5px;
+      height: 0.95em;
+      background: currentColor;
+      vertical-align: text-bottom;
+      margin: 0 1px 1px;
+      animation: typewriter-caret-blink 0.95s steps(1) infinite;
+      transform: translateY(1px);
+    }
+
+    @keyframes typewriter-caret-blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .typewriter-caret { animation: none; opacity: 0; }
+    }
+
     /* Flag shimmer on hover */
     .hero-europe,
     .hero-mena {
@@ -1082,11 +1112,11 @@
       </p>
 
       <p class="hero-desc lang-en">
-        Product designer (with AI <a href="#" class="services-link">i'm even more</a>)<br>
+        Product designer (with AI I'm a <a href="#" class="services-link typewriter"><span class="typewriter-text">Product Designer</span><span class="typewriter-caret" aria-hidden="true"></span></a>)<br>
         Five years shaping digital products for startups across <strong class="hero-europe">Europe</strong> <span class="flag">🇪🇺</span> and <strong class="hero-mena">MENA</strong> <span class="flag">🇩🇿</span><span class="flag">🇸🇦</span><span class="flag">🇦🇪</span>. I care about the details no one notices until my eyes feel satisfied.
       </p>
       <p class="hero-desc lang-ar">
-        مصمم منتجات (ومع الذكاء الاصطناعي <a href="#" class="services-link">أصبحت أكثر</a>)<br>
+        مصمم منتجات (ومع الذكاء الاصطناعي أنا <a href="#" class="services-link typewriter"><span class="typewriter-text">مصمم منتجات</span><span class="typewriter-caret" aria-hidden="true"></span></a>)<br>
         خمس سنوات في تشكيل المنتجات الرقمية للشركات الناشئة عبر <strong class="hero-europe">أوروبا</strong> <span class="flag">🇪🇺</span> و<strong class="hero-mena">الشرق الأوسط وشمال أفريقيا</strong> <span class="flag">🇩🇿</span><span class="flag">🇸🇦</span><span class="flag">🇦🇪</span>. أهتم بالتفاصيل التي لا يلاحظها أحد حتى تشعر عيناي بالرضا.
       </p>
 
@@ -1609,6 +1639,115 @@
         popoverTimer = setTimeout(() => workPopover.classList.remove('visible'), 60);
       });
     });
+
+    // Typewriter rotator for "i'm even more" link
+    (function typewriter() {
+      const skills = {
+        en: [
+          'Product Designer',
+          'Product/Design Engineer',
+          'AI-Native Designer',
+          'Product Manager',
+          'UI/UX Designer',
+          'Design Systems Lead',
+          'Brand Strategist',
+          'Mobile App Designer',
+          'Creative Director'
+        ],
+        ar: [
+          'مصمم منتجات',
+          'مهندس منتجات/تصميم',
+          'مصمم بقيادة الذكاء الاصطناعي',
+          'مدير منتجات',
+          'مصمم واجهات',
+          'قائد أنظمة التصميم',
+          'استراتيجي علامة تجارية',
+          'مصمم تطبيقات جوال',
+          'مدير إبداعي'
+        ]
+      };
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) return; // CSS has already hidden the caret; static word stays
+
+      const TYPE_BASE = 55;
+      const TYPE_JITTER = 35;
+      const ERASE_BASE = 28;
+      const ERASE_JITTER = 12;
+      const HOLD_MS = 1700;
+      const BETWEEN_MS = 280;
+
+      let idx = 0;
+      let charPos = 0;
+      let mode = 'type';
+      let currentLang = null;
+      let timeoutId = null;
+
+      const getLang = () =>
+        document.documentElement.getAttribute('lang') === 'ar' ? 'ar' : 'en';
+
+      const getTargets = (lang) =>
+        document.querySelectorAll(`.hero-desc.lang-${lang} .typewriter-text`);
+
+      const rand = (base, jitter) => base + (Math.random() * 2 - 1) * jitter;
+
+      const step = () => {
+        const lang = getLang();
+
+        // Restart current word from zero when language changes mid-animation
+        if (currentLang !== null && currentLang !== lang) {
+          charPos = 0;
+          mode = 'type';
+          // Clear the previously visible targets (they're hidden by CSS, but tidy)
+          getTargets(currentLang).forEach(t => (t.textContent = ''));
+        }
+        currentLang = lang;
+
+        const words = skills[lang];
+        const word = words[idx % words.length];
+        const targets = getTargets(lang);
+
+        if (mode === 'type') {
+          charPos = Math.min(charPos + 1, word.length);
+          targets.forEach(t => (t.textContent = word.slice(0, charPos)));
+          if (charPos === word.length) {
+            mode = 'hold';
+            timeoutId = setTimeout(step, HOLD_MS);
+            return;
+          }
+          timeoutId = setTimeout(step, rand(TYPE_BASE, TYPE_JITTER));
+        } else if (mode === 'hold') {
+          mode = 'erase';
+          timeoutId = setTimeout(step, 60);
+        } else if (mode === 'erase') {
+          charPos = Math.max(charPos - 1, 0);
+          targets.forEach(t => (t.textContent = word.slice(0, charPos)));
+          if (charPos === 0) {
+            mode = 'between';
+            idx++;
+            timeoutId = setTimeout(step, BETWEEN_MS);
+            return;
+          }
+          timeoutId = setTimeout(step, rand(ERASE_BASE, ERASE_JITTER));
+        } else {
+          mode = 'type';
+          timeoutId = setTimeout(step, 40);
+        }
+      };
+
+      // Pause when tab not visible so the loop doesn't drift in the background
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          clearTimeout(timeoutId);
+        } else {
+          clearTimeout(timeoutId);
+          timeoutId = setTimeout(step, 200);
+        }
+      });
+
+      // Kick off after a tiny delay so initial paint settles
+      timeoutId = setTimeout(step, 600);
+    })();
 
     // Language toggle (blur + fade transition)
     const langToggle = document.getElementById('langToggle');
