@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Meetendo — a booking app for beauty and wellness salons across the UAE. Case study by Benelhadj Djelloul Oussama.">
+  <title>Meetendo — Case Study · Djouss</title>
+  <link rel="icon" href="uploads/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+      const savedLang = localStorage.getItem('lang') || 'en';
+      document.documentElement.setAttribute('lang', savedLang);
+      document.documentElement.setAttribute('dir', savedLang === 'ar' ? 'rtl' : 'ltr');
+    })();
+  </script>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #ffffff;
+      --fg: #111111;
+      --muted: #888888;
+      --border: #e8e8e8;
+      --accent: #111111;
+      --hover-bg: #f5f5f5;
+      --max-w: 680px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b0b0b;
+      --fg: #f5f5f5;
+      --muted: #8e8e8e;
+      --border: #222222;
+      --accent: #ffffff;
+      --hover-bg: #161616;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    html[lang="ar"] body { font-family: 'IBM Plex Sans Arabic', var(--font); }
+
+    .lang-ar { display: none; }
+    html[lang="ar"] .lang-en { display: none; }
+    html[lang="ar"] .lang-ar { display: revert; }
+
+    body {
+      transition: filter 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: center top;
+    }
+
+    html.lang-switching body {
+      filter: blur(6px);
+      opacity: 0.45;
+      transform: scale(0.995);
+    }
+
+    html.lang-switching { pointer-events: none; }
+
+    /* View Transitions for theme */
+    ::view-transition-old(root),
+    ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+    ::view-transition-old(root) { z-index: 1; }
+    ::view-transition-new(root) { z-index: 9999; }
+    .transition-to-light::view-transition-old(root) { z-index: 9999; }
+    .transition-to-light::view-transition-new(root) { z-index: 1; }
+    .transition-to-dark::view-transition-old(root) { z-index: 1; }
+    .transition-to-dark::view-transition-new(root) { z-index: 9999; }
+
+    /* Layout */
+    .page {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Nav */
+    nav.site-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 32px 0 0;
+      margin-bottom: 48px;
+    }
+
+    .nav-name {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--fg);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      display: block;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--fg); }
+
+    /* Toggle buttons (theme + lang) */
+    .toggle-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      transition: color 0.2s, background-color 0.2s;
+      position: relative;
+    }
+
+    .toggle-btn:hover {
+      color: var(--fg);
+      background-color: var(--hover-bg);
+    }
+
+    .toggle-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .theme-toggle-btn svg {
+      position: absolute;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+    }
+
+    .theme-toggle-btn .sun-icon { opacity: 0; transform: rotate(90deg) scale(0); }
+    .theme-toggle-btn .moon-icon { opacity: 1; transform: rotate(0deg) scale(1); }
+    [data-theme="dark"] .theme-toggle-btn .sun-icon { opacity: 1; transform: rotate(0deg) scale(1); }
+    [data-theme="dark"] .theme-toggle-btn .moon-icon { opacity: 0; transform: rotate(-90deg) scale(0); }
+
+    /* Lang tooltip */
+    .lang-tooltip {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      background: var(--fg);
+      color: var(--bg);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 5px 9px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 60;
+      letter-spacing: 0.01em;
+    }
+
+    .lang-tooltip::before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 4px solid transparent;
+      border-bottom-color: var(--fg);
+    }
+
+    .lang-tooltip .lang-ar { font-family: 'IBM Plex Sans Arabic', var(--font); }
+    html[lang="ar"] .lang-tooltip .lang-en { font-family: 'Inter', var(--font); }
+
+    .lang-toggle-btn:hover .lang-tooltip,
+    .lang-toggle-btn:focus-visible .lang-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 36px;
+      letter-spacing: 0.01em;
+    }
+
+    .breadcrumb a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .breadcrumb a:hover { color: var(--fg); }
+
+    .breadcrumb .sep { opacity: 0.5; }
+
+    .breadcrumb .current { color: var(--fg); }
+
+    /* Project Header */
+    .proj-header {
+      margin-bottom: 48px;
+    }
+
+    .proj-header h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      color: var(--fg);
+    }
+
+    .proj-intro {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .proj-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .proj-meta-grid > div {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .proj-meta-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .proj-meta-value {
+      font-size: 14px;
+      color: var(--fg);
+      font-weight: 500;
+    }
+
+    /* Cover */
+    .proj-cover {
+      margin-bottom: 64px;
+    }
+
+    .proj-cover img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--hover-bg);
+    }
+
+    /* Sections */
+    .proj-section {
+      margin-bottom: 64px;
+    }
+
+    .proj-section h2 {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .proj-section p {
+      font-size: 15px;
+      color: var(--fg);
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+
+    .proj-section p:last-child { margin-bottom: 0; }
+
+    .proj-section p strong {
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    /* Image gallery (stacked) */
+    .proj-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .proj-gallery img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--hover-bg);
+    }
+
+    /* Image gallery (2-col grid) */
+    .proj-gallery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .proj-gallery-grid img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--hover-bg);
+    }
+
+    /* Back link */
+    .proj-footer {
+      padding: 32px 0 56px;
+      border-top: 1px solid var(--border);
+      margin-top: 16px;
+    }
+
+    .proj-footer a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s, gap 0.2s;
+    }
+
+    .proj-footer a:hover {
+      color: var(--fg);
+      gap: 12px;
+    }
+
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* First-paint entrance */
+    @keyframes proj-rise {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+        filter: blur(5px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes nav-fade-down {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      nav.site-nav { animation: nav-fade-down 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
+      .breadcrumb  { animation: proj-rise 1.1s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both; }
+      .proj-header { animation: proj-rise 1.2s 0.30s cubic-bezier(0.22, 1, 0.36, 1) both; }
+    }
+
+    /* Responsive */
+    @media (max-width: 560px) {
+      .proj-meta-grid { grid-template-columns: 1fr 1fr; }
+      .proj-gallery-grid { grid-template-columns: 1fr; }
+      nav.site-nav { flex-wrap: wrap; gap: 16px; }
+      .nav-links { gap: 14px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- NAV -->
+    <nav class="site-nav">
+      <a class="nav-name" href="main-two.html">
+        <img class="nav-avatar" src="Profile 1.png" alt="Djouss avatar">
+        Djouss
+      </a>
+      <ul class="nav-links">
+        <li><a href="main-two.html#work"><span class="lang-en">Work</span><span class="lang-ar">أعمالي</span></a></li>
+        <li>
+          <button id="langToggle" class="toggle-btn lang-toggle-btn" aria-label="Toggle Language">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m5 8 6 6"/>
+              <path d="m4 14 6-6 2-3"/>
+              <path d="M2 5h12"/>
+              <path d="M7 2h1"/>
+              <path d="m22 22-5-10-5 10"/>
+              <path d="M14 18h6"/>
+            </svg>
+            <span class="lang-tooltip" role="tooltip">
+              <span class="lang-en">العربية</span>
+              <span class="lang-ar">English</span>
+            </span>
+          </button>
+        </li>
+        <li>
+          <button id="themeToggle" class="toggle-btn theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sun-icon">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/>
+              <path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/>
+              <path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="moon-icon">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="main-two.html#work"><span class="lang-en">Work</span><span class="lang-ar">الأعمال</span></a>
+      <span class="sep">/</span>
+      <span class="current">Meetendo</span>
+    </nav>
+
+    <!-- PROJECT HEADER -->
+    <header class="proj-header">
+      <h1>Meetendo</h1>
+      <p class="proj-intro">
+        <span class="lang-en">A booking app connecting customers with beauty and wellness salons across the UAE. Meetendo unified a fragmented industry — turning Instagram DMs and phone calls into a single, polished booking experience.</span>
+        <span class="lang-ar">تطبيق حجز يربط العملاء بصالونات التجميل والعناية في الإمارات. وحّد Meetendo قطاعًا مجزأً — محوّلًا رسائل إنستغرام والمكالمات الهاتفية إلى تجربة حجز واحدة متقنة.</span>
+      </p>
+      <div class="proj-meta-grid">
+        <div>
+          <span class="proj-meta-label"><span class="lang-en">Role</span><span class="lang-ar">الدور</span></span>
+          <span class="proj-meta-value"><span class="lang-en">Product Designer</span><span class="lang-ar">مصمم منتجات</span></span>
+        </div>
+        <div>
+          <span class="proj-meta-label"><span class="lang-en">Year</span><span class="lang-ar">السنة</span></span>
+          <span class="proj-meta-value">2022 – 2023</span>
+        </div>
+        <div>
+          <span class="proj-meta-label"><span class="lang-en">Sector</span><span class="lang-ar">القطاع</span></span>
+          <span class="proj-meta-value"><span class="lang-en">Beauty Tech · UAE</span><span class="lang-ar">تقنيات الجمال · الإمارات</span></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- COVER -->
+    <figure class="proj-cover reveal">
+      <img src="uploads/Meetendo/meetendo-cover.png" alt="Meetendo cover">
+    </figure>
+
+    <!-- THE CHALLENGE -->
+    <section class="proj-section reveal">
+      <h2><span class="lang-en">The Challenge</span><span class="lang-ar">التحدي</span></h2>
+      <p>
+        <span class="lang-en">Beauty and wellness booking in the UAE was deeply fragmented. Customers juggled WhatsApp, phone calls, and Instagram DMs to find availability, while salons had no unified way to manage their schedules, staff, or repeat clients.</span>
+        <span class="lang-ar">كان حجز خدمات التجميل والعناية في الإمارات مجزأً بشكل عميق. كان العملاء يتنقّلون بين واتساب والمكالمات ورسائل إنستغرام لمعرفة التوافر، بينما لم تكن الصالونات تملك طريقة موحّدة لإدارة جداولها أو موظفيها أو عملائها المتكرّرين.</span>
+      </p>
+      <p>
+        <span class="lang-en">The product needed to feel as polished as the experience it was selling — and trustworthy enough for clients to pay upfront for premium services they hadn't tried before.</span>
+        <span class="lang-ar">كان على المنتج أن يبدو بنفس مستوى الخدمة التي يبيعها — وأن يكون موثوقًا بما يكفي ليدفع العملاء مسبقًا مقابل خدمات راقية لم يجرّبوها من قبل.</span>
+      </p>
+    </section>
+
+    <!-- MY ROLE -->
+    <section class="proj-section reveal">
+      <h2><span class="lang-en">My Role</span><span class="lang-ar">دوري</span></h2>
+      <p>
+        <span class="lang-en">As Product Designer, I led the end-to-end design — from research and journey mapping through to a complete visual identity, the customer-facing booking flow, and the salon-facing dashboard. I worked closely with the founders, two developers, and an early test pool of salons in Dubai.</span>
+        <span class="lang-ar">بصفتي مصمم منتجات، قدت التصميم من البداية إلى النهاية — من البحث وتخطيط رحلة المستخدم إلى الهوية البصرية الكاملة، وتدفق الحجز للعملاء، ولوحة تحكم الصالون. عملت بشكل وثيق مع المؤسّسين، ومطوّرَين، ومجموعة اختبار أوليّة من صالونات دبي.</span>
+      </p>
+    </section>
+
+    <!-- THE APPROACH -->
+    <section class="proj-section reveal">
+      <h2><span class="lang-en">The Approach</span><span class="lang-ar">المنهجية</span></h2>
+      <p>
+        <span class="lang-en">I started by mapping the existing salon-to-customer journey and interviewing both sides. The team agreed early on a few non-negotiables: a booking had to take under 30 seconds, availability had to be visible without commitment, and the visual language needed to feel like a high-end concierge service — not another listings app.</span>
+        <span class="lang-ar">بدأت بتخطيط رحلة الصالون-العميل القائمة ومقابلة الطرفَين. اتّفق الفريق منذ البداية على عدّة أساسيات غير قابلة للتفاوض: يجب أن يستغرق الحجز أقل من 30 ثانية، ويجب أن يكون التوافر مرئيًا دون التزام، وأن تشبه اللغة البصرية خدمة كونسيرج راقية — لا تطبيق قوائم آخر.</span>
+      </p>
+      <p>
+        <span class="lang-en">Quick low-fidelity flows were validated with five salon managers and twelve potential customers before any visual work began. The early conversations revealed that <strong>trust signals</strong> — verified reviews, photos of the actual chair, certified stylists — mattered far more than discounts.</span>
+        <span class="lang-ar">تم التحقق من تدفّقات أوّلية منخفضة الدقة مع خمسة مديري صالونات واثني عشر عميلًا محتملًا قبل بدء أي عمل بصري. كشفت المحادثات المبكرة أن <strong>إشارات الثقة</strong> — التقييمات الموثّقة، صور الكرسي الفعلي، الاختصاصيّين المعتمدين — كانت أهم بكثير من التخفيضات.</span>
+      </p>
+    </section>
+
+    <!-- KEY SCREENS -->
+    <section class="proj-section reveal">
+      <h2><span class="lang-en">Key Screens</span><span class="lang-ar">الشاشات الرئيسية</span></h2>
+      <p>
+        <span class="lang-en">The customer flow was deliberately linear — discover, select, schedule, confirm. Every screen earned its place by either reducing decision load or building trust.</span>
+        <span class="lang-ar">كان تدفّق العميل خطيًّا بشكل مدروس — اكتشاف، اختيار، جدولة، تأكيد. كل شاشة استحقّت مكانها إمّا بتقليل عبء القرار أو ببناء الثقة.</span>
+      </p>
+      <div class="proj-gallery">
+        <img src="uploads/Meetendo/Meetendo post 1.png" alt="Meetendo — onboarding">
+        <img src="uploads/Meetendo/Meetendo post 2.png" alt="Meetendo — discovery">
+        <img src="uploads/Meetendo/Meetendo post 3.png" alt="Meetendo — salon detail">
+        <img src="uploads/Meetendo/Meetendo post 4.png" alt="Meetendo — booking flow">
+        <img src="uploads/Meetendo/Meetendo post 5.png" alt="Meetendo — confirmation">
+      </div>
+    </section>
+
+    <!-- COMPONENTS & SYSTEM -->
+    <section class="proj-section reveal">
+      <h2><span class="lang-en">Components &amp; System</span><span class="lang-ar">المكوّنات والنظام</span></h2>
+      <p>
+        <span class="lang-en">A small but disciplined component library kept the customer app and the salon dashboard visually consistent. The system favored generous spacing, restrained color, and photography over illustration — to match the premium positioning.</span>
+        <span class="lang-ar">حافظت مكتبة مكوّنات صغيرة لكن منضبطة على الاتّساق البصري بين تطبيق العميل ولوحة تحكّم الصالون. فضّل النظام المسافات الواسعة، والألوان المتزنة، والصور الفوتوغرافية على الرسوم التوضيحية — لتتماشى مع التموضع الراقي.</span>
+      </p>
+      <div class="proj-gallery-grid">
+        <img src="uploads/Meetendo/Meetendo post 6.png" alt="Components">
+        <img src="uploads/Meetendo/Meetendo post 7.png" alt="Components">
+        <img src="uploads/Meetendo/Meetendo post 8.png" alt="Components">
+        <img src="uploads/Meetendo/Meetendo post 10.png" alt="Components">
+        <img src="uploads/Meetendo/Meetendo post 11.png" alt="Components">
+        <img src="uploads/Meetendo/Meetendo post 12.png" alt="Components">
+        <img src="uploads/Meetendo/Meetendo post 13.png" alt="Components">
+        <img src="uploads/Meetendo/Meetendo post 14.png" alt="Components">
+        <img src="uploads/Meetendo/Meetendo post 15.png" alt="Components">
+        <img src="uploads/Meetendo/Meetendo post 16.png" alt="Components">
+      </div>
+    </section>
+
+    <!-- OUTCOME -->
+    <section class="proj-section reveal">
+      <h2><span class="lang-en">Outcome &amp; Reflection</span><span class="lang-ar">النتائج والتأمّل</span></h2>
+      <p>
+        <span class="lang-en">Meetendo launched across the UAE in 2023. Partner salons reported a meaningful reduction in no-shows after switching to in-app booking with confirmations and reminders. Repeat-booking rates climbed steadily through the first six months.</span>
+        <span class="lang-ar">أُطلق Meetendo في الإمارات عام 2023. أبلغت الصالونات الشريكة عن انخفاض ملحوظ في حالات عدم الحضور بعد الانتقال إلى الحجز داخل التطبيق مع التأكيدات والتذكيرات. ارتفعت معدّلات الحجز المتكرّر بشكل مطرد خلال الأشهر الستة الأولى.</span>
+      </p>
+      <p>
+        <span class="lang-en">The clearest signal of success: customers consistently described the experience as <strong>"effortless"</strong> in feedback sessions — which, for a market trained on WhatsApp and word-of-mouth, is a high bar to clear.</span>
+        <span class="lang-ar">أوضح إشارة على النجاح: وصف العملاء التجربة باستمرار بأنها <strong>"سَلِسة"</strong> في جلسات الملاحظات — وهو معيار عالٍ في سوق معتاد على واتساب والتوصيات الشفهية.</span>
+      </p>
+    </section>
+
+    <!-- BACK -->
+    <nav class="proj-footer" aria-label="Back to work">
+      <a href="main-two.html#work">
+        <span aria-hidden="true">←</span>
+        <span class="lang-en">Back to all work</span>
+        <span class="lang-ar">العودة إلى كل الأعمال</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <script>
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.06 });
+    revealEls.forEach(el => observer.observe(el));
+
+    // Theme toggle (circular view transition, same as main-two)
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', (event) => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const isDark = currentTheme === 'dark';
+
+      const toggleTheme = () => {
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+      };
+
+      if (!document.startViewTransition) { toggleTheme(); return; }
+
+      const rect = themeToggle.getBoundingClientRect();
+      const x = event.clientX ?? (rect.left + rect.width / 2);
+      const y = event.clientY ?? (rect.top + rect.height / 2);
+      const endRadius = Math.hypot(
+        Math.max(x, window.innerWidth - x),
+        Math.max(y, window.innerHeight - y)
+      );
+
+      document.documentElement.classList.add(isDark ? 'transition-to-light' : 'transition-to-dark');
+      const transition = document.startViewTransition(toggleTheme);
+
+      transition.ready.then(() => {
+        const clipPath = [
+          `circle(0px at ${x}px ${y}px)`,
+          `circle(${endRadius}px at ${x}px ${y}px)`
+        ];
+        document.documentElement.animate(
+          { clipPath: isDark ? [...clipPath].reverse() : clipPath },
+          {
+            duration: 500,
+            easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+            pseudoElement: isDark
+              ? '::view-transition-old(root)'
+              : '::view-transition-new(root)',
+          }
+        );
+      });
+
+      transition.finished.then(() => {
+        document.documentElement.classList.remove('transition-to-light', 'transition-to-dark');
+      });
+    });
+
+    // Language toggle (blur + fade)
+    const langToggle = document.getElementById('langToggle');
+    let langSwitching = false;
+    langToggle.addEventListener('click', () => {
+      if (langSwitching) return;
+      langSwitching = true;
+      const currentLang = document.documentElement.getAttribute('lang') || 'en';
+      const newLang = currentLang === 'ar' ? 'en' : 'ar';
+      document.documentElement.classList.add('lang-switching');
+      setTimeout(() => {
+        document.documentElement.setAttribute('lang', newLang);
+        document.documentElement.setAttribute('dir', newLang === 'ar' ? 'rtl' : 'ltr');
+        localStorage.setItem('lang', newLang);
+        requestAnimationFrame(() => {
+          document.documentElement.classList.remove('lang-switching');
+          setTimeout(() => { langSwitching = false; }, 350);
+        });
+      }, 350);
+    });
+  </script>
+
+</body>
+
+</html>
