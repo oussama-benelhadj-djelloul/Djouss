@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Secure My Booking — integrating ticket-refund insurance into a booking widget. Case study by Benelhadj Djelloul Oussama.">
+  <title>Secure My Booking — Case Study · Djouss</title>
+  <link rel="icon" href="uploads/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+      const savedLang = localStorage.getItem('lang') || 'en';
+      document.documentElement.setAttribute('lang', savedLang);
+      document.documentElement.setAttribute('dir', savedLang === 'ar' ? 'rtl' : 'ltr');
+    })();
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --fg: #111111;
+      --muted: #888888;
+      --border: #e8e8e8;
+      --hover-bg: #f5f5f5;
+      --max-w: 680px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b0b0b;
+      --fg: #f5f5f5;
+      --muted: #8e8e8e;
+      --border: #222222;
+      --hover-bg: #161616;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.4s cubic-bezier(0.4,0,0.2,1), color 0.4s cubic-bezier(0.4,0,0.2,1),
+                  filter 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.35s cubic-bezier(0.22,1,0.36,1);
+      transform-origin: center top;
+    }
+
+    html[lang="ar"] body { font-family: 'IBM Plex Sans Arabic', var(--font); }
+
+    .lang-ar { display: none; }
+    html[lang="ar"] .lang-en { display: none; }
+    html[lang="ar"] .lang-ar { display: revert; }
+
+    html.lang-switching body { filter: blur(6px); opacity: 0.45; transform: scale(0.995); }
+    html.lang-switching { pointer-events: none; }
+
+    ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+    ::view-transition-old(root) { z-index: 1; }
+    ::view-transition-new(root) { z-index: 9999; }
+    .transition-to-light::view-transition-old(root) { z-index: 9999; }
+    .transition-to-light::view-transition-new(root) { z-index: 1; }
+    .transition-to-dark::view-transition-old(root) { z-index: 1; }
+    .transition-to-dark::view-transition-new(root) { z-index: 9999; }
+
+    .page { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    nav.site-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 32px 0 0; margin-bottom: 48px;
+    }
+    .nav-name {
+      font-size: 14px; font-weight: 500; letter-spacing: -0.01em;
+      color: var(--fg); text-decoration: none;
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .nav-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); display: block; }
+    .nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
+    .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--fg); }
+
+    .toggle-btn {
+      background: none; border: none; padding: 0; margin: 0; cursor: pointer;
+      color: var(--muted); display: flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%;
+      transition: color 0.2s, background-color 0.2s; position: relative;
+    }
+    .toggle-btn:hover { color: var(--fg); background-color: var(--hover-bg); }
+    .toggle-btn svg { width: 16px; height: 16px; }
+
+    .theme-toggle-btn svg { position: absolute; transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease; }
+    .theme-toggle-btn .sun-icon { opacity: 0; transform: rotate(90deg) scale(0); }
+    .theme-toggle-btn .moon-icon { opacity: 1; transform: rotate(0deg) scale(1); }
+    [data-theme="dark"] .theme-toggle-btn .sun-icon  { opacity: 1; transform: rotate(0deg) scale(1); }
+    [data-theme="dark"] .theme-toggle-btn .moon-icon { opacity: 0; transform: rotate(-90deg) scale(0); }
+
+    .lang-tooltip {
+      position: absolute; top: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      background: var(--fg); color: var(--bg);
+      font-size: 11px; font-weight: 500; padding: 5px 9px; border-radius: 6px;
+      white-space: nowrap; opacity: 0; pointer-events: none;
+      transition: opacity 0.2s cubic-bezier(0.22,1,0.36,1), transform 0.2s cubic-bezier(0.22,1,0.36,1);
+      z-index: 60; letter-spacing: 0.01em;
+    }
+    .lang-tooltip::before {
+      content: ''; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+      border: 4px solid transparent; border-bottom-color: var(--fg);
+    }
+    .lang-toggle-btn:hover .lang-tooltip,
+    .lang-toggle-btn:focus-visible .lang-tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Breadcrumb */
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); margin-bottom: 36px; }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.15s; }
+    .breadcrumb a:hover { color: var(--fg); }
+    .breadcrumb .sep { opacity: 0.5; }
+    .breadcrumb .current { color: var(--fg); }
+
+    /* Project header */
+    .proj-header { margin-bottom: 48px; }
+    .proj-header h1 {
+      font-size: 15px; font-weight: 500;
+      letter-spacing: -0.01em; line-height: 1.4; margin-bottom: 20px;
+    }
+    .proj-intro { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 32px; }
+
+    .proj-meta-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+      padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .proj-meta-grid > div { display: flex; flex-direction: column; gap: 4px; }
+    .proj-meta-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); font-weight: 500; }
+    .proj-meta-value { font-size: 13px; color: var(--fg); font-weight: 500; }
+
+    /* Cover */
+    .proj-cover { margin-bottom: 64px; }
+    .proj-cover img {
+      width: 100%; height: auto; display: block;
+      border-radius: 10px; border: 1px solid var(--border); background: var(--hover-bg);
+    }
+
+    /* Sections */
+    .proj-section { margin-bottom: 56px; }
+
+    .proj-section h2 {
+      font-size: 11px; font-weight: 500; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--muted); margin-bottom: 16px;
+    }
+
+    .proj-section h3 {
+      font-size: 16px; font-weight: 500; letter-spacing: -0.02em;
+      color: var(--fg); margin: 32px 0 12px;
+    }
+
+    .proj-section p {
+      font-size: 15px; color: var(--fg); line-height: 1.75; margin-bottom: 14px;
+    }
+    .proj-section p:last-child { margin-bottom: 0; }
+    .proj-section p strong { font-weight: 600; }
+
+    .proj-section ol, .proj-section ul {
+      margin: 12px 0 14px 20px; display: flex; flex-direction: column; gap: 8px;
+    }
+    .proj-section li { font-size: 15px; color: var(--fg); line-height: 1.7; }
+    .proj-section li strong { font-weight: 600; }
+
+    /* Images */
+    .proj-img {
+      width: 100%; height: auto; display: block; margin: 20px 0;
+      border-radius: 10px; border: 1px solid var(--border); background: var(--hover-bg);
+    }
+
+    .proj-gallery { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
+    .proj-gallery img {
+      width: 100%; height: auto; display: block;
+      border-radius: 10px; border: 1px solid var(--border); background: var(--hover-bg);
+    }
+
+    .proj-gallery-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px;
+    }
+    .proj-gallery-grid img {
+      width: 100%; height: auto; display: block;
+      border-radius: 10px; border: 1px solid var(--border); background: var(--hover-bg);
+    }
+
+    /* Footer */
+    #scrollTopBtn {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease, color 0.15s, background-color 0.15s;
+      z-index: 999;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    #scrollTopBtn.visible {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #scrollTopBtn:hover {
+      color: var(--fg);
+      background-color: var(--hover-bg);
+    }
+
+    .scroll-icon-wrap {
+      position: relative;
+      width: 16px;
+      height: 16px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .scroll-icon-wrap svg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 16px; height: 16px;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+    }
+
+    .scroll-icon-wrap .icon-a1 { transform: translateY(0);    opacity: 1; }
+    .scroll-icon-wrap .icon-a2 { transform: translateY(16px); opacity: 0; }
+
+    #scrollTopBtn:hover .scroll-icon-wrap .icon-a1 { transform: translateY(-16px); opacity: 0; }
+    #scrollTopBtn:hover .scroll-icon-wrap .icon-a2 { transform: translateY(0);     opacity: 1; }
+
+    .proj-footer { padding: 32px 0 56px; border-top: 1px solid var(--border); margin-top: 16px; }
+    .proj-footer a {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 14px; color: var(--muted); text-decoration: none; transition: color 0.15s, gap 0.2s;
+    }
+    .proj-footer a:hover { color: var(--fg); gap: 12px; }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @keyframes proj-rise {
+      from { opacity: 0; transform: translateY(24px); filter: blur(5px); }
+      to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+    }
+    @keyframes nav-fade-down {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      nav.site-nav { animation: nav-fade-down 0.9s cubic-bezier(0.22,1,0.36,1) both; }
+      .breadcrumb  { animation: proj-rise 1.1s 0.15s cubic-bezier(0.22,1,0.36,1) both; }
+      .proj-header { animation: proj-rise 1.2s 0.30s cubic-bezier(0.22,1,0.36,1) both; }
+    }
+
+    @media (max-width: 560px) {
+      .proj-meta-grid { grid-template-columns: 1fr 1fr; }
+      .proj-gallery-grid { grid-template-columns: 1fr; }
+      nav.site-nav { flex-wrap: wrap; gap: 16px; }
+      .nav-links { gap: 14px; }
+    }
+
+    .proj-video {
+      width: 100%; height: auto; display: block;
+      border-radius: 10px; border: 1px solid var(--border);
+      background: var(--hover-bg);
+    }
+
+    /* Lightbox */
+    .zoomable { cursor: zoom-in; }
+
+    #lightbox {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0, 0, 0, 0.0);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.22s ease, background 0.22s ease;
+    }
+
+    #lightbox.open {
+      opacity: 1; pointer-events: all;
+      background: rgba(0, 0, 0, 0.72);
+    }
+
+    #lightbox-backdrop {
+      position: absolute; inset: 0;
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+      transition: backdrop-filter 0.22s ease, -webkit-backdrop-filter 0.22s ease;
+    }
+
+    #lightbox.open #lightbox-backdrop {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    #lightbox-img-wrap {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      cursor: zoom-in;
+    }
+
+    #lightbox-img {
+      max-width: 90vw; max-height: 90vh;
+      border-radius: 10px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+      transform: scale(1);
+      transform-origin: center center;
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.22s ease;
+      opacity: 0;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    #lightbox.open #lightbox-img { opacity: 1; }
+
+    #lightbox-close {
+      position: absolute; top: 20px; right: 20px; z-index: 2;
+      background: rgba(255,255,255,0.12);
+      border: none; border-radius: 50%; width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; cursor: pointer;
+      transition: background 0.15s;
+    }
+    #lightbox-close:hover { background: rgba(255,255,255,0.22); }
+
+    #lightbox-zoom-hint {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; color: rgba(255,255,255,0.45);
+      letter-spacing: 0.06em; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- NAV -->
+    <nav class="site-nav">
+      <a class="nav-name" href="main-two.html">
+        <img class="nav-avatar" src="Profile 1.png" alt="Djouss avatar">
+        Djouss
+      </a>
+      <ul class="nav-links">
+        <li><a href="main-two.html#work"><span class="lang-en">Work</span><span class="lang-ar">أعمالي</span></a></li>
+        <li>
+          <button id="langToggle" class="toggle-btn lang-toggle-btn" aria-label="Toggle Language">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/>
+              <path d="m22 22-5-10-5 10"/><path d="M14 18h6"/>
+            </svg>
+            <span class="lang-tooltip" role="tooltip">
+              <span class="lang-en">العربية</span>
+              <span class="lang-ar">English</span>
+            </span>
+          </button>
+        </li>
+        <li>
+          <button id="themeToggle" class="toggle-btn theme-toggle-btn" aria-label="Toggle Theme">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sun-icon">
+              <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/>
+              <path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/>
+              <path d="M2 12h2"/><path d="M20 12h2"/>
+              <path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="moon-icon">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="main-two.html#work"><span class="lang-en">Work</span><span class="lang-ar">الأعمال</span></a>
+      <span class="sep">/</span>
+      <span class="current">Secure My Booking</span>
+    </nav>
+
+    <!-- PROJECT HEADER -->
+    <header class="proj-header">
+      <h1>Secure My Booking</h1>
+      <p class="proj-intro">
+        <span class="lang-en">Integrating a ticket-refund insurance component into Smeetz's booking widget — making it seamless, trustworthy, and easy to act on.</span>
+        <span class="lang-ar">دمج مكوّن تأمين على استرداد تذاكر الرحلات في نافذة حجز Smeetz — بشكل سلس وموثوق وسهل التفاعل معه.</span>
+      </p>
+      <div class="proj-meta-grid">
+        <div>
+          <span class="proj-meta-label"><span class="lang-en">Duration</span><span class="lang-ar">المدة</span></span>
+          <span class="proj-meta-value">Aug – Sep 2025</span>
+        </div>
+        <div>
+          <span class="proj-meta-label"><span class="lang-en">Role</span><span class="lang-ar">الدور</span></span>
+          <span class="proj-meta-value"><span class="lang-en">Product Designer</span><span class="lang-ar">مصمم منتجات</span></span>
+        </div>
+        <div>
+          <span class="proj-meta-label"><span class="lang-en">Collaboration</span><span class="lang-ar">التعاون</span></span>
+          <span class="proj-meta-value"><span class="lang-en">Lydia Birris (PM)</span><span class="lang-ar">ليديا بيريس (مديرة منتجات)</span></span>
+        </div>
+        <div>
+          <span class="proj-meta-label"><span class="lang-en">Tools</span><span class="lang-ar">الأدوات</span></span>
+          <span class="proj-meta-value">Figma, Slack, Mobbin</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- COVER -->
+    <figure class="proj-cover reveal">
+      <img class="zoomable" src="uploads/secure-booking/cover.png" alt="Secure My Booking — cover">
+    </figure>
+
+    <!-- CONTEXT -->
+    <section class="proj-section reveal">
+      <h2><span class="lang-en">Context</span><span class="lang-ar">السياق</span></h2>
+      <p>
+        <span class="lang-en">11Arches is a registered charity based in Bishop Auckland, best known for operating Kynren, a large-scale, live-action open-air show. They are one of Smeetz's key clients. In the most recent year, the charity reported an annual total gross income of approximately £10.47 million.</span>
+        <span class="lang-ar">11Arches منظمة خيرية مسجّلة مقرّها Bishop Auckland، تشتهر بتشغيل Kynren، وهو عرض مفتوح الهواء واسع النطاق. يُعدّون من أبرز عملاء Smeetz. في آخر سنة مالية، سجّلت المنظمة إجمالي دخل سنوي بلغ ما يقارب £10.47 مليون.</span>
+      </p>
+    </section>
+
+    <!-- COLLABORATION -->
+    <section class="proj-section reveal">
+      <h2><span class="lang-en">Collaboration</span><span class="lang-ar">التعاون</span></h2>
+      <p>
+        <span class="lang-en">I collaborated closely with <strong>Lydia</strong>, our Product Manager at Smeetz. She led the <strong>ideation and research phase</strong>, with minor contributions from my side as I was focusing on other ongoing tasks. Once the direction was defined, I took ownership of the wireframing and design, sharing iterative options and refinements with her throughout the process. Together, we prepared and presented the solution to the stakeholders, gathered their feedback, and aligned on the next steps.</span>
+        <span class="lang-ar">تعاونت بشكل وثيق مع <strong>ليديا</strong>، مديرة المنتجات في Smeetz. قادت هي <strong>مرحلة التخيّل والبحث</strong>، بمساهمات بسيطة من جانبي نظرًا لانشغالي بمهام أخرى. بمجرد تحديد الاتجاه، تولّيت ملكية التصميم والصياغة التكرارية، وتشاركتها معها طوال العملية. معًا، قدّمنا الحل للمعنيين، جمعنا ملاحظاتهم، وتوافقنا على الخطوات التالية.</span>
+      </p>
+    </section>
+
+    <!-- CHALLENGE -->
+    <section class="proj-section reveal">
+      <h2><span class="lang-en">Challenge</span><span class="lang-ar">التحدي</span></h2>
+      <p>
+        <span class="lang-en">11Arches partners with an insurance provider, <strong>Secure My Booking</strong>, which enables them to generate additional revenue by offering customers an optional ticket-refund guarantee. If an attendee is unable to attend the event, they can request a refund directly through the insurer according to the agency's policy.</span>
+        <span class="lang-ar">تتعاون 11Arches مع مزوّد تأمين هو <strong>Secure My Booking</strong>، الذي يمكّنهم من توليد إيرادات إضافية بتقديم ضمان استرداد اختياري للتذاكر. إن تعذّر على الحاضر الحضور، يمكنه طلب الاسترداد مباشرةً عبر شركة التأمين وفق بوليصة الوكالة.</span>
+      </p>
+      <p>
+        <span class="lang-en">At Smeetz, this feature was not yet supported in our booking widget, so our goal was to design and implement this new component. We needed to integrate it seamlessly into the user experience, ensuring it was clear, accessible, and easy for customers to understand and use.</span>
+        <span class="lang-ar">في Smeetz، لم تكن هذه الميزة مدعومة بعد في نافذة الحجز، لذا كان هدفنا تصميم وتنفيذ هذا المكوّن الجديد. احتجنا إلى دمجه بسلاسة في تجربة المستخدم، بضمان أن يكون واضحًا ومتاحًا وسهل الفهم والاستخدام.</span>
+      </p>
+    </section>
+
+    <!-- RESEARCH -->
+    <section class="proj-section reveal">
+      <h2><span class="lang-en">Research</span><span class="lang-ar">البحث</span></h2>
+      <p>
+        <span class="lang-en">We didn't have the opportunity to run deep UX research for this feature. The insurance component was a priority request from the client and needed to be delivered quickly. Because of this, Lydia and I agreed on a pragmatic approach: conducting a <strong>benchmark of well-known booking flows</strong> that already include insurance options.</span>
+        <span class="lang-ar">لم تتح لنا الفرصة لإجراء بحث UX معمّق لهذه الميزة. كان المكوّن التأميني طلبًا ذا أولوية من العميل ويجب تسليمه سريعًا. لذا، اتّفقنا أنا وليديا على نهج براغماتي: إجراء <strong>قياس مرجعي لتدفقات حجز معروفة</strong> تتضمّن خيارات تأمين بالفعل.</span>
+      </p>
+      <p><span class="lang-en">This approach helped us achieve two key goals:</span><span class="lang-ar">ساعدنا هذا النهج على تحقيق هدفَين رئيسيَّين:</span></p>
+      <ol>
+        <li>
+          <span class="lang-en"><strong>Ensure familiarity</strong> by designing something users already recognize and understand within a booking journey.</span>
+          <span class="lang-ar"><strong>ضمان الألفة</strong> بتصميم شيء يتعرّف عليه المستخدمون ضمن رحلة الحجز.</span>
+        </li>
+        <li>
+          <span class="lang-en"><strong>Move efficiently</strong> by skipping extensive wireframing and progressing directly to high-fidelity designs.</span>
+          <span class="lang-ar"><strong>التحرّك بكفاءة</strong> بتجاوز التصميم الأوّلي المطوّل والانتقال مباشرةً إلى تصاميم عالية الدقة.</span>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ACTIONS / ITERATIONS -->
+    <section class="proj-section reveal">
+      <h2><span class="lang-en">Actions &amp; Iterations</span><span class="lang-ar">الإجراءات والتكرارات</span></h2>
+
+      <h3><span class="lang-en">Where Design Meets Reality</span><span class="lang-ar">حيث يلتقي التصميم بالواقع</span></h3>
+      <div class="proj-gallery-grid" style="margin-top: 14px;margin-bottom: 14px;">
+        <img class="zoomable" src="uploads/secure-booking/sb-1.png" alt="Secure My Booking — screen">
+        <img class="zoomable" src="uploads/secure-booking/sb-2.png" alt="Secure My Booking — screen">
+      </div>
+      <p>
+        <span class="lang-en">There was a lot of back-and-forth between me and the Product Manager on how to introduce the insurance component into the existing booking flow. Since the team had been stable and in place for years, taking an overly creative or disruptive approach could have slowed down development and increased technical complexity.</span>
+        <span class="lang-ar">جرى كثير من النقاش بيني وبين مديرة المنتجات حول كيفية إدخال مكوّن التأمين في تدفق الحجز القائم. بما أن الفريق كان مستقرًّا منذ سنوات، كان النهج الإبداعي المفرط أو التخريبي قد يُبطئ التطوير ويزيد التعقيد التقني.</span>
+      </p>
+      <p>
+        <span class="lang-en">Our challenge was to <strong>balance design clarity</strong> with <strong>technical feasibility</strong>, integrating the feature in a way that felt natural to users while allowing the engineering team to deliver it quickly and safely.</span>
+        <span class="lang-ar">كان تحدّينا هو <strong>الموازنة بين وضوح التصميم</strong> و<strong>الجدوى التقنية</strong>، بدمج الميزة بأسلوب طبيعي للمستخدمين مع إتاحة المجال للفريق الهندسي لتسليمها بسرعة وأمان.</span>
+      </p>
+
+      <h3><span class="lang-en">Less Buttons, Better Flow</span><span class="lang-ar">أزرار أقل، تدفق أفضل</span></h3>
+      <img class="proj-img zoomable" src="uploads/secure-booking/sb-3.png" alt="Less Buttons, Better Flow">
+      <p>
+        <span class="lang-en">In the first iteration, we introduced the insurance component directly into the booking flow. However, after presenting it to internal stakeholders, we identified a usability concern: the booking flow already relies on a primary Continue CTA, and adding two additional buttons created <strong>too many competing actions</strong>. This increased cognitive load and made the selection less clear, potentially impacting decision-making and flow completion.</span>
+        <span class="lang-ar">في التكرار الأول، أدرجنا مكوّن التأمين مباشرةً في تدفق الحجز. لكن بعد تقديمه للمعنيين الداخليين، رصدنا مشكلة في سهولة الاستخدام: يعتمد التدفق بالفعل على زر Continue رئيسي، وإضافة زرَّين إضافيَّين أفرز <strong>منافسةً على الانتباه</strong>، مما رفع العبء المعرفي وجعل الاختيار أقل وضوحًا.</span>
+      </p>
+
+      <h3><span class="lang-en">Convincing Choices</span><span class="lang-ar">خيارات مقنعة</span></h3>
+      <img class="proj-img zoomable" src="uploads/secure-booking/sb-4.png" alt="Convincing Choices">
+      <p>
+        <span class="lang-en">We returned to benchmarking, this time focusing on a <strong>large, well-established company</strong> with an insurance component already integrated into its booking flow. Although this example came from outside the leisure and entertainment industry, it provided a strong, proven pattern.</span>
+        <span class="lang-ar">عدنا إلى المقارنة المرجعية، هذه المرة مع <strong>شركة كبيرة وراسخة</strong> تملك مكوّن تأمين مدمجًا في تدفق حجزها. وعلى الرغم من أن المثال جاء من خارج قطاع الترفيه، فقد قدّم نمطًا قويًا ومُثبتًا.</span>
+      </p>
+      <p>
+        <span class="lang-en">From this analysis, we restructured the insurance feature as a <strong>clear selection component with two options</strong>. The recommended option was supported with <strong>additional context, descriptive copy, and informative details</strong> to help users understand the value and confidently make a decision.</span>
+        <span class="lang-ar">بناءً على هذا التحليل، أعدنا هيكلة ميزة التأمين كـ<strong>مكوّن اختيار واضح بخيارَين</strong>. الخيار الموصى به مدعوم بـ<strong>سياق إضافي ونسخة وصفية ومعلومات مفيدة</strong> تساعد المستخدمين على فهم القيمة واتخاذ القرار بثقة.</span>
+      </p>
+
+      <h3><span class="lang-en">Work Beyond Design</span><span class="lang-ar">ما وراء التصميم</span></h3>
+      <p>
+        <span class="lang-en">Another small but impactful contribution I made was supporting the marketing of this feature. I designed the visual component used in the <strong>newsletter sent to our clients</strong> whenever a new feature is released, while the copy was provided by the Product Manager. This helped ensure a consistent, visually engaging presentation of the new insurance option.</span>
+        <span class="lang-ar">مساهمة أخرى صغيرة لكن ذات أثر: دعمت تسويق هذه الميزة. صمّمت المكوّن البصري المستخدم في <strong>النشرة البريدية المُرسَلة لعملائنا</strong> عند إطلاق كل ميزة جديدة، فيما قدّمت مديرة المنتجات النص. ساهم ذلك في ضمان تقديم متسق وجذّاب بصريًا لخيار التأمين الجديد.</span>
+      </p>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="proj-section reveal">
+      <h2><span class="lang-en">Results</span><span class="lang-ar">النتائج</span></h2>
+      <div class="proj-gallery">
+        <img class="zoomable" src="uploads/secure-booking/sb-5.png" alt="Secure My Booking — final screen">
+      </div>
+      <div class="proj-gallery-grid" style="margin-top: 14px;">
+        <img class="zoomable" src="uploads/secure-booking/sb-6.png" alt="Secure My Booking — screen">
+        <img class="zoomable" src="uploads/secure-booking/sb-7.png" alt="Secure My Booking — screen">
+      </div>
+    </section>
+
+    <!-- TAKEAWAYS -->
+    <section class="proj-section reveal">
+      <h2><span class="lang-en">Things I Learned · Takeaway &amp; Reflection</span><span class="lang-ar">ما تعلّمته · خلاصة وتأمّل</span></h2>
+      <ul>
+        <li>
+          <span class="lang-en"><strong>Speed requires structured thinking.</strong> When research time is limited, benchmarking becomes a strategy, not just a shortcut. Leveraging proven patterns helped us move quickly while reducing usability risks.</span>
+          <span class="lang-ar"><strong>السرعة تتطلّب تفكيرًا منظّمًا.</strong> حين يضيق وقت البحث، يصبح القياس المرجعي استراتيجية لا مجرد اختصار. الاستناد إلى أنماط مجرّبة ساعدنا على التحرّك سريعًا مع تقليل مخاطر سهولة الاستخدام.</span>
+        </li>
+        <li>
+          <span class="lang-en"><strong>Clarity beats creativity in transactional contexts.</strong> In high-intent flows like ticket purchases, reducing cognitive load is more important than introducing novel UI solutions.</span>
+          <span class="lang-ar"><strong>الوضوح يتفوّق على الإبداع في السياقات المعاملاتية.</strong> في تدفقات عالية النية كشراء التذاكر، تقليل العبء المعرفي أهم من ابتكار حلول واجهة جديدة.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- VIDEO -->
+    <section class="proj-section reveal">
+      <video class="proj-video" src="uploads/secure-booking/secureVid.mov" controls playsinline muted loop></video>
+    </section>
+
+    <!-- IMPACT -->
+    <section class="proj-section reveal">
+      <h2><span class="lang-en">Impact</span><span class="lang-ar">الأثر</span></h2>
+      <ul>
+        <li>
+          <span class="lang-en"><strong>Enabled a new revenue stream</strong> for 11Arches by integrating the Secure My Booking insurance option directly into the booking widget.</span>
+          <span class="lang-ar"><strong>فتح مصدر إيرادات جديد</strong> لـ11Arches بدمج خيار تأمين Secure My Booking مباشرةً في نافذة الحجز.</span>
+        </li>
+        <li>
+          <span class="lang-en"><strong>Maintained booking flow stability</strong> by introducing the feature without disrupting the existing conversion funnel.</span>
+          <span class="lang-ar"><strong>الحفاظ على استقرار تدفق الحجز</strong> بإدخال الميزة دون الإخلال بمسار التحويل القائم.</span>
+        </li>
+        <li>
+          <span class="lang-en"><strong>Supported feature adoption</strong> by preparing the visual assets for the product newsletter announcement, ensuring a cohesive and professional launch communication.</span>
+          <span class="lang-ar"><strong>دعم اعتماد الميزة</strong> بإعداد الأصول البصرية للإعلان في النشرة البريدية، بضمان تواصل إطلاق متسق واحترافي.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- BACK -->
+    <nav class="proj-footer" aria-label="Back to work">
+      <a href="main-two.html#work">
+        <span aria-hidden="true">←</span>
+        <span class="lang-en">Back to all work</span>
+        <span class="lang-ar">العودة إلى كل الأعمال</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- SCROLL TO TOP -->
+  <button id="scrollTopBtn" aria-label="Scroll to top">
+    <span class="scroll-icon-wrap">
+      <svg class="icon-a1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+      <svg class="icon-a2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+    </span>
+  </button>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <div id="lightbox-backdrop"></div>
+    <div id="lightbox-img-wrap">
+      <img id="lightbox-img" alt="">
+    </div>
+    <button id="lightbox-close" aria-label="Close">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <p id="lightbox-zoom-hint">Scroll to zoom · Click to close</p>
+  </div>
+
+  <script>
+    // Lightbox
+    const lightbox     = document.getElementById('lightbox');
+    const lbImg        = document.getElementById('lightbox-img');
+    const lbWrap       = document.getElementById('lightbox-img-wrap');
+    const lbClose      = document.getElementById('lightbox-close');
+    const lbHint       = document.getElementById('lightbox-zoom-hint');
+    let lbScale = 1;
+    const SCALE_MIN = 1, SCALE_MAX = 4, SCALE_STEP = 0.25;
+
+    function lbOpen(src, alt) {
+      lbImg.src = src;
+      lbImg.alt = alt;
+      lbScale = 1;
+      lbImg.style.transform = 'scale(1)';
+      lbWrap.style.cursor = 'zoom-in';
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function lbClose_() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(() => { lbImg.src = ''; }, 250);
+    }
+
+    document.querySelectorAll('.zoomable').forEach(img => {
+      img.addEventListener('click', () => lbOpen(img.src, img.alt));
+    });
+
+    lbClose.addEventListener('click', (e) => { e.stopPropagation(); lbClose_(); });
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox || e.target === document.getElementById('lightbox-backdrop')) lbClose_();
+    });
+
+    lbWrap.addEventListener('click', () => {
+      if (lbScale >= SCALE_MAX) {
+        lbScale = 1;
+      } else {
+        lbScale = Math.min(lbScale + 1, SCALE_MAX);
+      }
+      lbImg.style.transform = `scale(${lbScale})`;
+      lbWrap.style.cursor = lbScale >= SCALE_MAX ? 'zoom-out' : 'zoom-in';
+    });
+
+    lightbox.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY < 0 ? SCALE_STEP : -SCALE_STEP;
+      lbScale = Math.min(SCALE_MAX, Math.max(SCALE_MIN, lbScale + delta));
+      lbImg.style.transform = `scale(${lbScale})`;
+      lbWrap.style.cursor = lbScale >= SCALE_MAX ? 'zoom-out' : lbScale <= SCALE_MIN ? 'zoom-in' : 'grab';
+      lbHint.style.opacity = lbScale > 1 ? '0' : '1';
+    }, { passive: false });
+
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('open')) return;
+      if (e.key === 'Escape') lbClose_();
+      if (e.key === '+' || e.key === '=') { lbScale = Math.min(SCALE_MAX, lbScale + SCALE_STEP); lbImg.style.transform = `scale(${lbScale})`; }
+      if (e.key === '-')                   { lbScale = Math.max(SCALE_MIN, lbScale - SCALE_STEP); lbImg.style.transform = `scale(${lbScale})`; }
+    });
+
+    // Scroll to top button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll', () => {
+      scrollTopBtn.classList.toggle('visible', window.scrollY > 300);
+    }, { passive: true });
+    scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.06 });
+    revealEls.forEach(el => observer.observe(el));
+
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', (event) => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const isDark = currentTheme === 'dark';
+      const toggleTheme = () => {
+        const newTheme = isDark ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+      };
+      if (!document.startViewTransition) { toggleTheme(); return; }
+      const rect = themeToggle.getBoundingClientRect();
+      const x = event.clientX ?? (rect.left + rect.width / 2);
+      const y = event.clientY ?? (rect.top + rect.height / 2);
+      const endRadius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+      document.documentElement.classList.add(isDark ? 'transition-to-light' : 'transition-to-dark');
+      const transition = document.startViewTransition(toggleTheme);
+      transition.ready.then(() => {
+        const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`];
+        document.documentElement.animate(
+          { clipPath: isDark ? [...clipPath].reverse() : clipPath },
+          { duration: 500, easing: 'cubic-bezier(0.4,0,0.2,1)', pseudoElement: isDark ? '::view-transition-old(root)' : '::view-transition-new(root)' }
+        );
+      });
+      transition.finished.then(() => document.documentElement.classList.remove('transition-to-light', 'transition-to-dark'));
+    });
+
+    // Language toggle
+    const langToggle = document.getElementById('langToggle');
+    let langSwitching = false;
+    langToggle.addEventListener('click', () => {
+      if (langSwitching) return;
+      langSwitching = true;
+      const currentLang = document.documentElement.getAttribute('lang') || 'en';
+      const newLang = currentLang === 'ar' ? 'en' : 'ar';
+      document.documentElement.classList.add('lang-switching');
+      setTimeout(() => {
+        document.documentElement.setAttribute('lang', newLang);
+        document.documentElement.setAttribute('dir', newLang === 'ar' ? 'rtl' : 'ltr');
+        localStorage.setItem('lang', newLang);
+        requestAnimationFrame(() => {
+          document.documentElement.classList.remove('lang-switching');
+          setTimeout(() => { langSwitching = false; }, 350);
+        });
+      }, 350);
+    });
+  </script>
+</body>
+</html>
