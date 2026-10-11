@@ -337,6 +337,34 @@
       display: block;
     }
 
+    /* ── Resume link hover preview ── */
+    .resume-preview {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(6px) scale(0.97);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 6px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.07);
+    }
+
+    .resume-preview.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .resume-preview img {
+      width: 200px;
+      height: auto;
+      border-radius: 9px;
+      display: block;
+      background: #fff;
+    }
+
     .nav-links {
       display: flex;
       align-items: center;
@@ -1346,7 +1374,11 @@
         </div>
       </div>
       <ul class="nav-links">
-        <li><a href="uploads/resume-benelhadj-djelloul-oussama.pdf" download rel="noopener noreferrer" target="_blank" class="resume-link"><span class="resume-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-file"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><polyline points="14 2 14 8 20 8"/></svg><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></span><span class="lang-en">Resume</span><span class="lang-ar">السيرة الذاتية</span></a></li>
+        <li><a href="uploads/resume-benelhadj-djelloul-oussama.pdf" download rel="noopener noreferrer" target="_blank" class="resume-link"><span class="resume-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-file"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><polyline points="14 2 14 8 20 8"/></svg><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></span><span class="lang-en">Resume</span><span class="lang-ar">السيرة الذاتية</span></a>
+          <div class="resume-preview" id="resumePreview">
+            <img src="uploads/resume-preview.png" alt="Resume preview">
+          </div>
+        </li>
         <li>
           <button id="langToggle" class="theme-toggle-btn lang-toggle-btn" aria-label="Toggle Language">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-languages">
@@ -2115,6 +2147,22 @@
 
     navNameWrap.addEventListener('mouseleave', () => {
       navPreview.classList.remove('visible');
+    });
+
+    // Resume link hover preview — same pattern as the nav name preview, right-aligned to the link
+    const resumeLink = document.querySelector('.resume-link');
+    const resumePreview = document.getElementById('resumePreview');
+    document.body.appendChild(resumePreview);
+
+    resumeLink.addEventListener('mouseenter', () => {
+      const rect = resumeLink.getBoundingClientRect();
+      resumePreview.style.left = Math.max(8, rect.right - resumePreview.offsetWidth) + 'px';
+      resumePreview.style.top = (rect.bottom + 10) + 'px';
+      resumePreview.classList.add('visible');
+    });
+
+    resumeLink.addEventListener('mouseleave', () => {
+      resumePreview.classList.remove('visible');
     });
 
   </script>
