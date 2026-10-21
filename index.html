@@ -1,528 +1,2172 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DL8ZDPNJV4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Benelhadj Djelloul Oussama — Product Designer partnering with founders to design the future.">
+  <title>Benelhadj Djelloul Oussama — Designer</title>
+  <link rel="icon" href="uploads/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+      const savedLang = localStorage.getItem('lang') || 'en';
+      document.documentElement.setAttribute('lang', savedLang);
+      document.documentElement.setAttribute('dir', savedLang === 'ar' ? 'rtl' : 'ltr');
+    })();
+  </script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  gtag('config', 'G-DL8ZDPNJV4');
-</script>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="style.css">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="https://unpkg.com/scrollreveal"></script>
-    <link rel="icon" href="uploads/logo.png">
-    <title>Benelhadj Djelloul Oussama</title>
+    :root {
+      --bg: #ffffff;
+      --fg: #111111;
+      --muted: #888888;
+      --border: #e8e8e8;
+      --accent: #111111;
+      --hover-bg: #f5f5f5;
+      --testimonial-bg: #fafafa;
+      --cta-bg: #f1f1f1;
+      --logo-filter: grayscale(1) opacity(0.5);
+      --logo-hover-filter: grayscale(0) opacity(1);
+      --max-w: 680px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b0b0b;
+      --fg: #f5f5f5;
+      --muted: #8e8e8e;
+      --border: #222222;
+      --accent: #ffffff;
+      --hover-bg: #161616;
+      --testimonial-bg: #121212;
+      --cta-bg: #161616;
+      --logo-filter: invert(1) grayscale(1) opacity(0.5);
+      --logo-hover-filter: invert(1) grayscale(0) opacity(1);
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Language: Arabic font + visibility ── */
+    html[lang="ar"] body {
+      font-family: 'IBM Plex Sans Arabic', var(--font);
+    }
+
+    .lang-ar { display: none; }
+    html[lang="ar"] .lang-en { display: none; }
+    html[lang="ar"] .lang-ar { display: revert; }
+
+    /* Language switch animation: blur + fade the page during the swap */
+    html.lang-switching body {
+      filter: blur(6px);
+      opacity: 0.45;
+      transform: scale(0.995);
+    }
+    body {
+      transition: filter 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: center top;
+    }
+    html.lang-switching {
+      pointer-events: none;
+    }
+
+    /* RTL niceties: keep drawer on the right edge but flip border + exp date margin */
+    html[dir="rtl"] .drawer {
+      border-left: none;
+      border-right: 1px solid var(--border);
+      box-shadow: 12px 0 40px rgba(0, 0, 0, 0.08);
+    }
+
+    html[dir="rtl"] .exp-date {
+      margin-left: 0;
+      margin-right: 16px;
+    }
+
+    /* Language toggle button + tooltip */
+    .lang-toggle-btn {
+      position: relative;
+    }
+
+    .lang-toggle-btn svg {
+      position: static;
+    }
+
+    .lang-tooltip {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      background: var(--fg);
+      color: var(--bg);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 5px 9px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 60;
+      letter-spacing: 0.01em;
+    }
+
+    .lang-tooltip::before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 4px solid transparent;
+      border-bottom-color: var(--fg);
+    }
+
+    .lang-tooltip .lang-ar {
+      font-family: 'IBM Plex Sans Arabic', var(--font);
+    }
+    html[lang="ar"] .lang-tooltip .lang-en {
+      font-family: 'Inter', var(--font);
+    }
+
+    .lang-toggle-btn:hover .lang-tooltip,
+    .lang-toggle-btn:focus-visible .lang-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Theme Transition ── */
+    body, 
+    nav, 
+    .nav-links a, 
+    .work-item, 
+    .work-card-img, 
+    .testimonial, 
+    .cta-block, 
+    .logos-track img, 
+    .services-list li,
+    .exp-item {
+      transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  filter 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ── View Transitions (Circular Reveal) ── */
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+      mix-blend-mode: normal;
+    }
+
+    /* Default stack order */
+    ::view-transition-old(root) {
+      z-index: 1;
+    }
+    ::view-transition-new(root) {
+      z-index: 9999;
+    }
+
+    /* Stacks depending on transition direction */
+    .transition-to-light::view-transition-old(root) {
+      z-index: 9999;
+    }
+    .transition-to-light::view-transition-new(root) {
+      z-index: 1;
+    }
+
+    .transition-to-dark::view-transition-old(root) {
+      z-index: 1;
+    }
+    .transition-to-dark::view-transition-new(root) {
+      z-index: 9999;
+    }
+
+    /* ── Layout ── */
+    .page {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── Nav ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 32px 0 0;
+      margin-bottom: 80px;
+    }
+
+    .nav-name {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--fg);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      display: block;
+    }
+
+    .hero-name-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-signature {
+      display: block;
+      opacity: 0;
+      transform: translateY(3px);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    .nav-signature .sig-path {
+      stroke-dasharray: 300;
+      stroke-dashoffset: 300;
+    }
+
+    .hero-name-wrap:hover .nav-signature {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero-name-wrap:hover .sig-path:nth-child(1) {
+      animation: sig-draw 0.55s cubic-bezier(0.4, 0, 0.2, 1) 0s forwards;
+    }
+    .hero-name-wrap:hover .sig-path:nth-child(2) {
+      animation: sig-draw 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
+    }
+    .hero-name-wrap:hover .sig-path:nth-child(3) {
+      animation: sig-draw 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0.55s forwards;
+    }
+
+    @keyframes sig-draw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* ── Nav name hover preview ── */
+    .nav-name-wrap {
+      position: relative;
+    }
+
+    .nav-preview {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(6px) scale(0.97);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 6px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.07);
+      display: flex;
+      gap: 6px;
+    }
+
+    .nav-preview.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .nav-preview-img-large {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 9px;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .nav-preview-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav-preview-stack img {
+      width: 72px;
+      height: 72px;
+      object-fit: cover;
+      border-radius: 9px;
+      display: block;
+    }
+
+    /* ── Resume link hover preview ── */
+    .resume-preview {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(6px) scale(0.97);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 6px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.07);
+    }
+
+    .resume-preview.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .resume-preview img {
+      width: 200px;
+      height: auto;
+      border-radius: 9px;
+      display: block;
+      background: #fff;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--fg);
+    }
+
+    .resume-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .resume-icon-wrap {
+      position: relative;
+      width: 16px;
+      height: 16px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .resume-icon-wrap .icon-file,
+    .resume-icon-wrap .icon-download {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+    }
+
+    .resume-icon-wrap .icon-file {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .resume-icon-wrap .icon-download {
+      transform: translateY(16px);
+      opacity: 0;
+    }
+
+    .resume-link:hover .resume-icon-wrap .icon-file {
+      transform: translateY(-16px);
+      opacity: 0;
+    }
+
+    .resume-link:hover .resume-icon-wrap .icon-download {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .nav-cta {
+      font-size: 13px;
+      color: var(--fg) !important;
+      background: var(--fg);
+      color: var(--bg) !important;
+      padding: 7px 14px;
+      border-radius: 100px;
+      transition: opacity 0.15s !important;
+    }
+
+    .nav-cta:hover {
+      opacity: 0.75;
+    }
+
+    .theme-toggle-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      transition: color 0.2s, background-color 0.2s;
+      position: relative;
+    }
+
+    .theme-toggle-btn:hover {
+      color: var(--fg);
+      background-color: var(--hover-bg);
+    }
+
+    .theme-toggle-btn svg {
+      width: 16px;
+      height: 16px;
+      position: absolute;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+    }
+
+    /* Center icons and enable clipping for slide animation */
+    #themeToggle {
+      overflow: hidden;
+    }
+
+    #themeToggle svg {
+      top: 50%;
+      left: 50%;
+    }
+
+    /* Light mode idle: Moon centered, Sun waiting below */
+    #themeToggle .moon-icon {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+    #themeToggle .sun-icon {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% + 28px));
+    }
+
+    /* Light mode hover: Moon exits up, Sun enters from below */
+    #themeToggle:hover .moon-icon {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% - 28px));
+    }
+    #themeToggle:hover .sun-icon {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Dark mode idle: Sun centered, Moon waiting below */
+    [data-theme="dark"] #themeToggle .sun-icon {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+    [data-theme="dark"] #themeToggle .moon-icon {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% + 28px));
+    }
+
+    /* Dark mode hover: Sun exits up, Moon enters from below */
+    [data-theme="dark"] #themeToggle:hover .sun-icon {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% - 28px));
+    }
+    [data-theme="dark"] #themeToggle:hover .moon-icon {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      margin-bottom: 80px;
+    }
+
+    .hero-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .hero-status::before {
+      content: '';
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      color: var(--fg);
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    .hero-desc a,
+    .hero-desc strong {
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .hero-desc a:hover {
+      color: var(--fg);
+    }
+
+    .hero-desc .flag {
+      font-size: 14px;
+      margin: 0 2px;
+      letter-spacing: -1px;
+    }
+
+    .hero-name {
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    /* Typewriter rotator on "i'm even more" link */
+    .typewriter {
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .typewriter-text {
+      display: inline;
+    }
+
+    .typewriter-caret {
+      display: inline-block;
+      width: 1.5px;
+      height: 0.95em;
+      background: currentColor;
+      vertical-align: text-bottom;
+      margin: 0 1px 1px;
+      animation: typewriter-caret-blink 0.95s steps(1) infinite;
+      transform: translateY(1px);
+    }
+
+    @keyframes typewriter-caret-blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .typewriter-caret { animation: none; opacity: 0; }
+    }
+
+    /* Flag shimmer on hover */
+    .hero-europe,
+    .hero-mena {
+      background-image: linear-gradient(90deg, currentColor 0%, currentColor 100%);
+      background-size: 200% 100%;
+      background-position: 0 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+      transition: color 0.2s;
+    }
+
+    .hero-europe:hover {
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      background-image: linear-gradient(90deg, #003399 0%, #FFCC00 50%, #003399 100%);
+      animation: flag-shimmer 1.4s linear infinite;
+    }
+
+    .hero-mena:hover {
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      background-image: linear-gradient(90deg, #006233 0%, #CE1126 50%, #006233 100%);
+      animation: flag-shimmer 1.4s linear infinite;
+    }
+
+    @keyframes flag-shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .hero-flags {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .hero-flags img {
+      width: 20px;
+      height: 14px;
+      border-radius: 2px;
+      object-fit: cover;
+    }
+
+    .flag-emoji {
+      font-size: 18px;
+    }
+
+    .hero-trusted {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-family: var(--font);
+      font-weight: 500;
+      background: var(--fg);
+      color: var(--bg);
+      border: none;
+      padding: 11px 20px;
+      border-radius: 100px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.8;
+    }
+
+    .btn-primary img {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    /* ── Section ── */
+    section {
+      margin-bottom: 72px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    /* ── Services ── */
+    .services-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .services-list li {
+      font-size: 15px;
+      color: var(--fg);
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .services-list li:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .services-list li::before {
+      content: '→';
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── Client Logos ── */
+    .logos-track-wrap {
+      overflow: hidden;
+      -webkit-mask: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+      mask: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+    }
+
+    .logos-track {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      animation: scroll-logos 28s linear infinite;
+      width: max-content;
+    }
+
+    .logos-track img {
+      height: 28px;
+      width: auto;
+      object-fit: contain;
+      filter: var(--logo-filter);
+      transition: opacity 0.2s, filter 0.2s;
+    }
+
+    .logos-track img:hover {
+      filter: var(--logo-hover-filter);
+    }
+
+    @keyframes scroll-logos {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* ── Work Grid ── */
+    .work-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .work-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--fg);
+      transition: background 0.15s;
+      border-radius: 6px;
+      margin: 0 -8px;
+      padding-left: 8px;
+      padding-right: 8px;
+      cursor: pointer;
+    }
+
+    .work-item:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .work-item:hover {
+      background: var(--hover-bg);
+    }
+
+    .work-item-left {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .work-title {
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    .work-meta {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .work-arrow {
+      font-size: 14px;
+      color: var(--muted);
+      transition: transform 0.15s, color 0.15s;
+    }
+
+    .work-item:hover .work-arrow {
+      transform: translateX(4px);
+      color: var(--fg);
+    }
+
+    /* ── Work featured (image cards) ── */
+    .work-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .work-card {
+      text-decoration: none;
+      color: var(--fg);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .work-card-img-wrap {
+      width: 100%;
+      aspect-ratio: 16 / 7;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--hover-bg);
+      overflow: hidden;
+      transition: box-shadow 0.25s;
+    }
+
+    .work-card:hover .work-card-img-wrap {
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.09);
+    }
+
+    .work-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .work-card:hover .work-card-img {
+      transform: scale(1.03);
+    }
+
+    .work-card-label h3 {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--fg);
+    }
+
+    .work-card-label p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .work-card-desc { display: none; }
+
+    .work-card-placeholder {
+      pointer-events: none;
+      opacity: 0.45;
+    }
+
+    .work-card-img-placeholder {
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--border) 0px,
+        var(--border) 1px,
+        transparent 1px,
+        transparent 10px
+      );
+    }
+
+    .work-placeholder-title {
+      color: var(--muted) !important;
+    }
+
+    /* Secondary work list (More work) */
+    .work-not-happy {
+      font-size: 12px;
+      color: var(--muted);
+      opacity: 0.55;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin: 40px 0 8px;
+    }
+
+    .work-more-label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin: 0 0 12px;
+      opacity: 0.75;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .work-more-label:hover {
+      opacity: 1;
+    }
+
+    .work-more-chevron {
+      transition: transform 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .work-more-label[aria-expanded="false"] .work-more-chevron {
+      transform: rotate(-90deg);
+    }
+
+    .work-grid-wrap {
+      display: grid;
+      grid-template-rows: 1fr;
+      transition: grid-template-rows 0.3s ease, opacity 0.3s ease;
+      opacity: 1;
+    }
+
+    .work-grid-wrap.collapsed {
+      grid-template-rows: 0fr;
+      opacity: 0;
+    }
+
+    .work-grid-wrap > .work-grid {
+      overflow: hidden;
+    }
+
+    .work-grid .work-item {
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+
+    .work-grid .work-title {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color 0.15s;
+    }
+
+    .work-grid .work-meta {
+      font-size: 11.5px;
+      opacity: 0.85;
+    }
+
+    .work-grid .work-item:hover .work-title {
+      color: var(--fg);
+    }
+
+    /* ── Experience ── */
+    .exp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .exp-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .exp-item:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .exp-role {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    .exp-company {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .exp-date {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      margin-left: 16px;
+      padding-top: 2px;
+    }
+
+    /* ── Testimonials ── */
+    .testimonial-list {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .testimonial {
+      padding: 24px;
+      background: var(--testimonial-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      transition: box-shadow 0.2s;
+    }
+
+    .testimonial:hover {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .testimonial-quote {
+      font-size: 14px;
+      color: var(--fg);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .testimonial-author {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .testimonial-context {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── CTA footer block ── */
+    .cta-block {
+      background: var(--cta-bg);
+      border-radius: 16px;
+      padding: 56px 48px;
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .cta-block-name {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .cta-block h2 {
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+
+    .cta-block-desc {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 400px;
+    }
+
+    .cta-block-desc a {
+      color: var(--fg);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .cta-social {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 8px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .cta-social a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .cta-social a:hover {
+      color: var(--fg);
+    }
+
+    /* ── Footer ── */
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0 48px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── Reveal animation ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── First-paint entrance: rise from below ── */
+    @keyframes page-rise {
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+        filter: blur(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes nav-fade-down {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      nav {
+        animation: nav-fade-down 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      .hero .hero-desc {
+        animation: page-rise 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      /* Both lang-en + lang-ar copies share the same stagger position */
+      .hero .hero-desc:nth-of-type(1),
+      .hero .hero-desc:nth-of-type(2) { animation-delay: 0.30s; }
+      .hero .hero-desc:nth-of-type(3),
+      .hero .hero-desc:nth-of-type(4) { animation-delay: 0.65s; }
+      .hero .hero-desc:nth-of-type(5),
+      .hero .hero-desc:nth-of-type(6) { animation-delay: 1.00s; }
+      .hero .hero-desc:nth-of-type(7),
+      .hero .hero-desc:nth-of-type(8) { animation-delay: 1.35s; }
+    }
+
+    /* ── Drawer (Experience) ── */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 100;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
+
+    .drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100dvh;
+      width: min(440px, 92vw);
+      background: var(--bg);
+      border-left: 1px solid var(--border);
+      z-index: 101;
+      transform: translateX(100%);
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      overflow-y: auto;
+      padding: 32px 28px 40px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: -12px 0 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .drawer-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s, background-color 0.2s;
+    }
+
+    .drawer-close:hover {
+      color: var(--fg);
+      background: var(--hover-bg);
+    }
+
+    .drawer-close svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    body.drawer-open {
+      overflow: hidden;
+    }
+
+    /* Project drawer (wider for image gallery) */
+    #projectDrawer {
+      width: min(620px, 96vw);
+    }
+
+    .project-meta {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .project-images {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .project-images img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--hover-bg);
+    }
+
+    /* Hover popover on work-items */
+    .work-popover {
+      position: fixed;
+      width: 260px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+      transition: opacity 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+      z-index: 90;
+    }
+
+    .work-popover.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .work-popover img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      display: block;
+    }
+
+    @media (max-width: 700px) {
+      .work-popover { display: none; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 560px) {
+      .work-cards {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .nav-links {
+        gap: 14px;
+      }
+
+      .cta-block {
+        padding: 36px 24px;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <div class="Hero">
 
-    
-    <nav class="navbar  navbar-expand-lg text-dark">
-        <a class="navbar-brand ml-3" href="/">
-            <img src="/uploads/logo.png" class="d-inline-block w-100 align-top" alt="">
+  <div class="page">
+
+    <!-- NAV -->
+    <nav>
+      <div class="nav-name-wrap">
+        <a class="nav-name" href="#">
+          <img class="nav-avatar" src="Profile 1.png" alt="Djouss avatar">
+          Djouss
         </a>
-        <button class="navbar-toggler bg-light " type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon bg-dark"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item  active">
-                    <a class="nav-link text-dark mr-4 py-3" href="#">Home<span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark mr-4 py-3" href="#projects">Projects</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark mr-4 py-3" href="uploads/resume-benelhadj-djelloul-oussama.pdf" download
-                    rel="noopener noreferrer" target="_blank">Resume</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark mr-4 py-3" href="#About">About</a>
-                </li>
-            </ul>
+        <div class="nav-preview" id="navPreview">
+          <img class="nav-preview-img-large" src="me1.jpg" alt="Preview">
+          <div class="nav-preview-stack">
+            <img src="me2.jpg" alt="Preview">
+            <img src="me3.jpg" alt="Preview">
+          </div>
         </div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="uploads/resume-benelhadj-djelloul-oussama.pdf" download rel="noopener noreferrer" target="_blank" class="resume-link"><span class="resume-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-file"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><polyline points="14 2 14 8 20 8"/></svg><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></span><span class="lang-en">Resume</span><span class="lang-ar">السيرة الذاتية</span></a>
+          <div class="resume-preview" id="resumePreview">
+            <img src="uploads/resume-preview.png" alt="Resume preview">
+          </div>
+        </li>
+        <li>
+          <button id="langToggle" class="theme-toggle-btn lang-toggle-btn" aria-label="Toggle Language">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-languages">
+              <path d="m5 8 6 6"/>
+              <path d="m4 14 6-6 2-3"/>
+              <path d="M2 5h12"/>
+              <path d="M7 2h1"/>
+              <path d="m22 22-5-10-5 10"/>
+              <path d="M14 18h6"/>
+            </svg>
+            <span class="lang-tooltip" role="tooltip">
+              <span class="lang-en">العربية</span>
+              <span class="lang-ar">English</span>
+            </span>
+          </button>
+        </li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
+            <!-- Lucide Sun Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun sun-icon">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2"/>
+              <path d="M12 20v2"/>
+              <path d="m4.93 4.93 1.41 1.41"/>
+              <path d="m17.66 17.66 1.41 1.41"/>
+              <path d="M2 12h2"/>
+              <path d="M20 12h2"/>
+              <path d="m6.34 17.66-1.41 1.41"/>
+              <path d="m19.07 4.93-1.41 1.41"/>
+            </svg>
+            <!-- Lucide Moon Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon moon-icon">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+            </svg>
+          </button>
+        </li>
+      </ul>
     </nav>
 
-    <div class="container-fluid Hero">
-        <div class="row h-100">
-            <div class="col-md-2"></div>
-            <div class="col-md-8 my-auto px-4">
-                <div class="h1 font-weight-bold mb-3 project1">
-                    <img src="uploads/1664445353766.jpeg" width="75px" height="75px" style="border-radius: 500px;" alt="">
-                    <span class="pl-3">
-                        Benelhadj Djelloul Oussama
-                    </span> 
-                </div>
-                <div class="project3 mt-2">
-                    <span class="font-weight-bold">
-                        Based in Algeria -- Product Designer -- Master's Degree in Software Engineering.
-                    </span>
-                </div>
-                <div class="hero-desc mt-4">
-                    <span>
-                        Helping turn concepts into compelling products with a focus on design excellence and user experience. I've been fortunate to work with teams at <a href="https://smeetz.com" target="_blank" class="hero-link">Smeetz</a>, <a href="https://goubba.com" target="_blank" class="hero-link">Go</a> (ex Goubba), and <a href="https://finnetude.com" target="_blank" class="hero-link">Finnetued</a>, and <a href="#" class="hero-link" data-toggle="popover" data-trigger="click" title="Other Experiences" data-html="true" id="othersPopover">others</a>.
-                    </span>
-                </div>
-            </div>
-            <div class="col-md-2"></div>
+    <!-- HERO -->
+    <section class="hero">
+      <p class="hero-desc lang-en">
+        <span class="hero-name-wrap">
+          <span class="hero-name">Oussama Benelhadj Djelloul</span>
+          <svg class="nav-signature" width="60" height="60" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path class="sig-path" d="M0.295219 6.87935C0.460106 7.3603 0.624993 7.84125 1.29929 10.0026C1.97358 12.1639 3.15228 15.991 3.23055 15.5438C3.30883 15.0967 2.25096 10.2592 1.7166 7.60685C1.18224 4.9545 1.20344 4.63387 1.26738 4.3677C1.33131 4.10152 1.43734 3.89953 1.57678 3.75306C1.84295 3.47347 2.24143 3.43457 2.60044 3.48877C2.98032 3.54612 3.24376 4.00763 3.4408 4.57356C3.98556 6.13817 2.52006 8.35835 1.58593 9.42574C1.43595 9.59712 1.2645 9.62837 1.31465 9.59809C2.09094 9.12946 3.69158 9.17157 6.17447 9.90734C7.38628 10.2664 8.07577 11.255 8.50888 12.0807C8.89969 12.8257 8.64081 13.7151 8.30104 14.4471C7.7063 15.7284 5.91864 15.6149 4.96267 15.5206C4.75971 15.4565 4.58715 15.361 4.43893 15.2641C4.29071 15.1671 4.17208 15.0715 4.04984 14.973" stroke="#888888" stroke-opacity="0.57" stroke-width="0.590277" stroke-linecap="round"/>
+            <path class="sig-path" d="M5.55325 13.5915C5.65927 13.6346 7.33716 14.0087 10.1439 14.4905C11.9949 14.8083 13.3771 14.162 14.525 13.6428C15.4593 13.2202 15.864 12.5791 16.0085 12.1394C16.077 11.9308 16.0146 11.7212 15.9332 11.5587C15.8518 11.3963 15.7224 11.2795 15.5802 11.2087C15.438 11.1379 15.287 11.1167 15.1176 11.1435C14.9481 11.1704 14.7648 11.2459 14.6164 11.3926C14.468 11.5393 14.3602 11.755 14.3205 11.9686C14.2808 12.1822 14.3127 12.3871 14.4247 12.5736C15.0255 13.5729 17.2826 13.5881 20.4884 13.7341C22.7555 13.8373 26.33 13.7837 28.0867 13.892C29.8435 14.0003 29.676 14.2169 27.6425 14.8682C25.6089 15.5194 21.7144 16.5986 18.4583 17.3455C15.2023 18.0923 12.7029 18.474 10.5298 18.6871C8.35673 18.9001 6.58575 18.933 5.3687 18.8559C4.15165 18.7788 3.54219 18.5907 3.16205 18.2949C2.78191 17.999 2.64957 17.601 2.75313 16.845C2.85669 16.0891 3.20017 14.9871 4.15028 13.1009C5.10038 11.2147 6.64669 8.57765 7.62188 6.76681C9.05606 4.10365 9.32501 2.59236 9.25906 1.65547C9.20862 0.938839 8.70079 0.533962 8.3148 0.330814C8.14742 0.24272 7.98275 0.319608 7.91694 0.542553C7.85113 0.765498 7.87507 1.16656 9.29809 5.89869C10.7211 10.6308 13.5425 19.6818 15.0504 24.4459C16.5584 29.2099 16.6676 29.4126 16.5728 29.411C15.3986 29.3913 14.4081 28.5133 13.0768 28.4197C12.23 28.3601 11.0296 28.3878 12.605 27.2797C14.1805 26.1716 18.5669 23.9553 18.3719 23.7462C18.177 23.5371 13.2678 25.4024 10.5599 26.407C7.85203 27.4115 7.49411 27.4987 9.49748 26.825C11.5009 26.1513 15.8764 24.7141 18.2627 23.9071C20.649 23.1001 20.9135 22.9669 20.9039 22.9577C20.8943 22.9486 20.6026 23.0676 20.2693 23.1902" stroke="#888888" stroke-opacity="0.57" stroke-width="0.590277" stroke-linecap="round"/>
+            <path class="sig-path" d="M20.8731 24.6709L20.9052 24.6388" stroke="#888888" stroke-opacity="0.57" stroke-width="0.590277" stroke-linecap="round"/>
+          </svg>
+        </span>
+      </p>
+      <p class="hero-desc lang-ar">
+        <span class="hero-name">أسامة بن الحاج جلول</span>
+      </p>
+
+      <p class="hero-desc lang-en">
+        Product designer (with AI I'm a <a href="#" class="services-link typewriter"><span class="typewriter-text">Product Designer</span><span class="typewriter-caret" aria-hidden="true"></span></a>)<br>
+        Five years shaping digital products for startups across <strong class="hero-europe">Europe</strong> <span class="flag">🇪🇺</span> and <strong class="hero-mena">MENA</strong> <span class="flag">🇩🇿</span><span class="flag">🇸🇦</span><span class="flag">🇦🇪</span>. I care about the details no one notices until my eyes feel satisfied.
+      </p>
+      <p class="hero-desc lang-ar">
+        مصمم منتجات (ومع الذكاء الاصطناعي أنا <a href="#" class="services-link typewriter"><span class="typewriter-text">مصمم منتجات</span><span class="typewriter-caret" aria-hidden="true"></span></a>)<br>
+        خمس سنوات في تشكيل المنتجات الرقمية للشركات الناشئة عبر <strong class="hero-europe">أوروبا</strong> <span class="flag">🇪🇺</span> و<strong class="hero-mena">الشرق الأوسط وشمال أفريقيا</strong> <span class="flag">🇩🇿</span><span class="flag">🇸🇦</span><span class="flag">🇦🇪</span>. أهتم بالتفاصيل التي لا يلاحظها أحد حتى تشعر عيناي بالرضا.
+      </p>
+
+      <p class="hero-desc lang-en">
+        Currently working at <a href="https://smeetz.com" target="_blank" style="display:inline-flex;align-items:center;gap:4px;vertical-align:middle;"><img src="uploads/Smeetz logo.png" alt="" style="height:14px;width:auto;display:inline-block;vertical-align:middle;">Smeetz</a>, I've been fortunate to work with teams at <a href="#" target="_blank">Go</a> (ex <a href="#" target="_blank">Goubba</a>), and <a href="#" target="_blank">Finnetude</a>, and <a href="#" class="others-link">others</a>.
+      </p>
+      <p class="hero-desc lang-ar">
+        أعمل حاليًا في <a href="https://smeetz.com" target="_blank" style="display:inline-flex;align-items:center;gap:4px;vertical-align:middle;"><img src="uploads/Smeetz logo.png" alt="" style="height:14px;width:auto;display:inline-block;vertical-align:middle;">Smeetz</a>، وكنت محظوظًا للعمل مع فرق في<a href="#" target="_blank">Go</a> (سابقًا <a href="#" target="_blank">Goubba</a>) و<a href="#" target="_blank">Finnetude</a>، و<a href="#" class="others-link">غيرها</a>.
+      </p>
+
+      <p class="hero-desc lang-en">
+        Helping turn concepts into compelling products with a focus on
+        design excellence and user experience.
+        You can reach out to me on <a href="https://linkedin.com" target="_blank">Linkedin</a> or see more of my work on <a href="https://twitter.com" target="_blank">Twitter</a>.
+      </p>
+      <p class="hero-desc lang-ar">
+        أساعد في تحويل الأفكار إلى منتجات جذابة مع التركيز على تميز التصميم وتجربة المستخدم.
+        يمكنك التواصل معي على <a href="https://linkedin.com" target="_blank">لينكدإن</a> أو الاطلاع على المزيد من أعمالي على <a href="https://twitter.com" target="_blank">تويتر</a>.
+      </p>
+
+    </section>
+
+    <!-- CLIENTS SCROLL -->
+    <section class="reveal">
+      <p class="section-label"><span class="lang-en">Trusted by</span><span class="lang-ar">موثوق به من</span></p>
+      <p style="font-size:13px; color:var(--muted); margin-bottom:20px;">
+        <span class="lang-en">Designing solutions for a global clientele with unique needs.</span>
+        <span class="lang-ar">تصميم حلول لعملاء عالميين بحاجات فريدة.</span>
+      </p>
+      <div class="logos-track-wrap">
+        <div class="logos-track" id="logosTrack">
+          <img src="Porfolio-icons/3M express.png" alt="3M Express">
+          <img src="Porfolio-icons/al-Razi.png" alt="Al Razi">
+          <img src="Porfolio-icons/Alfa+.png" alt="Alfa+">
+          <img src="Porfolio-icons/amaalah.png" alt="Amaalah">
+          <img src="Porfolio-icons/Aqari.png" alt="Aqari">
+          <img src="Porfolio-icons/Atechor.png" alt="Atechor">
+          <img src="Porfolio-icons/AZTrajet.png" alt="AZ Trajet">
+          <img src="Porfolio-icons/baytup.png" alt="Baytup">
+          <img src="Porfolio-icons/Frame 1900.png" alt="Client">
+          <img src="Porfolio-icons/haraj.png" alt="Haraj">
+          <img src="Porfolio-icons/Jawla.png" alt="Jawla">
+          <img src="Porfolio-icons/Meetendo.png" alt="Meetendo">
+          <!-- Duplicate for seamless loop -->
+          <img src="Porfolio-icons/3M express.png" alt="3M Express">
+          <img src="Porfolio-icons/al-Razi.png" alt="Al Razi">
+          <img src="Porfolio-icons/Alfa+.png" alt="Alfa+">
+          <img src="Porfolio-icons/amaalah.png" alt="Amaalah">
+          <img src="Porfolio-icons/Aqari.png" alt="Aqari">
+          <img src="Porfolio-icons/Atechor.png" alt="Atechor">
+          <img src="Porfolio-icons/AZTrajet.png" alt="AZ Trajet">
+          <img src="Porfolio-icons/baytup.png" alt="Baytup">
+          <img src="Porfolio-icons/Frame 1900.png" alt="Client">
+          <img src="Porfolio-icons/haraj.png" alt="Haraj">
+          <img src="Porfolio-icons/Jawla.png" alt="Jawla">
+          <img src="Porfolio-icons/Meetendo.png" alt="Meetendo">
         </div>
+      </div>
+    </section>
+
+    <!-- SELECTED WORK – featured cards -->
+    <section id="work" class="reveal">
+      <p class="section-label"><span class="lang-en">Selected Work</span><span class="lang-ar">أعمال مختارة</span></p>
+
+      <div class="work-cards">
+        <a class="work-card" href="secure-booking.html">
+          <div class="work-card-img-wrap">
+            <img class="work-card-img" src="uploads/secure-booking/cover.png" alt="Secure My Booking">
+          </div>
+          <div class="work-card-label">
+            <h3>Secure My Booking</h3>
+            <p><span class="lang-en">Travel Tech · B2C · 2025</span><span class="lang-ar">تقنية السفر · B2C · 2025</span></p>
+          </div>
+        </a>
+        <a class="work-card work-card-placeholder" href="#">
+          <div class="work-card-img-wrap work-card-img-placeholder"></div>
+          <div class="work-card-label">
+            <h3 class="work-placeholder-title"><span class="lang-en">Coming soon</span><span class="lang-ar">قريباً</span></h3>
+            <p><span class="lang-en">— · — · —</span></p>
+          </div>
+        </a>
+        <a class="work-card work-card-placeholder" href="#">
+          <div class="work-card-img-wrap work-card-img-placeholder"></div>
+          <div class="work-card-label">
+            <h3 class="work-placeholder-title"><span class="lang-en">Coming soon</span><span class="lang-ar">قريباً</span></h3>
+            <p><span class="lang-en">— · — · —</span></p>
+          </div>
+        </a>
+      </div>
+
+      <p class="work-not-happy">
+        <span class="lang-en">Not happy yet?</span>
+        <span class="lang-ar">لم تُعجبك بعد؟</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      </p>
+
+      <button class="work-more-label" id="workMoreToggle" aria-expanded="false">
+        <span><span class="lang-en">More work</span><span class="lang-ar">أعمال أخرى</span></span>
+        <svg class="work-more-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+
+      <!-- remaining as list -->
+      <div class="work-grid-wrap collapsed" id="workGridWrap"><div class="work-grid">
+        <a class="work-item" href="meetendo.html" data-preview="uploads/Meetendo/meetendo+intro.png">
+          <div class="work-item-left">
+            <span class="work-title">Meetendo</span>
+            <span class="work-meta"><span class="lang-en">Health Tech · B2C · 2022–2023</span><span class="lang-ar">تقنية صحية · B2C · 2022–2023</span></span>
+          </div>
+          <span class="work-arrow">→</span>
+        </a>
+        <a class="work-item" href="/Pages/alfa.html" data-preview="uploads/finnetude/alfa+intro.png">
+          <div class="work-item-left">
+            <span class="work-title">ALFA+</span>
+            <span class="work-meta"><span class="lang-en">Fintech · B2B, B2Gov · 2022–2023</span><span class="lang-ar">تقنية مالية · B2B، B2Gov · 2022–2023</span></span>
+          </div>
+          <span class="work-arrow">→</span>
+        </a>
+        <a class="work-item" href="/Pages/send.html" data-preview="uploads/Send/send+intro.png">
+          <div class="work-item-left">
+            <span class="work-title">Send</span>
+            <span class="work-meta"><span class="lang-en">Logistics · B2B, B2Gov · 2022–2023</span><span class="lang-ar">لوجستيات · B2B، B2Gov · 2022–2023</span></span>
+          </div>
+          <span class="work-arrow">→</span>
+        </a>
+        <a class="work-item" href="/Pages/qari.html" data-preview="uploads/QARI/qari+intro.png">
+          <div class="work-item-left">
+            <span class="work-title">QARI</span>
+            <span class="work-meta"><span class="lang-en">E-learning · B2C · 2022–2023</span><span class="lang-ar">تعليم إلكتروني · B2C · 2022–2023</span></span>
+          </div>
+          <span class="work-arrow">→</span>
+        </a>
+        <a class="work-item" href="#" data-project="merkez">
+          <div class="work-item-left">
+            <span class="work-title">MERKEZ</span>
+            <span class="work-meta"><span class="lang-en">E-learning · B2C · 2023</span><span class="lang-ar">تعليم إلكتروني · B2C · 2023</span></span>
+          </div>
+          <span class="work-arrow">→</span>
+        </a>
+        <a class="work-item" href="#" data-project="aztrajet">
+          <div class="work-item-left">
+            <span class="work-title">A-Z Trajet</span>
+            <span class="work-meta"><span class="lang-en">VTC Ride-Hailing · B2C · 2023</span><span class="lang-ar">نقل ركاب · B2C · 2023</span></span>
+          </div>
+          <span class="work-arrow">→</span>
+        </a>
+        <a class="work-item" href="#" data-project="alrazi">
+          <div class="work-item-left">
+            <span class="work-title">Al Razi</span>
+            <span class="work-meta"><span class="lang-en">PRM, SaaS · B2B2C · 2023–2024</span><span class="lang-ar">PRM، SaaS · B2B2C · 2023–2024</span></span>
+          </div>
+          <span class="work-arrow">→</span>
+        </a>
+        <a class="work-item" href="#" data-project="amalaah">
+          <div class="work-item-left">
+            <span class="work-title">Amalaah</span>
+            <span class="work-meta"><span class="lang-en">HR-Tech · B2B2C · 2021</span><span class="lang-ar">تقنيات الموارد البشرية · B2B2C · 2021</span></span>
+          </div>
+          <span class="work-arrow">→</span>
+        </a>
+        <a class="work-item" href="#" data-project="jawlah">
+          <div class="work-item-left">
+            <span class="work-title">Jawlah</span>
+            <span class="work-meta"><span class="lang-en">Tourism · B2B2C · 2024</span><span class="lang-ar">سياحة · B2B2C · 2024</span></span>
+          </div>
+          <span class="work-arrow">→</span>
+        </a>
+        <a class="work-item" href="#" data-project="haraj">
+          <div class="work-item-left">
+            <span class="work-title">Haraj Al Fajr</span>
+            <span class="work-meta"><span class="lang-en">E-commerce · B2B · 2022–2023</span><span class="lang-ar">تجارة إلكترونية · B2B · 2022–2023</span></span>
+          </div>
+          <span class="work-arrow">→</span>
+        </a>
+      </div></div><!-- end .work-grid + .work-grid-wrap -->
+    </section>
+
+  </div>
+
+  <!-- DRAWER OVERLAY + PANELS -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+
+  <!-- Project drawer (populated by JS) -->
+  <aside class="drawer" id="projectDrawer" aria-hidden="true" aria-label="Project">
+    <div class="drawer-header">
+      <p class="section-label" style="margin-bottom:0;" id="projectTitle"></p>
+      <button class="drawer-close" data-drawer-close aria-label="Close drawer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/>
+          <path d="m6 6 12 12"/>
+        </svg>
+      </button>
     </div>
+    <div class="project-meta" id="projectMeta"></div>
+    <div class="project-images" id="projectImages"></div>
+  </aside>
 
+  <!-- Hover popover for work-items -->
+  <div class="work-popover" id="workPopover">
+    <img id="workPopoverImg" src="" alt="">
+  </div>
+
+  <aside class="drawer" id="servicesDrawer" aria-hidden="true" aria-label="I can help with">
+    <div class="drawer-header">
+      <p class="section-label" style="margin-bottom:0;">
+        <span class="lang-en">I can help with</span>
+        <span class="lang-ar">يمكنني المساعدة في</span>
+      </p>
+      <button class="drawer-close" data-drawer-close aria-label="Close drawer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/>
+          <path d="m6 6 12 12"/>
+        </svg>
+      </button>
     </div>
+    <ul class="services-list">
+      <li><span class="lang-en">Product Design</span><span class="lang-ar">تصميم المنتجات</span></li>
+      <li><span class="lang-en">Product/Design Engineer</span><span class="lang-ar">مهندس منتجات/تصميم</span></li>
+      <li><span class="lang-en">AI-Native Design</span><span class="lang-ar">التصميم القائم على الذكاء الاصطناعي</span></li>
+      <li><span class="lang-en">Product Management</span><span class="lang-ar">إدارة المنتجات</span></li>
+      <li><span class="lang-en">UI/UX Design</span><span class="lang-ar">تصميم واجهات وتجربة المستخدم</span></li>
+      <li><span class="lang-en">Design Systems</span><span class="lang-ar">أنظمة التصميم</span></li>
+      <li><span class="lang-en">Brand Strategy &amp; Art Direction</span><span class="lang-ar">استراتيجية العلامة التجارية والإدارة الفنية</span></li>
+      <li><span class="lang-en">Mobile App Design</span><span class="lang-ar">تصميم تطبيقات الجوال</span></li>
+      <li><span class="lang-en">Creative Direction for Startups</span><span class="lang-ar">الإدارة الإبداعية للشركات الناشئة</span></li>
+    </ul>
+  </aside>
 
-    <div class="container-fluid my-5 experience">
-        <div class="row mb-4">
-            <div class="col-md-2"></div>
-            <div class="col-md-8 py-2">
-                <div class="h3 font-weight-bold">
-                    Experience
-                </div>
-            </div>
-            <div class="col-md-2"></div>
-        </div>
-        
-        <div class="container">
-            <div class="row experience-scroll">
-                <div class="col-md-6">
-                    <div class="w-100">
-                        <img src="uploads/amaalah.png" class="w-100" alt="" srcset="">
-                    </div>
-                    <div class="h4 pt-3 font-weight-bold">
-                        UI/UX Designer at AMAALAH
-                    </div>
-                    <div class="text-muted mb-3">
-                        <span class="badge badge-success">HR-Tech</span> Freelancer "Saudi Arabia" | May to Juin-2021
-                    </div>
-                    <div id="amaalah-content">
-                        <ul>
-                            <li class="py-2">
-                                Joining a Freelancer team from around the world working on the recruiting Web-App and
-                                building the MVP.
-                            </li>
-                            <li class="py-2">
-                                Building the simplest experience and interfaces so it will be so easy for the target users
-                                who are new to the recruiting services.
-                            </li>
-                            <li class="py-2">
-                                Daily meetings with Stockholders and Developers to discuss updates.
-                            </li>
-                            <li class="py-2">
-                                Using my Programming experience background specially in the FRONT-ENd stacks, so i can
-                                design an
-                                feasible interfaces.
-                            </li>
-                            <li class="py-2">
-                                Considering the SEO on the website while designing.
-                            </li>
-                            <li class="py-2">
-                                Being Creative as much as possible with consideration of how users will feel during the use
-                                of the Web-App.
-                            </li>
-                            <li class="py-2">
-                                Focusing on the UX Writing and what drive the costumers.
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="my-5">
-                        <a href="Amaalah.html" class="bg-dark text-light p-3">
-                            Let's see the Results
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="w-100">
-                        <img src="uploads/goubba.png" class="w-100" alt="" srcset="">
-                    </div>
-                    <div class="h4 pt-3 font-weight-bold">
-                        Product Designer  at Goubba
-                    </div>
-                    <div class="text-muted mb-3">
-                        <span class="badge badge-danger">Fintech</span> Intern "Algeria" | Juin to Aout-2022
-                    </div>
-                    <div id="goubba-content">
-                        <ul>
-                            <li class="py-2">
-                                Being the Responsible of Goubba Design System, taking the brand products to a consistent Visual and experience with documenting for better DX ( Developer Experienc[...]
-                            </li>
-                            <li class="py-2">
-                                Ensure the flexibility of the Design System through radical Changes.
-                            </li>
-                            <li class="py-2">
-                                Applying the Atomic method and also taking inspiration from the already existing Goubba products.
-                            </li>
-                            <li class="py-2">
-                                Using my Programming experience background specially in the FRONT-ENd stacks, so i can
-                                design an
-                                feasible interfaces.
-                            </li>
-                            <li class="py-2">
-                                Work on the Responsive UI for some products.
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="my-5">
-                        <a href="https://goubba.com/" target="_blank" class="bg-dark text-light p-3">
-                            Let's see the Results
-                        </a>
-                    </div>
-                </div>
-                 
-            </div>
-        </div>
-        <div class="container mt-5">
-            <div class="row experience-scroll">
-                <div class="col-md-6">
-                    <div class="w-100">
-                        <img src="uploads/alphaa.png" class="w-100" alt="" srcset="">
-                    </div>
-                    <div class="h4 pt-3 font-weight-bold">
-                        Product Designer at Alfa + 
-                    </div>
-                    <div class="text-muted mb-3">
-                        <span class="badge badge-success">Fintech & SAAS</span> Freelancer "Algeria" | October to December-2021
-                    </div>
-                    <div id="alfa-content">
-                        <ul>
-                            <li class="py-2">
-                                Building the First Algerian Trading Simulation.
-                            </li>
-                            <li class="py-2">
-                                Discuss the usage of the website with the client during the design process.
-                            </li>
-                            <li class="py-2">
-                                Make a Set of components to face the problem of having allot of information and task in one single page.
-                            </li>
-                            <li class="py-2">
-                                Discovering new field "Trading & Shares" and learn more about.
-                            </li>
-                            <li class="py-2">
-                                Design a System to make it easy for the Development process.
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="my-5">
-                        <a href="http://alfa.finnetude.com" target="_blank" class="bg-dark text-light p-3">
-                            Let's see the Results
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="w-100">
-                        <img src="uploads/keenahome.png" class="w-100" alt="" srcset="">
-                    </div>
-                    <div class="h4 pt-3 font-weight-bold">
-                        Web Designer at KEENA
-                    </div>
-                    <div class="text-muted mb-3">
-                        <span class="badge badge-primary">Agency</span> Freelancer "Canada" | May-2021
-                    </div>
-                    <div id="keena-content">
-                        <ul>
-                            <li class="py-2">
-                                Designing a Landing Page for the Canadian.
-                            </li>
-                            <li class="py-2">
-                                Design and Develope it in less than a 48 hours.
-                            </li>
-                            <li class="py-2">
-                                First World Client with a harmony communication.
-                            </li>
-                            <li class="py-2">
-                                Increasing the interest of new users by the website.
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="my-5">
-                        <a href="Keena.html" class="text-light bg-dark p-3">
-                            Let's see the Results
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
+  <aside class="drawer" id="drawer" aria-hidden="true" aria-label="Experience">
+    <div class="drawer-header">
+      <p class="section-label" style="margin-bottom:0;">
+        <span class="lang-en">Experience</span>
+        <span class="lang-ar">الخبرة</span>
+      </p>
+      <button class="drawer-close" data-drawer-close aria-label="Close drawer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/>
+          <path d="m6 6 12 12"/>
+        </svg>
+      </button>
     </div>
-
-    <div class="container-fluid projects my-5" id="projects">
-        <div class="row mb-4">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-                <div class="h3 font-weight-bold">
-                    Projects
-                </div>
-            </div>
-            <div class="col-md-2"></div>
+    <div class="exp-list">
+      <div class="exp-item">
+        <div>
+          <div class="exp-role"><span class="lang-en">Product Designer</span><span class="lang-ar">مصمم منتجات</span></div>
+          <div class="exp-company">Smeetz</div>
         </div>
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-                <div class="container-fluid">
-                    <div class="row mb-4 project1">
-                        <div class="col-md-4">
-                            <img src="uploads/Commandi-Card.png" class="img-thumbnail h-100" alt="">
-                        </div>
-                        <div class="col-md-8 py-4 px-4 commandi-bg">
-                            <div class="py-5">
-                                <div class="text-muted pb-2">
-                                    Study Case
-                                </div>
-                                <div class="h2 font-weight-bold pb-2">
-                                    Commandi App
-                                </div>
-                                <div class="pb-3">
-                                    Delivery App based in Tbessa in Algeria woned by my friends, the app MVP is already
-                                    published so i have a chance to do a Testing
-                                </div>
-                                <div class="mt-4">
-                                    <a href="https://www.behance.net/gallery/124125575/Commandi-Case-Study"
-                                        target="__blank" class="p-2 bg-dark text-white">
-                                        Let's see the Project
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-4 project2">
-                        <div class="col-md-4">
-                            <img src="uploads/Anazik-Card.png" class="img-thumbnail h-100" alt="">
-                        </div>
-                        <div class="col-md-8 py-4 px-4 anazik-bg">
-                            <div class="my-5">
-
-                                <div class="text-muted pb-2">
-                                    Study Case
-                                </div>
-                                <div class="h2 font-weight-bold pb-2">
-                                    Anazik App
-                                </div>
-                                <div class="pb-3">
-                                    Music Streaming app by Ooredoo company collaborating with INTAJ to build this
-                                    product, i
-                                    made an amazing story telling experience in the study case.
-                                </div>
-                                <div class="mt-4">
-                                    <a href="https://www.behance.net/gallery/124930355/Anazik-Music-App-Ux-Study-Case"
-                                        target="__blank" class="p-2 bg-dark text-white">
-                                        Let's see the Project
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-4 project3">
-                        <div class="col-md-4">
-                            <img src="uploads/SNTF-Card.png" class="img-thumbnail h-100" alt="">
-                        </div>
-                        <div class="col-md-8 py-4 px-4 SNTF-bg">
-                            <div class="my-5">
-                                <div class="text-muted pb-2">
-                                    Redesign
-                                </div>
-                                <div class="h2 font-weight-bold pb-2">
-                                    SNTF App
-                                </div>
-                                <div class="pb-3">
-                                    Algerian app for train schedule in the country, Redesigning the app and making the
-                                    interfaces looked fresh with some UX tips too.
-                                </div>
-                                <div class="mt-4">
-                                    <a href="https://www.behance.net/gallery/125618217/SNTF-Redesign"
-                                        class="p-2 bg-dark text-white">
-                                        Let's see the Project
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mb-4 project4">
-                        <div class="col-md-12 text-center">
-                            <a href="https://www.behance.net/djou_ss/" class="h3 mt-2">
-                                See More UI Interfaces...
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2"></div>
+        <span class="exp-date"><span class="lang-en">Aug 2024</span><span class="lang-ar">أغسطس 2024</span></span>
+      </div>
+      <div class="exp-item">
+        <div>
+          <div class="exp-role"><span class="lang-en">Product Designer</span><span class="lang-ar">مصمم منتجات</span></div>
+          <div class="exp-company">3M Zone</div>
         </div>
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8"></div>
-            <div class="col-md-2"></div>
+        <span class="exp-date"><span class="lang-en">Jul 2023 – Aug 2024</span><span class="lang-ar">يوليو 2023 – أغسطس 2024</span></span>
+      </div>
+      <div class="exp-item">
+        <div>
+          <div class="exp-role"><span class="lang-en">Product Designer</span><span class="lang-ar">مصمم منتجات</span></div>
+          <div class="exp-company">Finnetude</div>
         </div>
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8"></div>
-            <div class="col-md-2"></div>
+        <span class="exp-date"><span class="lang-en">Jan 2023 – Jun 2023</span><span class="lang-ar">يناير 2023 – يونيو 2023</span></span>
+      </div>
+      <div class="exp-item">
+        <div>
+          <div class="exp-role"><span class="lang-en">UI/UX Designer Intern</span><span class="lang-ar">متدرب تصميم واجهات</span></div>
+          <div class="exp-company">Goubba</div>
         </div>
+        <span class="exp-date"><span class="lang-en">Jun 2022 – Sep 2022</span><span class="lang-ar">يونيو 2022 – سبتمبر 2022</span></span>
+      </div>
+      <div class="exp-item">
+        <div>
+          <div class="exp-role"><span class="lang-en">UI/UX Designer (Freelance)</span><span class="lang-ar">مصمم واجهات (مستقل)</span></div>
+          <div class="exp-company">Amaalah</div>
+        </div>
+        <span class="exp-date"><span class="lang-en">Jun 2021</span><span class="lang-ar">يونيو 2021</span></span>
+      </div>
     </div>
+  </aside>
 
-    <div class="container-fluid p-4 bg-light" id="About">
-        <div class="row mb-4">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-                <div class="h3 font-weight-bold">
-                    About
-                </div>
-            </div>
-            <div class="col-md-2"></div>
-        </div>
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-10">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-5">
-                            <img src="uploads/me.jpg" class="img-thumbnail " alt="">
-                        </div>
-                        <div class="col-md-5 pb-4">
-                            <div class="h3 font-weight-bold">
-                                Bit about me !
-                            </div>
-                            <div>
-                                It all started when i begin learning programming and building websites using HTML, CSS,
-                                JS.
-                            </div>
-                            <br>
-                            <div>
-                                Building my personal Blog, friends e-commerce... all by coding, then i found myself
-                                attached to learning how users will feel and act when i change the colors or fix the
-                                layout. <br><br>
-                                Then my journey start as a UI/UX designer to a Product Designer, learning the
-                                <span class="font-weight-bold">Human-Design-Interfaces</span> from Apple or the <span
-                                    class="font-weight-bold">User-Centered-Design</span> from Google give me the
-                                drive to pursue the Product Design title with enjoying researching and testing digital
-                                products on users.
-                            </div><br>
-                            <div>
-                                Humbly, <span class="font-weight-bold">Story Telling</span> is my Dope Skill you can see
-                                this in the Projects,
-                                from the day i
-                                born listening to Grands parent stories so Big Thanks for them.
-                            </div><br>
-                            <div>
-                                When i'm not designing, usually i'm listening to some Rap or Learning Germany and ofc as
-                                an Algerian playing Football is in the blood.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+  <script>
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    revealEls.forEach(el => observer.observe(el));
 
-    <div class="container-fluid bg-light">
-        <div class="row">
-            <HR WIDTH="75%" COLOR="#FFFFFF" SIZE="4">
-        </div>
-    </div>
-    <div class="container-fluid bg-light">
-        <div class="row pb-4">
-            <div class="col-md-2"></div>
-            <div class="col-md-8 text-dark text-center">
-                <ul class="mx-auto" style="list-style-type: none;">
-                    <li style="float: left;"><a class="px-3" href="https://www.instagram.com/djou.ss/">instagram</a>
-                    </li>
-                    <li style="float: left;"><a class="px-3" href="https://www.linkedin.com/in/djouss/">Linkedin</a>
-                    </li>
-                    <li style="float: left;"><a class="px-3" href="https://www.behance.net/djou_ss/">Behance</a></li>
-                    <li style="float: left;">
-                        <p class="px-3">benelhadj-djelloul-oussama@outlook.com</p>
-                    </li>
-                    <li style="float: left;">
-                        <p class="px-3">+213549273110</p>
-                    </li>
-                    <li style="float: left;">
-                        <div class="pl-5">Build by Me *-*</div>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-md-2"></div>
-        </div>
-    </div>
+    // Theme toggle logic (Circular View Transition)
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', (event) => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const isDark = currentTheme === 'dark';
+      
+      const toggleTheme = () => {
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+      };
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      // Fallback for browsers that do not support View Transitions API
+      if (!document.startViewTransition) {
+        toggleTheme();
+        return;
+      }
 
-    <script>
-        // Redirect to 'main.html' after 3 seconds
-        setTimeout(function() {
-            window.location.href = "main.html";
-        }, 500); // 3000 milliseconds = 3 seconds
-        ScrollReveal().reveal('.project1', { delay: 100 });
-        ScrollReveal().reveal('.experience-scroll', { delay: 100 });
+      // Get target coordinate from click or fall back to center of icon
+      const rect = themeToggle.getBoundingClientRect();
+      const x = event.clientX ?? (rect.left + rect.width / 2);
+      const y = event.clientY ?? (rect.top + rect.height / 2);
 
+      // Compute final radius to cover the screen
+      const endRadius = Math.hypot(
+        Math.max(x, window.innerWidth - x),
+        Math.max(y, window.innerHeight - y)
+      );
 
-        ScrollReveal().reveal('.project2', { delay: 200 });
-        ScrollReveal().reveal('.project3', { delay: 300 });
-        ScrollReveal().reveal('.project4', { delay: 400 });
+      // Add direction class to documentElement
+      document.documentElement.classList.add(isDark ? 'transition-to-light' : 'transition-to-dark');
 
-        // Initialize popover for "others" link
-        $(document).ready(function(){
-            // Collect all experience content
-            var allExperienceContent = '';
-            
-            // Get content from all experience items
-            var amaalahContent = document.getElementById('amaalah-content').innerHTML;
-            var goubbaContent = document.getElementById('goubba-content').innerHTML;
-            var alfaContent = document.getElementById('alfa-content').innerHTML;
-            var keenaContent = document.getElementById('keena-content').innerHTML;
-            
-            var popoverContent = `
-                <div class="experience-popover">
-                    <div class="mb-4">
-                        <h5 class="font-weight-bold">UI/UX Designer at AMAALAH</h5>
-                        <span class="badge badge-success">HR-Tech</span> Freelancer "Saudi Arabia" | May to Juin-2021
-                        ${amaalahContent}
-                    </div>
-                    <div class="mb-4">
-                        <h5 class="font-weight-bold">Product Designer at Goubba</h5>
-                        <span class="badge badge-danger">Fintech</span> Intern "Algeria" | Juin to Aout-2022
-                        ${goubbaContent}
-                    </div>
-                    <div class="mb-4">
-                        <h5 class="font-weight-bold">Product Designer at Alfa +</h5>
-                        <span class="badge badge-success">Fintech & SAAS</span> Freelancer "Algeria" | October to December-2021
-                        ${alfaContent}
-                    </div>
-                    <div>
-                        <h5 class="font-weight-bold">Web Designer at KEENA</h5>
-                        <span class="badge badge-primary">Agency</span> Freelancer "Canada" | May-2021
-                        ${keenaContent}
-                    </div>
-                </div>
-            `;
-            
-            $('#othersPopover').popover({
-                content: popoverContent,
-                trigger: 'click',
-                placement: 'bottom',
-                html: true
-            });
-            
-            // Close popover when clicking outside
-            $(document).on('click', function(e){
-                if($(e.target).data('toggle') !== 'popover' && $(e.target).parents('.popover.in').length === 0) {
-                    $('[data-toggle="popover"]').popover('hide');
-                }
-            });
+      const transition = document.startViewTransition(toggleTheme);
+
+      transition.ready.then(() => {
+        const clipPath = [
+          `circle(0px at ${x}px ${y}px)`,
+          `circle(${endRadius}px at ${x}px ${y}px)`
+        ];
+
+        document.documentElement.animate(
+          {
+            clipPath: isDark ? [...clipPath].reverse() : clipPath,
+          },
+          {
+            duration: 500,
+            easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+            pseudoElement: isDark 
+              ? '::view-transition-old(root)' 
+              : '::view-transition-new(root)',
+          }
+        );
+      });
+
+      // Cleanup classes after transition is completed
+      transition.finished.then(() => {
+        document.documentElement.classList.remove('transition-to-light', 'transition-to-dark');
+      });
+    });
+
+    // Drawers
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const drawers = document.querySelectorAll('.drawer');
+
+    const openDrawer = (drawerEl) => (e) => {
+      if (e) e.preventDefault();
+      drawerEl.classList.add('open');
+      drawerOverlay.classList.add('open');
+      drawerEl.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('drawer-open');
+    };
+
+    const closeAllDrawers = () => {
+      drawers.forEach(d => {
+        d.classList.remove('open');
+        d.setAttribute('aria-hidden', 'true');
+      });
+      drawerOverlay.classList.remove('open');
+      document.body.classList.remove('drawer-open');
+    };
+
+    document.querySelectorAll('.others-link').forEach(el => el.addEventListener('click', openDrawer(document.getElementById('drawer'))));
+    document.querySelectorAll('.services-link').forEach(el => el.addEventListener('click', openDrawer(document.getElementById('servicesDrawer'))));
+    document.querySelectorAll('[data-drawer-close]').forEach(btn => btn.addEventListener('click', closeAllDrawers));
+    drawerOverlay.addEventListener('click', closeAllDrawers);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAllDrawers();
+    });
+
+    // Project data (extracted from /Pages/*.html)
+    const projects = {
+      merkez: {
+        title: 'MERKEZ',
+        metaEn: 'E-learning · B2C · 2023',
+        metaAr: 'تعليم إلكتروني · B2C · 2023',
+        cover: 'uploads/Merkez/merkez-cover.png',
+        images: [
+          'uploads/Merkez/Post 1.png','uploads/Merkez/Post 2.png','uploads/Merkez/Post 3.png',
+          'uploads/Merkez/Post 4.png','uploads/Merkez/Post 5.png','uploads/Merkez/Post 6.png',
+          'uploads/Merkez/Post 7.png','uploads/Merkez/Post 8.png','uploads/Merkez/Post 9.png',
+          'uploads/Merkez/Post 10.png','uploads/Merkez/Post 11.png'
+        ]
+      },
+      aztrajet: {
+        title: 'A-Z Trajet',
+        metaEn: 'VTC Ride-Hailing · B2C · 2023',
+        metaAr: 'نقل ركاب · B2C · 2023',
+        cover: 'uploads/A-Z Trajet/trajet-cover.png',
+        images: [
+          'uploads/A-Z Trajet/trajet- 1.png','uploads/A-Z Trajet/trajet- 2.png','uploads/A-Z Trajet/trajet- 3.png',
+          'uploads/A-Z Trajet/trajet- 4.png','uploads/A-Z Trajet/trajet- 7.png','uploads/A-Z Trajet/trajet- 8.png',
+          'uploads/A-Z Trajet/trajet- 10.png','uploads/A-Z Trajet/trajet- 11.png','uploads/A-Z Trajet/trajet- 12.png',
+          'uploads/A-Z Trajet/trajet- 13.png','uploads/A-Z Trajet/trajet- 14.png','uploads/A-Z Trajet/trajet- 16.png',
+          'uploads/A-Z Trajet/trajet- 33.png','uploads/A-Z Trajet/trajet- 44.png'
+        ]
+      },
+      alrazi: {
+        title: 'Al Razi',
+        metaEn: 'PRM, SaaS · B2B2C · 2023–2024',
+        metaAr: 'PRM، SaaS · B2B2C · 2023–2024',
+        cover: 'uploads/alrazi/alrazi-cover.png',
+        images: [
+          'uploads/alrazi/alrazi- 1.png','uploads/alrazi/alrazi- 2.png','uploads/alrazi/alrazi- 3.png',
+          'uploads/alrazi/alrazi- 4.png','uploads/alrazi/alrazi- 5.png','uploads/alrazi/alrazi- 6.png',
+          'uploads/alrazi/alrazi- 7.png','uploads/alrazi/alrazi- 8.png','uploads/alrazi/alrazi- 16.png'
+        ]
+      },
+      amalaah: {
+        title: 'Amaalah',
+        metaEn: 'HR-Tech · B2B2C · 2021',
+        metaAr: 'تقنيات الموارد البشرية · B2B2C · 2021',
+        cover: 'uploads/Amaalah/amaalah-cover.png',
+        images: [
+          'uploads/Amaalah/amaalah- 1.png','uploads/Amaalah/amaalah- 2.png','uploads/Amaalah/amaalah- 3.png',
+          'uploads/Amaalah/amaalah- 4.png','uploads/Amaalah/amaalah- 5.png','uploads/Amaalah/amaalah- 6.png',
+          'uploads/Amaalah/amaalah- 7.png','uploads/Amaalah/amaalah- 8.png','uploads/Amaalah/amaalah- 9.png',
+          'uploads/Amaalah/amaalah- 10.png','uploads/Amaalah/amaalah- 11.png'
+        ]
+      },
+      jawlah: {
+        title: 'Jawlah',
+        metaEn: 'Tourism · B2B2C · 2024',
+        metaAr: 'سياحة · B2B2C · 2024',
+        cover: 'uploads/jawlah/jawlah-cover.png',
+        images: [
+          'uploads/jawlah/jawlah- 1.png','uploads/jawlah/jawlah- 2.png','uploads/jawlah/jawlah- 3.png',
+          'uploads/jawlah/jawlah- 4.png','uploads/jawlah/jawlah- 5.png','uploads/jawlah/jawlah- 6.png'
+        ]
+      },
+      haraj: {
+        title: 'Haraj Al Fajr',
+        metaEn: 'E-commerce · B2B · 2022–2023',
+        metaAr: 'تجارة إلكترونية · B2B · 2022–2023',
+        cover: 'uploads/haraj/haraj-cover.png',
+        images: [
+          'uploads/haraj/haraj- 1.png','uploads/haraj/haraj- 2.png','uploads/haraj/haraj- 3.png',
+          'uploads/haraj/haraj- 4.png','uploads/haraj/haraj- 5.png','uploads/haraj/haraj- 6.png',
+          'uploads/haraj/haraj- 7.png','uploads/haraj/haraj- 8.png'
+        ]
+      }
+    };
+
+    const projectDrawer = document.getElementById('projectDrawer');
+    const projectTitle = document.getElementById('projectTitle');
+    const projectMeta = document.getElementById('projectMeta');
+    const projectImages = document.getElementById('projectImages');
+
+    const populateProject = (key) => {
+      const p = projects[key];
+      if (!p) return;
+
+      projectTitle.textContent = p.title;
+
+      // Build meta with both language spans (safe DOM construction)
+      projectMeta.replaceChildren();
+      const enSpan = document.createElement('span');
+      enSpan.className = 'lang-en';
+      enSpan.textContent = p.metaEn;
+      const arSpan = document.createElement('span');
+      arSpan.className = 'lang-ar';
+      arSpan.textContent = p.metaAr;
+      projectMeta.append(enSpan, arSpan);
+
+      // Build image list
+      projectImages.replaceChildren();
+      [p.cover, ...p.images].forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = p.title;
+        img.loading = 'lazy';
+        projectImages.append(img);
+      });
+
+      projectDrawer.scrollTop = 0;
+    };
+
+    document.querySelectorAll('.work-item[data-project]').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('workPopover').classList.remove('visible');
+        populateProject(item.dataset.project);
+        openDrawer(projectDrawer)();
+      });
+    });
+
+    // Hover popover for work-items (centered on cursor)
+    const workPopover = document.getElementById('workPopover');
+    const workPopoverImg = document.getElementById('workPopoverImg');
+    let popoverTimer;
+
+    const movePopoverToCursor = (e) => {
+      const w = workPopover.offsetWidth;
+      const h = workPopover.offsetHeight;
+      const margin = 8;
+      const gap = 16;
+      let left = e.clientX - w / 2;
+      // Prefer above the cursor; flip below if there's no room
+      let top = e.clientY - h - gap;
+      if (top < margin) top = e.clientY + gap;
+      left = Math.max(margin, Math.min(left, window.innerWidth - w - margin));
+      top = Math.max(margin, Math.min(top, window.innerHeight - h - margin));
+      workPopover.style.left = `${left}px`;
+      workPopover.style.top = `${top}px`;
+    };
+
+    document.querySelectorAll('.work-item[data-project]').forEach(item => {
+      item.addEventListener('mouseenter', (e) => {
+        const p = projects[item.dataset.project];
+        if (!p || !p.images.length) return;
+        clearTimeout(popoverTimer);
+        workPopoverImg.src = p.images[0];
+        workPopoverImg.alt = p.title;
+        movePopoverToCursor(e);
+        requestAnimationFrame(() => workPopover.classList.add('visible'));
+      });
+      item.addEventListener('mousemove', movePopoverToCursor);
+      item.addEventListener('mouseleave', () => {
+        popoverTimer = setTimeout(() => workPopover.classList.remove('visible'), 60);
+      });
+    });
+
+    // Collapsible More Work
+    const workMoreToggle = document.getElementById('workMoreToggle');
+    const workGridWrap = document.getElementById('workGridWrap');
+    workMoreToggle.addEventListener('click', () => {
+      const expanded = workMoreToggle.getAttribute('aria-expanded') === 'true';
+      workMoreToggle.setAttribute('aria-expanded', String(!expanded));
+      workGridWrap.classList.toggle('collapsed', expanded);
+    });
+
+    // Hover popover for direct-link work items (data-preview)
+    document.querySelectorAll('.work-item[data-preview]').forEach(item => {
+      item.addEventListener('mouseenter', (e) => {
+        clearTimeout(popoverTimer);
+        workPopoverImg.src = item.dataset.preview;
+        workPopoverImg.alt = item.querySelector('.work-title')?.textContent || '';
+        movePopoverToCursor(e);
+        requestAnimationFrame(() => workPopover.classList.add('visible'));
+      });
+      item.addEventListener('mousemove', movePopoverToCursor);
+      item.addEventListener('mouseleave', () => {
+        popoverTimer = setTimeout(() => workPopover.classList.remove('visible'), 60);
+      });
+    });
+
+    // Typewriter rotator for "i'm even more" link
+    (function typewriter() {
+      const skills = {
+        en: [
+          'Product Designer',
+          'Product/Design Engineer',
+          'AI-Native Designer',
+          'Product Manager',
+          'UI/UX Designer',
+          'Design Systems Lead',
+          'Brand Strategist',
+          'Mobile App Designer',
+          'Creative Director'
+        ],
+        ar: [
+          'مصمم منتجات',
+          'مهندس منتجات/تصميم',
+          'مصمم بقيادة الذكاء الاصطناعي',
+          'مدير منتجات',
+          'مصمم واجهات',
+          'قائد أنظمة التصميم',
+          'استراتيجي علامة تجارية',
+          'مصمم تطبيقات جوال',
+          'مدير إبداعي'
+        ]
+      };
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) return; // CSS has already hidden the caret; static word stays
+
+      const TYPE_BASE = 55;
+      const TYPE_JITTER = 35;
+      const ERASE_BASE = 28;
+      const ERASE_JITTER = 12;
+      const HOLD_MS = 1700;
+      const BETWEEN_MS = 280;
+
+      let idx = 0;
+      let charPos = 0;
+      let mode = 'type';
+      let currentLang = null;
+      let timeoutId = null;
+
+      const getLang = () =>
+        document.documentElement.getAttribute('lang') === 'ar' ? 'ar' : 'en';
+
+      const getTargets = (lang) =>
+        document.querySelectorAll(`.hero-desc.lang-${lang} .typewriter-text`);
+
+      const rand = (base, jitter) => base + (Math.random() * 2 - 1) * jitter;
+
+      const step = () => {
+        const lang = getLang();
+
+        // Restart current word from zero when language changes mid-animation
+        if (currentLang !== null && currentLang !== lang) {
+          charPos = 0;
+          mode = 'type';
+          // Clear the previously visible targets (they're hidden by CSS, but tidy)
+          getTargets(currentLang).forEach(t => (t.textContent = ''));
+        }
+        currentLang = lang;
+
+        const words = skills[lang];
+        const word = words[idx % words.length];
+        const targets = getTargets(lang);
+
+        if (mode === 'type') {
+          charPos = Math.min(charPos + 1, word.length);
+          targets.forEach(t => (t.textContent = word.slice(0, charPos)));
+          if (charPos === word.length) {
+            mode = 'hold';
+            timeoutId = setTimeout(step, HOLD_MS);
+            return;
+          }
+          timeoutId = setTimeout(step, rand(TYPE_BASE, TYPE_JITTER));
+        } else if (mode === 'hold') {
+          mode = 'erase';
+          timeoutId = setTimeout(step, 60);
+        } else if (mode === 'erase') {
+          charPos = Math.max(charPos - 1, 0);
+          targets.forEach(t => (t.textContent = word.slice(0, charPos)));
+          if (charPos === 0) {
+            mode = 'between';
+            idx++;
+            timeoutId = setTimeout(step, BETWEEN_MS);
+            return;
+          }
+          timeoutId = setTimeout(step, rand(ERASE_BASE, ERASE_JITTER));
+        } else {
+          mode = 'type';
+          timeoutId = setTimeout(step, 40);
+        }
+      };
+
+      // Pause when tab not visible so the loop doesn't drift in the background
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          clearTimeout(timeoutId);
+        } else {
+          clearTimeout(timeoutId);
+          timeoutId = setTimeout(step, 200);
+        }
+      });
+
+      // Kick off after a tiny delay so initial paint settles
+      timeoutId = setTimeout(step, 600);
+    })();
+
+    // Language toggle (blur + fade transition)
+    const langToggle = document.getElementById('langToggle');
+    let langSwitching = false;
+    langToggle.addEventListener('click', () => {
+      if (langSwitching) return;
+      langSwitching = true;
+
+      const currentLang = document.documentElement.getAttribute('lang') || 'en';
+      const newLang = currentLang === 'ar' ? 'en' : 'ar';
+
+      // Phase 1: blur out
+      document.documentElement.classList.add('lang-switching');
+
+      // Phase 2 (after 350ms): swap lang while page is blurred
+      setTimeout(() => {
+        document.documentElement.setAttribute('lang', newLang);
+        document.documentElement.setAttribute('dir', newLang === 'ar' ? 'rtl' : 'ltr');
+        localStorage.setItem('lang', newLang);
+
+        // Phase 3: blur back in
+        requestAnimationFrame(() => {
+          document.documentElement.classList.remove('lang-switching');
+          setTimeout(() => { langSwitching = false; }, 350);
         });
-    </script>
+      }, 350);
+    });
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    // Nav name hover preview — move to body so no ancestor transform affects position: fixed
+    const navNameWrap = document.querySelector('.nav-name-wrap');
+    const navPreview = document.getElementById('navPreview');
+    document.body.appendChild(navPreview);
+
+    navNameWrap.addEventListener('mouseenter', () => {
+      const rect = navNameWrap.getBoundingClientRect();
+      navPreview.style.left = rect.left + 'px';
+      navPreview.style.top = (rect.bottom + 10) + 'px';
+      navPreview.classList.add('visible');
+    });
+
+    navNameWrap.addEventListener('mouseleave', () => {
+      navPreview.classList.remove('visible');
+    });
+
+    // Resume link hover preview — same pattern as the nav name preview, right-aligned to the link
+    const resumeLink = document.querySelector('.resume-link');
+    const resumePreview = document.getElementById('resumePreview');
+    document.body.appendChild(resumePreview);
+
+    resumeLink.addEventListener('mouseenter', () => {
+      const rect = resumeLink.getBoundingClientRect();
+      resumePreview.style.left = Math.max(8, rect.right - resumePreview.offsetWidth) + 'px';
+      resumePreview.style.top = (rect.bottom + 10) + 'px';
+      resumePreview.classList.add('visible');
+    });
+
+    resumeLink.addEventListener('mouseleave', () => {
+      resumePreview.classList.remove('visible');
+    });
+
+  </script>
+
 </body>
 
 </html>
