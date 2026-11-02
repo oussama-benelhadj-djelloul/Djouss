@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Link Preview Card</title>
+  <!--
+    Source for uploads/og/og-card.{png,mp4,gif}.
+    Open with ?t=<ms> to freeze the animation at that moment (used for frame export).
+    Without ?t it plays once, like a normal page.
+  -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=block" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 1200px; height: 630px; overflow: hidden; background: #ffffff; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #111111; -webkit-font-smoothing: antialiased; position: relative; }
+
+    .sig { position: absolute; left: 60px; top: 110px; width: 200px; height: 200px; color: #333333; }
+    .sig path { stroke: currentColor; stroke-width: 0.5; stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .sig path:nth-child(1) { animation: draw .7s cubic-bezier(.4,0,.2,1) .2s forwards; }
+    .sig path:nth-child(2) { animation: draw 1.4s cubic-bezier(.4,0,.2,1) .5s forwards; }
+    .sig path:nth-child(3) { animation: draw .2s ease 1.8s forwards; }
+
+    .name { position: absolute; left: 72px; top: 360px; font-size: 64px; font-weight: 500; letter-spacing: -0.035em; opacity: 0; transform: translateY(16px); animation: rise .7s cubic-bezier(.22,1,.36,1) 1.6s forwards; }
+    .role { position: absolute; left: 72px; top: 446px; font-size: 28px; color: #888888; letter-spacing: -0.01em; opacity: 0; transform: translateY(12px); animation: rise .7s cubic-bezier(.22,1,.36,1) 1.8s forwards; }
+    .domain { position: absolute; left: 72px; bottom: 56px; font-size: 22px; color: #9a9a9a; letter-spacing: -0.01em; }
+
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+  </style>
+</head>
+<body>
+  <svg class="sig" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path class="sig-path" d="M0.295219 6.87935C0.460106 7.3603 0.624993 7.84125 1.29929 10.0026C1.97358 12.1639 3.15228 15.991 3.23055 15.5438C3.30883 15.0967 2.25096 10.2592 1.7166 7.60685C1.18224 4.9545 1.20344 4.63387 1.26738 4.3677C1.33131 4.10152 1.43734 3.89953 1.57678 3.75306C1.84295 3.47347 2.24143 3.43457 2.60044 3.48877C2.98032 3.54612 3.24376 4.00763 3.4408 4.57356C3.98556 6.13817 2.52006 8.35835 1.58593 9.42574C1.43595 9.59712 1.2645 9.62837 1.31465 9.59809C2.09094 9.12946 3.69158 9.17157 6.17447 9.90734C7.38628 10.2664 8.07577 11.255 8.50888 12.0807C8.89969 12.8257 8.64081 13.7151 8.30104 14.4471C7.7063 15.7284 5.91864 15.6149 4.96267 15.5206C4.75971 15.4565 4.58715 15.361 4.43893 15.2641C4.29071 15.1671 4.17208 15.0715 4.04984 14.973" pathLength="1" stroke-linecap="round"/>
+            <path class="sig-path" d="M5.55325 13.5915C5.65927 13.6346 7.33716 14.0087 10.1439 14.4905C11.9949 14.8083 13.3771 14.162 14.525 13.6428C15.4593 13.2202 15.864 12.5791 16.0085 12.1394C16.077 11.9308 16.0146 11.7212 15.9332 11.5587C15.8518 11.3963 15.7224 11.2795 15.5802 11.2087C15.438 11.1379 15.287 11.1167 15.1176 11.1435C14.9481 11.1704 14.7648 11.2459 14.6164 11.3926C14.468 11.5393 14.3602 11.755 14.3205 11.9686C14.2808 12.1822 14.3127 12.3871 14.4247 12.5736C15.0255 13.5729 17.2826 13.5881 20.4884 13.7341C22.7555 13.8373 26.33 13.7837 28.0867 13.892C29.8435 14.0003 29.676 14.2169 27.6425 14.8682C25.6089 15.5194 21.7144 16.5986 18.4583 17.3455C15.2023 18.0923 12.7029 18.474 10.5298 18.6871C8.35673 18.9001 6.58575 18.933 5.3687 18.8559C4.15165 18.7788 3.54219 18.5907 3.16205 18.2949C2.78191 17.999 2.64957 17.601 2.75313 16.845C2.85669 16.0891 3.20017 14.9871 4.15028 13.1009C5.10038 11.2147 6.64669 8.57765 7.62188 6.76681C9.05606 4.10365 9.32501 2.59236 9.25906 1.65547C9.20862 0.938839 8.70079 0.533962 8.3148 0.330814C8.14742 0.24272 7.98275 0.319608 7.91694 0.542553C7.85113 0.765498 7.87507 1.16656 9.29809 5.89869C10.7211 10.6308 13.5425 19.6818 15.0504 24.4459C16.5584 29.2099 16.6676 29.4126 16.5728 29.411C15.3986 29.3913 14.4081 28.5133 13.0768 28.4197C12.23 28.3601 11.0296 28.3878 12.605 27.2797C14.1805 26.1716 18.5669 23.9553 18.3719 23.7462C18.177 23.5371 13.2678 25.4024 10.5599 26.407C7.85203 27.4115 7.49411 27.4987 9.49748 26.825C11.5009 26.1513 15.8764 24.7141 18.2627 23.9071C20.649 23.1001 20.9135 22.9669 20.9039 22.9577C20.8943 22.9486 20.6026 23.0676 20.2693 23.1902" pathLength="1" stroke-linecap="round"/>
+            <path class="sig-path" d="M20.8731 24.6709L20.9052 24.6388" pathLength="1" stroke-linecap="round"/>
+          </svg>
+  <p class="name">Oussama Benelhadj Djelloul</p>
+  <p class="role">Senior Product Designer · Europe &amp; MENA</p>
+  <p class="domain">djouss.netlify.app</p>
+  <script>
+    const t = new URLSearchParams(location.search).get('t');
+    if (t !== null) {
+      document.getAnimations().forEach(a => a.pause());
+      document.fonts.ready.then(() => {
+        document.getAnimations().forEach(a => { a.currentTime = Number(t); });
+        document.body.dataset.ready = '1';
+      });
+    }
+  </script>
+</body>
+</html>
