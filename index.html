@@ -1211,11 +1211,86 @@
       color: var(--fg);
     }
 
+    /* ── Contact sign-off ── */
+    .contact-text {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 520px;
+    }
+
+    .contact-text a {
+      color: var(--fg);
+      font-weight: 500;
+      text-decoration: underline;
+      text-decoration-color: var(--border);
+      text-underline-offset: 4px;
+      transition: text-decoration-color 0.2s;
+    }
+
+    .contact-text a:hover {
+      text-decoration-color: var(--fg);
+    }
+
+    .ext-link {
+      white-space: nowrap;
+    }
+
+    .ext-icon {
+      display: inline-block;
+      margin-inline-start: 3px;
+      vertical-align: 1px;
+      opacity: 0.6;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+
+    .ext-link:hover .ext-icon {
+      opacity: 1;
+      transform: translate(1px, -1px);
+    }
+
+    html[dir="rtl"] .ext-icon {
+      transform: scaleX(-1);
+    }
+
+    html[dir="rtl"] .ext-link:hover .ext-icon {
+      transform: scaleX(-1) translate(1px, -1px);
+    }
+
+    .copy-email {
+      font: inherit;
+      font-size: 11px;
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 7px;
+      margin-inline-start: 6px;
+      vertical-align: 2px;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .copy-email:hover {
+      color: var(--fg);
+      border-color: var(--muted);
+    }
+
+    .copy-email .copy-done,
+    .copy-email.is-copied .copy-idle {
+      display: none;
+    }
+
+    .copy-email.is-copied .copy-done {
+      display: inline;
+    }
+
     /* ── Footer ── */
     footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-top: 48px;
       padding: 24px 0 48px;
       font-size: 12px;
       color: var(--muted);
@@ -1532,11 +1607,11 @@
       <p class="hero-desc lang-en">
         Helping turn concepts into compelling products with a focus on
         design excellence and user experience.
-        You can reach out to me on <a href="https://linkedin.com" target="_blank">Linkedin</a> or see more of my work on <a href="https://twitter.com" target="_blank">Twitter</a>.
+        You can reach out to me on <a href="https://linkedin.com/in/djouss" target="_blank" rel="noopener noreferrer" class="ext-link">LinkedIn<svg class="ext-icon" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a> or <a href="https://x.com/oussama187352" target="_blank" rel="noopener noreferrer" class="ext-link">X<svg class="ext-icon" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>, or by <a href="mailto:benelhadj-djelloul-oussama@outlook.com">email</a>.
       </p>
       <p class="hero-desc lang-ar">
         أساعد في تحويل الأفكار إلى منتجات جذابة مع التركيز على تميز التصميم وتجربة المستخدم.
-        يمكنك التواصل معي على <a href="https://linkedin.com" target="_blank">لينكدإن</a> أو الاطلاع على المزيد من أعمالي على <a href="https://twitter.com" target="_blank">تويتر</a>.
+        يمكنك التواصل معي على <a href="https://linkedin.com/in/djouss" target="_blank" rel="noopener noreferrer" class="ext-link">لينكدإن<svg class="ext-icon" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a> أو <a href="https://x.com/oussama187352" target="_blank" rel="noopener noreferrer" class="ext-link">X<svg class="ext-icon" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>، أو عبر <a href="mailto:benelhadj-djelloul-oussama@outlook.com">البريد الإلكتروني</a>.
       </p>
 
     </section>
@@ -1701,6 +1776,26 @@
         </a>
       </div></div><!-- end .work-grid + .work-grid-wrap -->
     </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="reveal">
+      <p class="section-label"><span class="lang-en">Contact</span><span class="lang-ar">تواصل</span></p>
+      <p class="contact-text lang-en">
+        Always happy to talk product, design, or an idea you're working on. Write to me at
+        <a href="mailto:benelhadj-djelloul-oussama@outlook.com">benelhadj-djelloul-oussama@outlook.com</a><button class="copy-email" type="button" data-email="benelhadj-djelloul-oussama@outlook.com"><span class="copy-idle"><span class="lang-en">Copy</span><span class="lang-ar">نسخ</span></span><span class="copy-done"><span class="lang-en">Copied ✓</span><span class="lang-ar">تم النسخ ✓</span></span></button>
+        or find me on <a href="https://linkedin.com/in/djouss" target="_blank" rel="noopener noreferrer" class="ext-link">LinkedIn<svg class="ext-icon" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a> and <a href="https://x.com/oussama187352" target="_blank" rel="noopener noreferrer" class="ext-link">X<svg class="ext-icon" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>.
+      </p>
+      <p class="contact-text lang-ar">
+        يسعدني دائمًا الحديث عن المنتجات والتصميم أو فكرة تعمل عليها. راسلني على
+        <a href="mailto:benelhadj-djelloul-oussama@outlook.com" dir="ltr">benelhadj-djelloul-oussama@outlook.com</a><button class="copy-email" type="button" data-email="benelhadj-djelloul-oussama@outlook.com"><span class="copy-idle"><span class="lang-en">Copy</span><span class="lang-ar">نسخ</span></span><span class="copy-done"><span class="lang-en">Copied ✓</span><span class="lang-ar">تم النسخ ✓</span></span></button>
+        أو تجدني على <a href="https://linkedin.com/in/djouss" target="_blank" rel="noopener noreferrer" class="ext-link">لينكدإن<svg class="ext-icon" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a> و<a href="https://x.com/oussama187352" target="_blank" rel="noopener noreferrer" class="ext-link">X<svg class="ext-icon" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>.
+      </p>
+    </section>
+
+    <footer>
+      <span>© 2026 Djouss</span>
+      <span><span class="lang-en">Made with care in Algiers</span><span class="lang-ar">صُنع بعناية في الجزائر</span></span>
+    </footer>
 
   </div>
 
@@ -2056,6 +2151,28 @@
       item.addEventListener('mousemove', movePopoverToCursor);
       item.addEventListener('mouseleave', () => {
         popoverTimer = setTimeout(() => workPopover.classList.remove('visible'), 60);
+      });
+    });
+
+    // Copy email in contact sign-off
+    document.querySelectorAll('.copy-email').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(btn.dataset.email);
+        } catch (e) {
+          // Fallback for browsers that block the async clipboard API
+          const tmp = document.createElement('textarea');
+          tmp.value = btn.dataset.email;
+          tmp.style.position = 'fixed';
+          tmp.style.opacity = '0';
+          document.body.appendChild(tmp);
+          tmp.select();
+          const ok = document.execCommand('copy');
+          tmp.remove();
+          if (!ok) return;
+        }
+        btn.classList.add('is-copied');
+        setTimeout(() => btn.classList.remove('is-copied'), 1600);
       });
     });
 
