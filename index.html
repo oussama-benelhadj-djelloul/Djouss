@@ -65,7 +65,22 @@
     html {
       font-size: 16px;
       scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: #d4d4d4 transparent;
     }
+
+    [data-theme="dark"] {
+      scrollbar-color: #3a3a3a transparent;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track,
+    ::-webkit-scrollbar-track-piece { background: transparent; box-shadow: none; border: none; }
+    ::-webkit-scrollbar-thumb { background: #d4d4d4; border-radius: 999px; box-shadow: none; border: none; }
+    ::-webkit-scrollbar-corner { background: transparent; }
+    [data-theme="dark"] ::-webkit-scrollbar-thumb { background: #3a3a3a; }
+    ::-webkit-scrollbar-thumb:hover { background: #b0b0b0; }
+    [data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: #555; }
 
     body {
       font-family: var(--font);
