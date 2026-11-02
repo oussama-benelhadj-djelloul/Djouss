@@ -1060,6 +1060,40 @@
       border-top: none;
     }
 
+    /* Case studies in progress (sits under More work) */
+    .work-soon-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--fg);
+    }
+
+    .work-soon-row .work-more-title {
+      color: var(--muted);
+    }
+
+    .work-more-stack > .work-soon-thumb {
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--border) 0px,
+        var(--border) 1px,
+        var(--hover-bg) 1px,
+        var(--hover-bg) 5px
+      );
+    }
+
+    .work-soon-badge {
+      flex-shrink: 0;
+      font-size: 11px;
+      color: var(--muted);
+      padding: 3px 9px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+
     .work-grid-wrap {
       display: grid;
       grid-template-rows: 1fr;
@@ -1665,7 +1699,7 @@
 
     <!-- SELECTED WORK – featured cards -->
     <section id="work" class="reveal">
-      <p class="section-label"><span class="lang-en">Selected Work</span><span class="lang-ar">أعمال مختارة</span></p>
+      <p class="section-label"><span class="lang-en">Selected Product Design Work</span><span class="lang-ar">أعمال مختارة في تصميم المنتجات</span></p>
 
       <div class="work-cards">
         <a class="work-card" href="secure-booking.html">
@@ -1675,20 +1709,6 @@
           <div class="work-card-label">
             <h3>Secure My Booking</h3>
             <p><span class="lang-en">Travel Tech · B2C · 2025</span><span class="lang-ar">تقنية السفر · B2C · 2025</span></p>
-          </div>
-        </a>
-        <a class="work-card work-card-placeholder" href="#">
-          <div class="work-card-img-wrap work-card-img-placeholder"></div>
-          <div class="work-card-label">
-            <h3 class="work-placeholder-title"><span class="lang-en">Coming soon</span><span class="lang-ar">قريباً</span></h3>
-            <p><span class="lang-en">— · — · —</span></p>
-          </div>
-        </a>
-        <a class="work-card work-card-placeholder" href="#">
-          <div class="work-card-img-wrap work-card-img-placeholder"></div>
-          <div class="work-card-label">
-            <h3 class="work-placeholder-title"><span class="lang-en">Coming soon</span><span class="lang-ar">قريباً</span></h3>
-            <p><span class="lang-en">— · — · —</span></p>
           </div>
         </a>
       </div>
@@ -1704,7 +1724,7 @@
             <span class="work-more-count" dir="ltr">+5</span>
           </span>
           <span class="work-more-text">
-            <span class="work-more-title"><span class="lang-en">10 more projects</span><span class="lang-ar">10 مشاريع أخرى</span></span>
+            <span class="work-more-title"><span class="lang-en">10 more UI/UX projects</span><span class="lang-ar">10 مشاريع UI/UX أخرى</span></span>
             <span class="work-more-sub"><span class="lang-en">Fintech, health, logistics, e-learning &amp; more</span><span class="lang-ar">تقنية مالية، صحة، لوجستيات، تعليم إلكتروني والمزيد</span></span>
           </span>
         </span>
@@ -1784,6 +1804,21 @@
           <span class="work-arrow">→</span>
         </a>
       </div></div><!-- end .work-grid + .work-grid-wrap -->
+
+      <!-- case studies in progress -->
+      <div class="work-soon-row">
+        <span class="work-more-left">
+          <span class="work-more-stack" aria-hidden="true">
+            <span class="work-soon-thumb"></span>
+            <span class="work-soon-thumb"></span>
+          </span>
+          <span class="work-more-text">
+            <span class="work-more-title"><span class="lang-en">2 case studies in progress</span><span class="lang-ar">دراستا حالة قيد الإعداد</span></span>
+            <span class="work-more-sub"><span class="lang-en">AI design workflow · Changelog platform</span><span class="lang-ar">سير عمل التصميم بالذكاء الاصطناعي · منصة سجل التغييرات</span></span>
+          </span>
+        </span>
+        <span class="work-soon-badge"><span class="lang-en">Soon</span><span class="lang-ar">قريباً</span></span>
+      </div>
     </section>
 
     <!-- CONTACT -->
