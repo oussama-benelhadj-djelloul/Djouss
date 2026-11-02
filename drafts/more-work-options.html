@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>More Work Options</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff; --fg: #111111; --muted: #888888; --border: #e8e8e8;
+      --hover-bg: #f5f5f5; --cta-bg: #f1f1f1;
+      --logo-filter: grayscale(1) opacity(0.6);
+      --max-w: 680px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    [data-theme="dark"] {
+      --bg: #0b0b0b; --fg: #f5f5f5; --muted: #8e8e8e; --border: #222222;
+      --hover-bg: #161616; --cta-bg: #161616;
+      --logo-filter: grayscale(1) opacity(0.7);
+    }
+
+    body { font-family: var(--font); background: var(--bg); color: var(--fg); -webkit-font-smoothing: antialiased; }
+    .page { max-width: var(--max-w); margin: 0 auto; padding: 64px 16px 120px; }
+
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 56px; }
+    .topbar h1 { font-size: 15px; font-weight: 500; letter-spacing: -0.01em; }
+    .topbar p { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .theme-btn { font: inherit; font-size: 12px; color: var(--muted); background: none; border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+    .theme-btn:hover { color: var(--fg); }
+
+    .option { padding: 40px 0 48px; border-top: 1px solid var(--border); }
+    .option-tag { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+    .option-name { font-size: 15px; font-weight: 500; margin: 6px 0 4px; letter-spacing: -0.01em; }
+    .option-why { font-size: 13px; color: var(--muted); line-height: 1.55; margin-bottom: 28px; max-width: 520px; }
+    .stage { border: 1px dashed var(--border); border-radius: 12px; padding: 28px 24px; }
+
+    /* faux last featured card, for context */
+    .ctx-card { height: 64px; border-radius: 12px; border: 1px solid var(--border); background: var(--hover-bg); opacity: 0.5; margin-bottom: 32px; }
+
+    /* ── shared list (copied from index.html) ── */
+    .work-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: var(--fg); }
+    .work-item:first-child { border-top: 1px solid var(--border); }
+    .work-item-left { display: flex; flex-direction: column; gap: 3px; }
+    .work-title { font-size: 13.5px; font-weight: 500; color: var(--muted); transition: color .15s; }
+    .work-meta { font-size: 11.5px; color: var(--muted); opacity: .85; }
+    .work-arrow { font-size: 14px; color: var(--muted); transition: transform .15s, color .15s; }
+    .work-item:hover .work-title, .work-item:hover .work-arrow { color: var(--fg); }
+    .work-item:hover .work-arrow { transform: translateX(4px); }
+
+    .grid-wrap { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .35s ease, opacity .3s ease; }
+    .grid-wrap > div { overflow: hidden; }
+    .open .grid-wrap { grid-template-rows: 1fr; opacity: 1; }
+
+    .chev { transition: transform .25s ease; flex-shrink: 0; }
+    .open .chev { transform: rotate(180deg); }
+    .open .hide-when-open { display: none; }
+
+    /* ── A · Peek ── */
+    .peek { position: relative; }
+    .peek .peek-list { max-height: 132px; overflow: hidden; transition: max-height .45s ease; }
+    .peek.open .peek-list { max-height: 900px; }
+    .peek .peek-list::after { content: ''; position: absolute; left: 0; right: 0; bottom: 36px; height: 96px; background: linear-gradient(to bottom, transparent, var(--bg) 85%); pointer-events: none; transition: opacity .3s; }
+    .peek.open .peek-list::after { opacity: 0; }
+    .peek-btn { margin-top: 4px; display: flex; align-items: center; gap: 6px; background: none; border: none; font: inherit; font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; padding: 6px 0; }
+    .peek-btn:hover { color: var(--fg); }
+
+    /* ── B · Logo stack ── */
+    .stack-row { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: none; border-left: none; border-right: none; font: inherit; color: var(--fg); cursor: pointer; text-align: left; }
+    .stack-left { display: flex; align-items: center; gap: 14px; }
+    .logos { display: flex; }
+    .logos span { width: 30px; height: 30px; border-radius: 8px; border: 2px solid var(--bg); background: var(--hover-bg); display: grid; place-items: center; margin-left: -8px; overflow: hidden; transition: transform .2s ease, margin .2s ease; }
+    .logos span:first-child { margin-left: 0; }
+    .logos span { position: relative; background: var(--bg); box-shadow: 0 0 0 1px var(--border); }
+    .logos img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; filter: grayscale(1) brightness(.82); transition: filter .25s; }
+    .stack-row:hover .logos img { filter: none; }
+    .logos .more { font-size: 10px; font-weight: 600; color: var(--muted); }
+    .stack-row:hover .logos span { margin-left: -2px; }
+    .stack-row:hover .logos span:first-child { margin-left: 0; }
+    .stack-text b { display: block; font-size: 13.5px; font-weight: 500; }
+    .stack-text small { font-size: 11.5px; color: var(--muted); }
+    .stack-row .chev { color: var(--muted); }
+    .stack-row:hover .chev { color: var(--fg); }
+    .b-wrap.open .stack-row { border-bottom-color: transparent; }
+    .b-wrap .grid-wrap .work-item:first-child { border-top: none; }
+
+    /* ── C · Archive line ── */
+    .archive-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 12px; display: flex; justify-content: space-between; }
+    .archive-label span:last-child { letter-spacing: 0; text-transform: none; font-weight: 400; opacity: .7; }
+    .archive-row { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); border-left: none; border-right: none; background: none; font: inherit; cursor: pointer; text-align: left; color: var(--muted); }
+    .archive-row .names { font-size: 13.5px; font-weight: 500; }
+    .archive-row .names em { font-style: normal; color: var(--fg); }
+    .archive-row .count { font-size: 12px; white-space: nowrap; display: flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px; transition: color .15s, border-color .15s, background .15s; }
+    .archive-row:hover .count { color: var(--fg); background: var(--hover-bg); }
+    .c-wrap.open .archive-row { display: none; }
+
+    /* ── D · Thumbnail strip ── */
+    .thumbs-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+    .thumbs-head p { font-size: 13px; color: var(--muted); }
+    .thumbs-head button { background: none; border: none; font: inherit; font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 6px; }
+    .thumbs-head button:hover { color: var(--fg); }
+    .thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; cursor: pointer; }
+    .thumbs > div { aspect-ratio: 4 / 3; border-radius: 8px; border: 1px solid var(--border); background: var(--hover-bg); overflow: hidden; position: relative; }
+    .thumbs img { width: 100%; height: 100%; object-fit: cover; object-position: top center; filter: grayscale(1); opacity: .6; transition: filter .3s, opacity .3s, transform .3s; }
+    .thumbs > div:hover img { filter: none; opacity: 1; transform: scale(1.04); }
+    .thumbs .plus { display: grid; place-items: center; font-size: 13px; font-weight: 500; color: var(--muted); }
+    .thumbs .plus:hover { color: var(--fg); }
+    .d-wrap.open .thumbs { display: none; }
+
+    .note { font-size: 12px; color: var(--muted); margin-top: 18px; line-height: 1.55; }
+    .note b { color: var(--fg); font-weight: 500; }
+
+    @media (max-width: 520px) {
+      .thumbs { grid-template-columns: repeat(3, 1fr); }
+      .thumbs > div:nth-child(n+3):not(.plus) { display: none; }
+      .archive-row .names { font-size: 12.5px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="topbar">
+    <div>
+      <h1>“More work” — closed-state options</h1>
+      <p>Click each one to open it. All open the same list.</p>
+    </div>
+    <button class="theme-btn" id="themeBtn">Toggle theme</button>
+  </div>
+
+  <!-- A -->
+  <section class="option">
+    <p class="option-tag">Option A</p>
+    <p class="option-name">The peek</p>
+    <p class="option-why">The first three rows are already visible and fade out into the page. People can see there's a list and that it continues. It adds no new elements, just your existing rows.</p>
+    <div class="stage">
+      <div class="ctx-card"></div>
+      <div class="peek" data-toggle>
+        <div class="peek-list" data-list></div>
+        <button class="peek-btn" data-trigger>
+          <span class="hide-when-open">Show all 10 projects</span>
+          <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- B -->
+  <section class="option">
+    <p class="option-tag">Option B</p>
+    <p class="option-name">Project avatar stack</p>
+    <p class="option-why">A single row in the same shape as your list, led by overlapping greyscale crops of the projects. On hover they fan out slightly and get their colour back. It's a familiar pattern from avatar groups, so it hints at real work behind the click without adding weight.</p>
+    <div class="stage">
+      <div class="ctx-card"></div>
+      <div class="b-wrap" data-toggle>
+        <button class="stack-row" data-trigger>
+          <span class="stack-left">
+            <span class="logos">
+              <span><img src="../uploads/Meetendo/meetendo+intro.png" alt=""></span>
+              <span><img src="../uploads/finnetude/alfa+intro.png" alt=""></span>
+              <span><img src="../uploads/Send/send+intro.png" alt=""></span>
+              <span><img src="../uploads/QARI/qari+intro.png" alt=""></span>
+              <span><img src="../uploads/Haraj/haraj+intro.png" alt=""></span>
+              <span class="more">+5</span>
+            </span>
+            <span class="stack-text">
+              <b>10 more projects</b>
+              <small>Fintech, health, logistics, e-learning &amp; more</small>
+            </span>
+          </span>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="grid-wrap"><div data-list></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C -->
+  <section class="option">
+    <p class="option-tag">Option C</p>
+    <p class="option-name">Named archive row</p>
+    <p class="option-why">Pure type, the quietest option. Recognisable names like Meetendo and ALFA+ create curiosity on their own, and a small count pill makes the row clearly clickable. It replaces the “Not happy yet?” line.</p>
+    <div class="stage">
+      <div class="ctx-card"></div>
+      <div class="c-wrap" data-toggle>
+        <p class="archive-label"><span>Archive</span><span>2021 – 2024</span></p>
+        <button class="archive-row" data-trigger>
+          <span class="names"><em>Meetendo</em>, <em>ALFA+</em>, <em>Send</em>, <em>QARI</em> and 6 others</span>
+          <span class="count">View all
+            <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </button>
+        <div class="grid-wrap"><div data-list></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- D -->
+  <section class="option">
+    <p class="option-tag">Option D</p>
+    <p class="option-name">Thumbnail strip</p>
+    <p class="option-why">Small greyscale project shots in the same rounded-card style as your featured work. Hovering one brings back its colour. This is the most visual option and the strongest pull, but also the heaviest. It's a good fit if you want people to treat the archive as real work.</p>
+    <div class="stage">
+      <div class="ctx-card"></div>
+      <div class="d-wrap" data-toggle>
+        <div class="thumbs-head">
+          <p>Earlier projects</p>
+          <button data-trigger>
+            <span class="hide-when-open">See all 10</span>
+            <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
+        <div class="thumbs" data-trigger>
+          <div><img src="../uploads/Meetendo/meetendo+intro.png" alt="Meetendo"></div>
+          <div><img src="../uploads/finnetude/alfa+intro.png" alt="ALFA+"></div>
+          <div><img src="../uploads/Send/send+intro.png" alt="Send"></div>
+          <div><img src="../uploads/QARI/qari+intro.png" alt="QARI"></div>
+          <div class="plus">+6</div>
+        </div>
+        <div class="grid-wrap"><div data-list></div></div>
+      </div>
+    </div>
+    <p class="note"><b>My pick:</b> B or C. Both stay within your list language (thin borders, muted type) while saying what's inside before the click. That's what “More work” with a chevron doesn't do today.</p>
+  </section>
+
+</div>
+
+<script>
+  const projects = [
+    ['Meetendo', 'Health Tech · B2C · 2022–2023'],
+    ['ALFA+', 'Fintech · B2B, B2Gov · 2022–2023'],
+    ['Send', 'Logistics · B2B, B2Gov · 2022–2023'],
+    ['QARI', 'E-learning · B2C · 2022–2023'],
+    ['MERKEZ', 'E-learning · B2C · 2023'],
+    ['A-Z Trajet', 'VTC Ride-Hailing · B2C · 2023'],
+    ['Al Razi', 'PRM, SaaS · B2B2C · 2023–2024'],
+    ['Amalaah', 'HR-Tech · B2B2C · 2021'],
+    ['Jawlah', 'Tourism · B2B2C · 2024'],
+    ['Haraj Al Fajr', 'E-commerce · B2B · 2022–2023'],
+  ];
+  const rows = projects.map(([t, m]) =>
+    `<a class="work-item" href="#"><div class="work-item-left"><span class="work-title">${t}</span><span class="work-meta">${m}</span></div><span class="work-arrow">→</span></a>`
+  ).join('');
+  document.querySelectorAll('[data-list]').forEach(el => el.innerHTML = rows);
+
+  document.querySelectorAll('[data-toggle]').forEach(wrap => {
+    wrap.querySelectorAll('[data-trigger]').forEach(t =>
+      t.addEventListener('click', () => wrap.classList.toggle('open'))
+    );
+  });
+  document.querySelectorAll('.work-item').forEach(a => a.addEventListener('click', e => e.preventDefault()));
+
+  const root = document.documentElement;
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Options</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff; --fg: #111111; --muted: #888888; --border: #e8e8e8;
+      --hover-bg: #f5f5f5; --cta-bg: #f1f1f1; --ok: #16a34a;
+      --max-w: 680px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    [data-theme="dark"] {
+      --bg: #0b0b0b; --fg: #f5f5f5; --muted: #8e8e8e; --border: #222222;
+      --hover-bg: #161616; --cta-bg: #161616; --ok: #22c55e;
+    }
+
+    body { font-family: var(--font); background: var(--bg); color: var(--fg); -webkit-font-smoothing: antialiased; }
+    .page { max-width: var(--max-w); margin: 0 auto; padding: 64px 16px 120px; }
+
+    .topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 40px; }
+    .topbar h1 { font-size: 15px; font-weight: 500; letter-spacing: -0.01em; }
+    .topbar p { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .theme-btn { font: inherit; font-size: 12px; color: var(--muted); background: none; border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; cursor: pointer; white-space: nowrap; }
+    .theme-btn:hover { color: var(--fg); }
+
+    .option { padding: 40px 0 48px; border-top: 1px solid var(--border); }
+    .option-tag { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+    .option-name { font-size: 15px; font-weight: 500; margin: 6px 0 4px; letter-spacing: -0.01em; }
+    .option-why { font-size: 13px; color: var(--muted); line-height: 1.55; margin-bottom: 28px; max-width: 520px; }
+    .stage { border: 1px dashed var(--border); border-radius: 12px; padding: 32px 24px; }
+    .ctx-row { height: 44px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); opacity: .5; margin-bottom: 56px; }
+
+    .section-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 20px; }
+
+    /* hero fix (shared) */
+    .hero-desc { font-size: 15px; color: var(--muted); line-height: 1.7; }
+    .hero-desc a { font-weight: 600; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .hero-desc a:hover { color: var(--fg); }
+
+    /* status dot */
+    .status { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); position: relative; }
+    .dot::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: var(--ok); animation: ping 2s ease-out infinite; }
+    @keyframes ping { 0% { transform: scale(1); opacity: .5; } 100% { transform: scale(2.6); opacity: 0; } }
+
+    footer { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; margin-top: 48px; font-size: 12px; color: var(--muted); }
+
+    /* ── A · Quiet sign-off ── */
+    .a-text { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 520px; }
+    .a-text a { color: var(--fg); font-weight: 500; text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: 4px; transition: text-decoration-color .2s; }
+    .a-text a:hover { text-decoration-color: var(--fg); }
+    .copy-mini { font: inherit; font-size: 11px; color: var(--muted); background: none; border: 1px solid var(--border); border-radius: 6px; padding: 2px 7px; margin-inline-start: 6px; cursor: pointer; vertical-align: 2px; transition: color .15s, border-color .15s; }
+    .copy-mini:hover { color: var(--fg); }
+
+    /* ── B · CTA card ── */
+    .cta-block { background: var(--cta-bg); border-radius: 16px; padding: 48px 40px; display: flex; flex-direction: column; gap: 16px; }
+    .cta-block h2 { font-size: clamp(24px, 4vw, 32px); font-weight: 400; letter-spacing: -0.03em; line-height: 1.2; }
+    .cta-block-desc { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 420px; }
+    .cta-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px; border-radius: 999px; font: inherit; font-size: 13px; font-weight: 500; text-decoration: none; cursor: pointer; transition: opacity .15s, background .15s, border-color .15s; }
+    .btn-primary { background: var(--fg); color: var(--bg); border: 1px solid var(--fg); }
+    .btn-primary:hover { opacity: .85; }
+    .btn-ghost { background: transparent; color: var(--fg); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--bg); border-color: var(--muted); }
+
+    /* ── C · Contact list ── */
+    .c-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; }
+    .c-head .section-label { margin: 0; }
+    .c-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: var(--fg); cursor: pointer; background: none; border-left: 0; border-right: 0; border-top: 0; width: 100%; font: inherit; text-align: start; }
+    .c-head + .c-row { border-top: 1px solid var(--border); }
+    .c-left { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+    .c-title { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; }
+    .c-meta { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .c-act { font-size: 12px; color: var(--muted); white-space: nowrap; transition: color .15s, transform .15s; }
+    .c-row:hover .c-act { color: var(--fg); }
+    .c-row:hover .c-act.arrow { transform: translateX(4px); }
+
+    /* ── D · Big type ── */
+    .d-kicker { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+    .d-big { font: inherit; display: inline-flex; align-items: center; gap: 12px; background: none; border: 0; padding: 0; color: var(--fg); cursor: pointer; text-align: start; font-size: clamp(22px, 5vw, 34px); font-weight: 400; letter-spacing: -0.03em; line-height: 1.2; }
+    .d-big .em { background: linear-gradient(var(--fg), var(--fg)) 0 100% / 0 1px no-repeat; transition: background-size .35s ease; overflow-wrap: anywhere; }
+    .d-big:hover .em { background-size: 100% 1px; }
+    .d-big svg { flex-shrink: 0; color: var(--muted); transition: color .2s, transform .2s; }
+    .d-big:hover svg { color: var(--fg); transform: translate(2px, -2px); }
+    .d-hint { font-size: 12px; color: var(--muted); margin-top: 12px; min-height: 18px; }
+    .d-links { display: flex; gap: 20px; margin-top: 28px; }
+    .d-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .15s; }
+    .d-links a:hover { color: var(--fg); }
+
+    .copied { color: var(--ok) !important; }
+
+    .note { font-size: 12px; color: var(--muted); margin-top: 18px; line-height: 1.6; }
+    .note b { color: var(--fg); font-weight: 500; }
+
+    @media (max-width: 520px) {
+      .cta-block { padding: 32px 22px; }
+      .c-meta { max-width: 52vw; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="topbar">
+    <div>
+      <h1>Contact: end-of-page options</h1>
+      <p>The email buttons copy the address here instead of opening your mail app.</p>
+    </div>
+    <button class="theme-btn" id="themeBtn">Toggle theme</button>
+  </div>
+
+  <!-- Shared hero fix -->
+  <section class="option">
+    <p class="option-tag">In all options · hero line</p>
+    <p class="option-name">Real links in the intro</p>
+    <p class="option-why">The hero sentence points to your actual LinkedIn and adds your email. Twitter is dropped because it pointed nowhere; send me your handle if you'd rather keep it.</p>
+    <div class="stage">
+      <p class="hero-desc">
+        Helping turn concepts into compelling products with a focus on design excellence and user experience.
+        You can reach out to me on <a href="https://linkedin.com/in/djouss" target="_blank">LinkedIn</a> or by <a href="mailto:benelhadj-djelloul-oussama@outlook.com">email</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- A -->
+  <section class="option">
+    <p class="option-tag">Option A</p>
+    <p class="option-name">Quiet sign-off</p>
+    <p class="option-why">A section label and one sentence in the same voice as your hero. The email is the link, with a tiny copy button next to it. It's the lightest option and the closest to how the page already reads.</p>
+    <div class="stage">
+      <div class="ctx-row"></div>
+      <p class="section-label">Contact</p>
+      <p class="a-text">
+        Open to senior product design roles. If you're building something and think I could help, write to me at
+        <a href="mailto:benelhadj-djelloul-oussama@outlook.com">benelhadj-djelloul-oussama@outlook.com</a><button class="copy-mini" data-copy>Copy</button>
+        or find me on <a href="https://linkedin.com/in/djouss" target="_blank">LinkedIn</a>.
+      </p>
+      <footer><span>© 2026 Djouss</span><span>Made with care in Algiers</span></footer>
+    </div>
+  </section>
+
+  <!-- B -->
+  <section class="option">
+    <p class="option-tag">Option B</p>
+    <p class="option-name">Call-to-action card</p>
+    <p class="option-why">A soft grey card with a headline and two buttons. Your CSS already has this style left over from the old page (<code>.cta-block</code>), so it fits the system. It's the clearest “what do I do now?” for a recruiter, but also the loudest.</p>
+    <div class="stage">
+      <div class="ctx-row"></div>
+      <div class="cta-block">
+        <span class="status"><span class="dot"></span>Available for new roles</span>
+        <h2>Let's build something people notice.</h2>
+        <p class="cta-block-desc">Open to senior product design roles. I usually reply within a day.</p>
+        <div class="cta-actions">
+          <button class="btn btn-primary" data-copy>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+            <span data-label>Email me</span>
+          </button>
+          <a class="btn btn-ghost" href="https://linkedin.com/in/djouss" target="_blank">LinkedIn ↗</a>
+        </div>
+      </div>
+      <footer><span>© 2026 Djouss</span><span>Made with care in Algiers</span></footer>
+    </div>
+  </section>
+
+  <!-- C -->
+  <section class="option">
+    <p class="option-tag">Option C</p>
+    <p class="option-name">Contact list</p>
+    <p class="option-why">Contact as rows, in exactly the same style as your work list: thin borders, title over muted meta, an action on the right. It's structured and easy to scan, and the availability dot adds a bit of life without any colour blocks.</p>
+    <div class="stage">
+      <div class="ctx-row"></div>
+      <div class="c-head">
+        <p class="section-label">Get in touch</p>
+        <span class="status"><span class="dot"></span>Open to senior roles</span>
+      </div>
+      <button class="c-row" data-copy>
+        <span class="c-left"><span class="c-title">Email</span><span class="c-meta">benelhadj-djelloul-oussama@outlook.com</span></span>
+        <span class="c-act" data-label>Copy</span>
+      </button>
+      <a class="c-row" href="https://linkedin.com/in/djouss" target="_blank">
+        <span class="c-left"><span class="c-title">LinkedIn</span><span class="c-meta">linkedin.com/in/djouss</span></span>
+        <span class="c-act arrow">→</span>
+      </a>
+      <a class="c-row" href="../uploads/resume-benelhadj-djelloul-oussama.pdf" target="_blank">
+        <span class="c-left"><span class="c-title">Resume</span><span class="c-meta">PDF · updated 2026</span></span>
+        <span class="c-act arrow">↓</span>
+      </a>
+      <footer><span>© 2026 Djouss</span><span>Made with care in Algiers</span></footer>
+    </div>
+  </section>
+
+  <!-- D -->
+  <section class="option">
+    <p class="option-tag">Option D</p>
+    <p class="option-name">Big email sign-off</p>
+    <p class="option-why">The email itself is the headline. Clicking copies it, and on hover an underline draws in. It's confident and memorable, and the page ends on one clear thing to do.</p>
+    <div class="stage">
+      <div class="ctx-row"></div>
+      <p class="d-kicker">Open to senior product design roles. Say hi —</p>
+      <button class="d-big" data-copy>
+        <span class="em">benelhadj-djelloul-oussama<wbr>@outlook.com</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+      </button>
+      <p class="d-hint" data-hint>Click to copy</p>
+      <div class="d-links">
+        <a href="https://linkedin.com/in/djouss" target="_blank">LinkedIn</a>
+        <a href="../uploads/resume-benelhadj-djelloul-oussama.pdf" target="_blank">Resume</a>
+      </div>
+      <footer><span>© 2026 Djouss</span><span>Made with care in Algiers</span></footer>
+    </div>
+    <p class="note"><b>My pick:</b> C, or A if you want it quieter. C reuses your list pattern, so it feels native, and it gives a recruiter email, LinkedIn and resume in one place.<br><b>Heads-up:</b> “Open to senior roles” is public, and you currently work at Smeetz. If you'd rather keep it low-key, I can swap it for something like “Open to new conversations”.</p>
+  </section>
+
+</div>
+
+<script>
+  const EMAIL = 'benelhadj-djelloul-oussama@outlook.com';
+
+  document.querySelectorAll('[data-copy]').forEach(el => {
+    el.addEventListener('click', async e => {
+      e.preventDefault();
+      try { await navigator.clipboard.writeText(EMAIL); } catch (_) {}
+      const label = el.querySelector('[data-label]') || (el.classList.contains('copy-mini') ? el : null);
+      const hint = el.parentElement.querySelector('[data-hint]');
+      const target = label || hint;
+      if (!target) return;
+      const prev = target.textContent;
+      target.textContent = 'Copied ✓';
+      target.classList.add('copied');
+      setTimeout(() => { target.textContent = prev; target.classList.remove('copied'); }, 1600);
+    });
+  });
+
+  const root = document.documentElement;
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+  });
+</script>
+</body>
+</html>
