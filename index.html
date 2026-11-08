@@ -1487,6 +1487,20 @@
       width: min(620px, 96vw);
     }
 
+    /* Phones: drawers take the whole screen */
+    @media (max-width: 640px) {
+      .drawer,
+      #projectDrawer {
+        width: 100vw;
+        border-left: none;
+        border-right: none;
+        padding: 24px 16px 40px;
+      }
+      html[dir="rtl"] .drawer {
+        border-right: none;
+      }
+    }
+
     .project-meta {
       font-size: 13px;
       color: var(--muted);
@@ -1735,28 +1749,28 @@
 
       <!-- remaining as list -->
       <div class="work-grid-wrap collapsed" id="workGridWrap"><div class="work-grid">
-        <a class="work-item" href="meetendo.html" data-preview="uploads/Meetendo/meetendo+intro.png">
+        <a class="work-item" href="#" data-project="meetendo">
           <div class="work-item-left">
             <span class="work-title">Meetendo</span>
             <span class="work-meta"><span class="lang-en">Health Tech · B2C · 2022–2023</span><span class="lang-ar">تقنية صحية · B2C · 2022–2023</span></span>
           </div>
           <span class="work-arrow">→</span>
         </a>
-        <a class="work-item" href="/Pages/alfa.html" data-preview="uploads/finnetude/alfa+intro.png">
+        <a class="work-item" href="#" data-project="alfa">
           <div class="work-item-left">
             <span class="work-title">ALFA+</span>
             <span class="work-meta"><span class="lang-en">Fintech · B2B, B2Gov · 2022–2023</span><span class="lang-ar">تقنية مالية · B2B، B2Gov · 2022–2023</span></span>
           </div>
           <span class="work-arrow">→</span>
         </a>
-        <a class="work-item" href="/Pages/send.html" data-preview="uploads/Send/send+intro.png">
+        <a class="work-item" href="#" data-project="send">
           <div class="work-item-left">
             <span class="work-title">Send</span>
             <span class="work-meta"><span class="lang-en">Logistics · B2B, B2Gov · 2022–2023</span><span class="lang-ar">لوجستيات · B2B، B2Gov · 2022–2023</span></span>
           </div>
           <span class="work-arrow">→</span>
         </a>
-        <a class="work-item" href="/Pages/qari.html" data-preview="uploads/QARI/qari+intro.png">
+        <a class="work-item" href="#" data-project="qari">
           <div class="work-item-left">
             <span class="work-title">QARI</span>
             <span class="work-meta"><span class="lang-en">E-learning · B2C · 2022–2023</span><span class="lang-ar">تعليم إلكتروني · B2C · 2022–2023</span></span>
@@ -2050,6 +2064,87 @@
 
     // Project data (extracted from /Pages/*.html)
     const projects = {
+      meetendo: {
+        title: 'Meetendo',
+        metaEn: 'Health Tech · B2C · 2022–2023',
+        metaAr: 'تقنية صحية · B2C · 2022–2023',
+        preview: 'uploads/Meetendo/meetendo+intro.png',
+        cover: 'uploads/Meetendo/meetendo-cover.png',
+        images: [
+          'uploads/Meetendo/Meetendo post 1.png',
+          'uploads/Meetendo/Meetendo post 2.png',
+          'uploads/Meetendo/Meetendo post 3.png',
+          'uploads/Meetendo/Meetendo post 4.png',
+          'uploads/Meetendo/Meetendo post 5.png',
+          'uploads/Meetendo/Meetendo post 6.png',
+          'uploads/Meetendo/Meetendo post 7.png',
+          'uploads/Meetendo/Meetendo post 8.png',
+          'uploads/Meetendo/Meetendo post 10.png',
+          'uploads/Meetendo/Meetendo post 11.png',
+          'uploads/Meetendo/Meetendo post 12.png',
+          'uploads/Meetendo/Meetendo post 13.png',
+          'uploads/Meetendo/Meetendo post 14.png',
+          'uploads/Meetendo/Meetendo post 15.png',
+          'uploads/Meetendo/Meetendo post 16.png'
+        ]
+      },
+      alfa: {
+        title: 'ALFA+',
+        metaEn: 'Fintech · B2B, B2Gov · 2022–2023',
+        metaAr: 'تقنية مالية · B2B، B2Gov · 2022–2023',
+        preview: 'uploads/finnetude/alfa+intro.png',
+        cover: 'uploads/New/alfa-cover.png',
+        images: [
+          'uploads/finnetude/Media 4 Post.png',
+          'uploads/finnetude/Media 5 Post.png',
+          'uploads/finnetude/Media 6 Post.png',
+          'uploads/finnetude/img 2.png',
+          'uploads/finnetude/img6.png',
+          'uploads/finnetude/message 1.png',
+          'uploads/finnetude/message W.png',
+          'uploads/finnetude/prototo3.png',
+          'uploads/finnetude/final Post 2.png',
+          'uploads/finnetude/Media 1 2 3 Post.png',
+          'uploads/finnetude/Media 4 5 6 Post.png',
+          'uploads/finnetude/final Post.png'
+        ]
+      },
+      send: {
+        title: 'Send',
+        metaEn: 'Logistics · B2B, B2Gov · 2022–2023',
+        metaAr: 'لوجستيات · B2B، B2Gov · 2022–2023',
+        preview: 'uploads/Send/send+intro.png',
+        cover: 'uploads/Send/send-cover.png',
+        images: [
+          'uploads/Send/Instagram-Post square-1.jpg',
+          'uploads/Send/Instagram-Post square-2.jpg',
+          'uploads/Send/Instagram-Post square-3.jpg',
+          'uploads/Send/Instagram-Post square-4.jpg',
+          'uploads/Send/Instagram-Post square-5.jpg',
+          'uploads/Send/Instagram-Post square-7.jpg',
+          'uploads/Send/Instagram-Post square.jpg',
+          'uploads/Send/Instagram-Post square-6.jpg'
+        ]
+      },
+      qari: {
+        title: 'QARI',
+        metaEn: 'E-learning · B2C · 2022–2023',
+        metaAr: 'تعليم إلكتروني · B2C · 2022–2023',
+        preview: 'uploads/QARI/qari+intro.png',
+        cover: 'uploads/QARI/qari-cover.png',
+        images: [
+          'uploads/QARI/Instagram post - 1.png',
+          'uploads/QARI/Instagram post - 2.png',
+          'uploads/QARI/Instagram post - 3.png',
+          'uploads/QARI/Instagram post - 4.png',
+          'uploads/QARI/Instagram post - 5.png',
+          'uploads/QARI/Instagram post - 6.png',
+          'uploads/QARI/Instagram post - 8.png',
+          'uploads/QARI/Instagram post - 9.png',
+          'uploads/QARI/Instagram post - 10.png',
+          'uploads/QARI/Instagram post - 7.png'
+        ]
+      },
       merkez: {
         title: 'MERKEZ',
         metaEn: 'E-learning · B2C · 2023',
@@ -2112,11 +2207,12 @@
         title: 'Haraj Al Fajr',
         metaEn: 'E-commerce · B2B · 2022–2023',
         metaAr: 'تجارة إلكترونية · B2B · 2022–2023',
-        cover: 'uploads/haraj/haraj-cover.png',
+        preview: 'uploads/Haraj/haraj+intro.png',
+        cover: 'uploads/Haraj/haraj-cover.png',
         images: [
-          'uploads/haraj/haraj- 1.png','uploads/haraj/haraj- 2.png','uploads/haraj/haraj- 3.png',
-          'uploads/haraj/haraj- 4.png','uploads/haraj/haraj- 5.png','uploads/haraj/haraj- 6.png',
-          'uploads/haraj/haraj- 7.png','uploads/haraj/haraj- 8.png'
+          'uploads/Haraj/haraj- 1.png','uploads/Haraj/haraj- 2.png','uploads/Haraj/haraj- 3.png',
+          'uploads/Haraj/haraj- 4.png','uploads/Haraj/haraj- 5.png','uploads/Haraj/haraj- 6.png',
+          'uploads/Haraj/haraj- 7.png','uploads/Haraj/haraj- 8.png'
         ]
       }
     };
@@ -2189,7 +2285,7 @@
         const p = projects[item.dataset.project];
         if (!p || !p.images.length) return;
         clearTimeout(popoverTimer);
-        workPopoverImg.src = p.images[0];
+        workPopoverImg.src = p.preview || p.images[0];
         workPopoverImg.alt = p.title;
         movePopoverToCursor(e);
         requestAnimationFrame(() => workPopover.classList.add('visible'));
@@ -2229,21 +2325,6 @@
       const expanded = workMoreToggle.getAttribute('aria-expanded') === 'true';
       workMoreToggle.setAttribute('aria-expanded', String(!expanded));
       workGridWrap.classList.toggle('collapsed', expanded);
-    });
-
-    // Hover popover for direct-link work items (data-preview)
-    document.querySelectorAll('.work-item[data-preview]').forEach(item => {
-      item.addEventListener('mouseenter', (e) => {
-        clearTimeout(popoverTimer);
-        workPopoverImg.src = item.dataset.preview;
-        workPopoverImg.alt = item.querySelector('.work-title')?.textContent || '';
-        movePopoverToCursor(e);
-        requestAnimationFrame(() => workPopover.classList.add('visible'));
-      });
-      item.addEventListener('mousemove', movePopoverToCursor);
-      item.addEventListener('mouseleave', () => {
-        popoverTimer = setTimeout(() => workPopover.classList.remove('visible'), 60);
-      });
     });
 
     // Typewriter rotator for "i'm even more" link
